@@ -3,4 +3,4 @@
 
 Plotting using LQAnalyzer tags,
 
-* v8-0-2.9
+* v8-0-3.2
