@@ -1,7 +1,7 @@
 #include "trilepton_mumumu.cc"
 #include <fstream>
 
-void run_trilepton_mumumu_2016(int XXX){
+void run_trilepton_mumumu_SR(int XXX){
  
   //==== get env
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");

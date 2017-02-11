@@ -6,7 +6,7 @@
 //==== then, first will be filled at the bottom, so we want them in the bottom of legend
 void make_legend(TLegend *lg, TString MCtype, vector<TH1D*> hists, vector<TString> alias);
 
-void fake_calculator_2016(double dXYMin, double RelIsoMax){
+void fake_calculator(double dXYMin, double RelIsoMax){
 
   TH1::SetDefaultSumw2(true);
   TH2::SetDefaultSumw2(true);

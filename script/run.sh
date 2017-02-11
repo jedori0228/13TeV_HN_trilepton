@@ -2,16 +2,16 @@
 whichRun=$1
 
 if [ $whichRun = "SR" ]; then
-  root -l -b -q "src/run_trilepton_mumumu_2016.C(2)"
+  root -l -b -q "src/run_trilepton_mumumu_SR.C(2)"
 fi
 
 if [ $whichRun = "CR" ]; then
   if [ -z "$2" ]; then
-    root -l -b -q "src/run_trilepton_mumumu_CR_2016.C(1)"
+    root -l -b -q "src/run_trilepton_mumumu_CR.C(1)"
   else
     whichCR=$2
     if [ $whichCR = "dilep" ]; then
-      root -l -b -q "src/run_trilepton_mumumu_CR_2016.C(2)"
+      root -l -b -q "src/run_trilepton_mumumu_CR.C(2)"
     fi
   fi
 fi
@@ -25,11 +25,11 @@ if [ $whichRun = "FR" ]; then
 		do
 			for j in 0.2 0.3 0.4 0.6 0.8 1.0
 			do
-				root -l -b -q "src/fake_calculator_2016.C($i, $j)"
+				root -l -b -q "src/fake_calculator.C($i, $j)"
 			done
 		done
   else
-    root -l -b -q "src/fake_calculator_2016.C($dXYSig, $RelIso)" 
+    root -l -b -q "src/fake_calculator.C($dXYSig, $RelIso)" 
   fi
 fi
 

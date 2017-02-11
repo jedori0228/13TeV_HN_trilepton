@@ -1,7 +1,7 @@
 #include "trilepton_mumumu.cc"
 #include <fstream>
 
-void run_trilepton_mumumu_CR_2016(int XXX){
+void run_trilepton_mumumu_CR(int XXX){
   
   //==============
   //==== get env
