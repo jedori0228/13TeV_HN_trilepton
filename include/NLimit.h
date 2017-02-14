@@ -16,7 +16,7 @@ class NLimit {
     PDF = 1,
     Q2scale = 2,
     MuonID = 3,
-    MuonPtRes = 4,
+    MuonPt = 4,
     JES = 5,
     JER = 6,
     Uncl = 7,

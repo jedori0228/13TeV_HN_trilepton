@@ -40,7 +40,7 @@ void syst_FR_make_matrix(){
   hist_bins->SetBinContent(1, n_pt_bins);
   hist_bins->SetBinContent(2, n_eta_bins);
   
-  TFile *file_FRs = new TFile(plotpath+"FRs.root", "RECREATE");
+  TFile *file_FRs = new TFile(plotpath+"Trilep_Muon_FakeRate.root", "RECREATE");
   file_FRs->cd();
   hist_dXYMins->Write();
   hist_RelIsoMaxs->Write();

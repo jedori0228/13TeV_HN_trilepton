@@ -21,9 +21,9 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
   TH1D *hist_prompt = new TH1D("hist_prompt", "", n_mass, 0, n_mass);
   TH1D *hist_signal = new TH1D("hist_signal", "", n_mass, 0, n_mass);
 
-  vector<double> signal_syst_Lumi, signal_syst_MuonPtRes, signal_syst_JES, signal_syst_Uncl, signal_syst_MuonID;
-  vector<double> prompt_syst_Lumi, prompt_syst_MuonPtRes, prompt_syst_JES, prompt_syst_Uncl, prompt_syst_MuonID, prompt_syst_Norm;
-  vector<double> fake_syst_MuonPtRes, fake_syst_JES, fake_syst_Uncl;
+  vector<double> signal_syst_Lumi, signal_syst_MuonPt, signal_syst_JES, signal_syst_Uncl, signal_syst_MuonID;
+  vector<double> prompt_syst_Lumi, prompt_syst_MuonPt, prompt_syst_JES, prompt_syst_Uncl, prompt_syst_MuonID, prompt_syst_Norm;
+  vector<double> fake_syst_MuonPt, fake_syst_JES, fake_syst_Uncl;
   
   for(unsigned int i=0; i<masses.size(); i++){
 
@@ -51,19 +51,19 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     hist_signal->SetBinError(i+1, n_limit.err_total(NLimit::signal)/N_MC);
 
     signal_syst_Lumi.push_back( 6.2 );
-    signal_syst_MuonPtRes.push_back( 100.*n_limit.signal_systs[NLimit::MuonPtRes]/n_limit.n_signal );
+    signal_syst_MuonPt.push_back( 100.*n_limit.signal_systs[NLimit::MuonPt]/n_limit.n_signal );
     signal_syst_JES.push_back( 100.*n_limit.signal_systs[NLimit::JES]/n_limit.n_signal );
     signal_syst_Uncl.push_back( 100.*n_limit.signal_systs[NLimit::Uncl]/n_limit.n_signal );
     signal_syst_MuonID.push_back( 100.*n_limit.signal_systs[NLimit::MuonID]/n_limit.n_signal );
 
     prompt_syst_Lumi.push_back( 6.2 );
-    prompt_syst_MuonPtRes.push_back( 100.*n_limit.prompt_systs[NLimit::MuonPtRes]/n_limit.n_prompt );
+    prompt_syst_MuonPt.push_back( 100.*n_limit.prompt_systs[NLimit::MuonPt]/n_limit.n_prompt );
     prompt_syst_JES.push_back( 100.*n_limit.prompt_systs[NLimit::JES]/n_limit.n_prompt );
     prompt_syst_Uncl.push_back( 100.*n_limit.prompt_systs[NLimit::Uncl]/n_limit.n_prompt );
     prompt_syst_MuonID.push_back( 100.*n_limit.prompt_systs[NLimit::MuonID]/n_limit.n_prompt );
     prompt_syst_Norm.push_back( 100.*n_limit.prompt_systs[NLimit::Norm]/n_limit.n_prompt );
     
-    fake_syst_MuonPtRes.push_back( 100.*n_limit.fake_systs[NLimit::MuonPtRes]/n_limit.n_fake );
+    fake_syst_MuonPt.push_back( 100.*n_limit.fake_systs[NLimit::MuonPt]/n_limit.n_fake );
     fake_syst_JES.push_back( 100.*n_limit.fake_systs[NLimit::JES]/n_limit.n_fake );
     fake_syst_Uncl.push_back( 100.*n_limit.fake_systs[NLimit::Uncl]/n_limit.n_fake );
     
@@ -101,9 +101,9 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     }
     cout << " \\\\" << endl;
 
-    cout << "~~~Muon Momentum Resolution"<<"\t";
+    cout << "~~~Muon Momentum Scale"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
-      cout << "& "<<std::fixed<<std::setprecision(2)<<signal_syst_MuonPtRes.at(i)<<"\\% ";
+      cout << "& "<<std::fixed<<std::setprecision(2)<<signal_syst_MuonPt.at(i)<<"\\% ";
     }
     cout << " \\\\" << endl;
 
@@ -139,9 +139,9 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     }
     cout << endl;
 
-    cout << "Muon Momentum Resolution"<<"\t";
+    cout << "Muon Momentum Scale"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
-      cout <<std::fixed<<std::setprecision(2)<<signal_syst_MuonPtRes.at(i)<<"\t";
+      cout <<std::fixed<<std::setprecision(2)<<signal_syst_MuonPt.at(i)<<"\t";
     }
     cout << endl;
 
@@ -179,9 +179,9 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     }
     cout << " \\\\" << endl;
     
-    cout << "~~~Muon Momentum Resolution"<<"\t";
+    cout << "~~~Muon Momentum Scale"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
-      cout << "& "<<std::fixed<<std::setprecision(2)<<prompt_syst_MuonPtRes.at(i)<<"\\% ";
+      cout << "& "<<std::fixed<<std::setprecision(2)<<prompt_syst_MuonPt.at(i)<<"\\% ";
     }
     cout << " \\\\" << endl;
     
@@ -223,9 +223,9 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     }
     cout << endl;
     
-    cout << "Muon Momentum Resolution"<<"\t";
+    cout << "Muon Momentum Scale"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
-      cout <<std::fixed<<std::setprecision(2)<<prompt_syst_MuonPtRes.at(i)<<"\t";
+      cout <<std::fixed<<std::setprecision(2)<<prompt_syst_MuonPt.at(i)<<"\t";
     }
     cout << endl;
     
@@ -263,9 +263,9 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     
     cout << "###################### FOR LATEX ######################" << endl;
     
-    cout << "~~~Muon Momentum Resolution"<<"\t";
+    cout << "~~~Muon Momentum Scale"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
-      cout << "& "<<std::fixed<<std::setprecision(2)<<fake_syst_MuonPtRes.at(i)<<"\\% ";
+      cout << "& "<<std::fixed<<std::setprecision(2)<<fake_syst_MuonPt.at(i)<<"\\% ";
     }
     cout << " \\\\" << endl;
     
@@ -289,9 +289,9 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     }
     cout << endl;
     
-    cout << "Muon Momentum Resolution"<<"\t";
+    cout << "Muon Momentum Scale"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
-      cout <<std::fixed<<std::setprecision(2)<<fake_syst_MuonPtRes.at(i)<<"\t";
+      cout <<std::fixed<<std::setprecision(2)<<fake_syst_MuonPt.at(i)<<"\t";
     }
     cout << endl;
     

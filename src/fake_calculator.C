@@ -43,7 +43,7 @@ void fake_calculator(double dXYMin, double RelIsoMax){
   map< TString, vector<Color_t> > map_string_to_MC_color;
   vector<TString> all_MC_list;
   
-  all_MC_list = {"singletop", "TTJets_aMC", "DY", "WJets", "QCD_mu", "HN40_mumumu_VmuN_0p1", "VV"};
+  all_MC_list = {"singletop", "TTJets_aMC", "DY", "WJets", "QCD_mu", "HN_MuMuMu_40", "VV"};
   map_string_to_MC_list["SingleMuon"] = {"singletop", "TTJets_aMC", "DY", "WJets"};
   map_string_to_MC_alias["SingleMuon"] = {"singletop", "ttbar", "DY", "WJets"};
   map_string_to_MC_color["SingleMuon"] = {kOrange, kRed, kYellow, kGreen};
@@ -51,7 +51,7 @@ void fake_calculator(double dXYMin, double RelIsoMax){
   
   //==== get all files here
   map< TString, TFile* > map_string_to_file;
-  map_string_to_file["data"] = new TFile(filepath+"/FakeRateCalculator_Mu_data_DoubleMuon_cat_v8-0-2.root");
+  map_string_to_file["data"] = new TFile(filepath+"/FakeRateCalculator_Mu_data_DoubleMuon_cat_"+cmssw_version+".root");
   for(unsigned int i=0; i<all_MC_list.size(); i++){
     TString this_samplename = all_MC_list.at(i);
     map_string_to_file[this_samplename] = new TFile(filepath+"/FakeRateCalculator_Mu_SK"+this_samplename+"_cat_"+cmssw_version+".root");
@@ -160,7 +160,7 @@ void fake_calculator(double dXYMin, double RelIsoMax){
   for(unsigned int i=0; i<MuonId.size(); i++){
       
     TH1D* hist_DY = (TH1D*)map_string_to_file["DY"]->Get(str_dXYCut+"_prompt_"+MuonId.at(i)+"_dXYSig");
-    TH1D* hist_signal = (TH1D*)map_string_to_file["HN40_mumumu_VmuN_0p1"]->Get(str_dXYCut+"_prompt_"+MuonId.at(i)+"_dXYSig");
+    TH1D* hist_signal = (TH1D*)map_string_to_file["HN_MuMuMu_40"]->Get(str_dXYCut+"_prompt_"+MuonId.at(i)+"_dXYSig");
     TH1D* hist_ttbar = (TH1D*)map_string_to_file["TTJets_aMC"]->Get(str_dXYCut+"_fake_"+MuonId.at(i)+"_dXYSig");
     TH1D* hist_QCD_mumu = (TH1D*)map_string_to_file["QCD_mu"]->Get(str_dXYCut+"_fake_"+MuonId.at(i)+"_dXYSig");
     

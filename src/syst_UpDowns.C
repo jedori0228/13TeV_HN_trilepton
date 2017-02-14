@@ -403,7 +403,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     PDF = 1,
     Q2scale = 2,
     MuonID = 3,
-    MuonPtRes = 4,
+    MuonPt = 4,
     JES = 5,
     JER = 6,
     Uncl = 7,
@@ -418,7 +418,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     n_limit.n_fake = yields_fake.at(0);
     n_limit.n_stat_fake = stat_error_fake;
     n_limit.n_syst_fake = sqrt(squared_syst_fake);
-    n_limit.fake_systs[NLimit::MuonPtRes] = GetMeanUncert(syst_error_fake.at(1), syst_error_fake.at(2));
+    n_limit.fake_systs[NLimit::MuonPt] = GetMeanUncert(syst_error_fake.at(1), syst_error_fake.at(2));
     n_limit.fake_systs[NLimit::JES] = GetMeanUncert(syst_error_fake.at(3), syst_error_fake.at(4));
     n_limit.fake_systs[NLimit::JER] = GetMeanUncert(syst_error_fake.at(5), syst_error_fake.at(6));
     n_limit.fake_systs[NLimit::Uncl] = GetMeanUncert(syst_error_fake.at(7), syst_error_fake.at(8));
@@ -426,7 +426,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     n_limit.n_prompt = yields_prompt.at(0);
     n_limit.n_stat_prompt = stat_error_prompt;
     n_limit.n_syst_prompt = sqrt(squared_syst_prompt);
-    n_limit.prompt_systs[NLimit::MuonPtRes] = GetMeanUncert(syst_error_prompt.at(1), syst_error_prompt.at(2));
+    n_limit.prompt_systs[NLimit::MuonPt] = GetMeanUncert(syst_error_prompt.at(1), syst_error_prompt.at(2));
     n_limit.prompt_systs[NLimit::JES] = GetMeanUncert(syst_error_prompt.at(3), syst_error_prompt.at(4));
     n_limit.prompt_systs[NLimit::JER] = GetMeanUncert(syst_error_prompt.at(5), syst_error_prompt.at(6));
     n_limit.prompt_systs[NLimit::Uncl] = GetMeanUncert(syst_error_prompt.at(7), syst_error_prompt.at(8));
@@ -436,7 +436,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     n_limit.n_signal = yields_signal.at(0);
     n_limit.n_stat_signal = stat_error_signal;
     n_limit.n_syst_signal = sqrt(squared_syst_signal);
-    n_limit.signal_systs[NLimit::MuonPtRes] = GetMeanUncert(syst_error_signal.at(1), syst_error_signal.at(2));
+    n_limit.signal_systs[NLimit::MuonPt] = GetMeanUncert(syst_error_signal.at(1), syst_error_signal.at(2));
     n_limit.signal_systs[NLimit::JES] = GetMeanUncert(syst_error_signal.at(3), syst_error_signal.at(4));
     n_limit.signal_systs[NLimit::JER] = GetMeanUncert(syst_error_signal.at(5), syst_error_signal.at(6));
     n_limit.signal_systs[NLimit::Uncl] = GetMeanUncert(syst_error_signal.at(7), syst_error_signal.at(8));

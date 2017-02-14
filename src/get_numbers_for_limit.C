@@ -101,7 +101,7 @@ void get_numbers_for_limit(){
   }
 
   cout << "============== Non prompt ==============" << endl;
-  vector<TString> bkgs = {"DYJets_10to50", "DYJets", "WJets", "TTJets_MG", "WW", "WZ", "ZZ"};
+  vector<TString> bkgs = {"DYJets_10to50", "DYJets", "WJets", "TTJets_aMC", "WW", "WZ", "ZZ"};
   vector<double> n_events;
   double n_total;
   for(unsigned int i=0; i<bkgs.size(); i++){

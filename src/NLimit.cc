@@ -27,7 +27,7 @@ TString NLimit::SystSourceStr(systsource systsrc){
   else if(systsrc==PDF) return "PDF";
   else if(systsrc==Q2scale) return "Q2Scale";
   else if(systsrc==MuonID) return "MuonID";
-  else if(systsrc==MuonPtRes) return "MuonPtRes";
+  else if(systsrc==MuonPt) return "MuonPt";
   else if(systsrc==JES) return "JES";
   else if(systsrc==JER) return "JER";
   else if(systsrc==Uncl) return "UnclusteredE";
