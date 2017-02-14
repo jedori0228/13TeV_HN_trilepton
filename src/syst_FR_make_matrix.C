@@ -123,7 +123,7 @@ void syst_FR_make_matrix(){
   hist_n_muons->GetXaxis()->SetTitle("Minimum |dXYSig|");
   hist_axis(hist_n_muons);
   //TGaxis::SetMaxDigits(2);
-  c_n_muons->SaveAs(plotpath+"n_muons.png");
+  c_n_muons->SaveAs(plotpath+"n_muons.pdf");
 
   //==== HighdXY one-binned FR
   TCanvas *c_HighdXY_FR = new TCanvas("c_HighdXY_FR", "", 800, 800);
@@ -134,7 +134,7 @@ void syst_FR_make_matrix(){
   hist_HighdXY_FR->GetYaxis()->SetTitle("Maximum Loose Isolation");
   hist_HighdXY_FR->GetXaxis()->SetTitle("Minimum |dXYSig|");
   hist_axis(hist_HighdXY_FR);
-  c_HighdXY_FR->SaveAs(plotpath+"/HighdXY_FR.png");
+  c_HighdXY_FR->SaveAs(plotpath+"/HighdXY_FR.pdf");
 
   //==== QCD Large
   TCanvas *c_QCD_FR_Large = new TCanvas("c_QCD_FR_Large", "", 800, 800);
@@ -145,7 +145,7 @@ void syst_FR_make_matrix(){
   hist_QCD_FR_Large->GetYaxis()->SetTitle("Maximum Loose Isolation");
   hist_QCD_FR_Large->GetXaxis()->SetTitle("Minimum |dXYSig|");
   hist_axis(hist_QCD_FR_Large);
-  c_QCD_FR_Large->SaveAs(plotpath+"/QCD_FR_Large.png");
+  c_QCD_FR_Large->SaveAs(plotpath+"/QCD_FR_Large.pdf");
   //==== QCD Small
   TCanvas *c_QCD_FR_Small = new TCanvas("c_QCD_FR_Small", "", 800, 800);
   canvas_margin(c_QCD_FR_Small);
@@ -155,7 +155,7 @@ void syst_FR_make_matrix(){
   hist_QCD_FR_Small->GetYaxis()->SetTitle("Maximum Loose Isolation");
   hist_QCD_FR_Small->GetXaxis()->SetTitle("Minimum |dXYSig|");
   hist_axis(hist_QCD_FR_Small);
-  c_QCD_FR_Small->SaveAs(plotpath+"/QCD_FR_Small.png");
+  c_QCD_FR_Small->SaveAs(plotpath+"/QCD_FR_Small.pdf");
   //==== QCD SF
   TCanvas *c_QCD_FRSF = new TCanvas("c_QCD_FRSF", "", 800, 800);
   canvas_margin(c_QCD_FRSF);
@@ -165,7 +165,7 @@ void syst_FR_make_matrix(){
   hist_QCD_FRSF->GetYaxis()->SetTitle("Maximum Loose Isolation");
   hist_QCD_FRSF->GetXaxis()->SetTitle("Minimum |dXYSig|");
   hist_axis(hist_QCD_FRSF);
-  c_QCD_FRSF->SaveAs(plotpath+"/QCD_FRSF.png");
+  c_QCD_FRSF->SaveAs(plotpath+"/QCD_FRSF.pdf");
 
   //==== TagZ Large
   TCanvas *c_TagZ_FR_Large = new TCanvas("c_TagZ_FR_Large", "", 800, 800);
@@ -176,7 +176,7 @@ void syst_FR_make_matrix(){
   hist_TagZ_FR_Large->GetYaxis()->SetTitle("Maximum Loose Isolation");
   hist_TagZ_FR_Large->GetXaxis()->SetTitle("Minimum |dXYSig|");
   hist_axis(hist_TagZ_FR_Large);
-  c_TagZ_FR_Large->SaveAs(plotpath+"/TagZ_FR_Large.png");
+  c_TagZ_FR_Large->SaveAs(plotpath+"/TagZ_FR_Large.pdf");
   //==== TagZ Small
   TCanvas *c_TagZ_FR_Small = new TCanvas("c_TagZ_FR_Small", "", 800, 800);
   canvas_margin(c_TagZ_FR_Small);
@@ -186,7 +186,7 @@ void syst_FR_make_matrix(){
   hist_TagZ_FR_Small->GetYaxis()->SetTitle("Maximum Loose Isolation");
   hist_TagZ_FR_Small->GetXaxis()->SetTitle("Minimum |dXYSig|");
   hist_axis(hist_TagZ_FR_Small);
-  c_TagZ_FR_Small->SaveAs(plotpath+"/TagZ_FR_Small.png");
+  c_TagZ_FR_Small->SaveAs(plotpath+"/TagZ_FR_Small.pdf");
   //==== TagZ SF
   TCanvas *c_TagZ_FRSF = new TCanvas("c_TagZ_FRSF", "", 800, 800);
   canvas_margin(c_TagZ_FRSF);
@@ -196,7 +196,7 @@ void syst_FR_make_matrix(){
   hist_TagZ_FRSF->GetYaxis()->SetTitle("Maximum Loose Isolation");
   hist_TagZ_FRSF->GetXaxis()->SetTitle("Minimum |dXYSig|");
   hist_axis(hist_TagZ_FRSF);
-  c_TagZ_FRSF->SaveAs(plotpath+"/TagZ_FRSF.png");
+  c_TagZ_FRSF->SaveAs(plotpath+"/TagZ_FRSF.pdf");
 
  
 

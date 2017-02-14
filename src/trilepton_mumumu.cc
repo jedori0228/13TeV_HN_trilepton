@@ -544,7 +544,7 @@ void trilepton_mumumu::draw_canvas(THStack* mc_stack, TH1D* mc_error, TH1D* hist
   }
 
   mkdir(plotpath+"/"+histname_suffix[i_cut]);
-  c1->SaveAs(plotpath+"/"+histname_suffix[i_cut]+"/"+histname[i_var]+histname_suffix[i_cut]+".png");
+  c1->SaveAs(plotpath+"/"+histname_suffix[i_cut]+"/"+histname[i_var]+histname_suffix[i_cut]+".pdf");
   outputfile->cd(histname_suffix[i_cut]);
   c1->Write();
   

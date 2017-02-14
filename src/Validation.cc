@@ -97,7 +97,7 @@ void Validation(){
           
           hist_axis(hist_empty, hist_ratio);
           
-          c1->SaveAs(plotpath+thid_id+"_"+this_cut+"_"+this_pu+"_"+this_var+".png");
+          c1->SaveAs(plotpath+thid_id+"_"+this_cut+"_"+this_pu+"_"+this_var+".pdf");
           
         }
       }

@@ -94,7 +94,7 @@ void syst_FR_get_unct(){
   hist_n_TTL->GetXaxis()->SetTitle("Minimum |dXYSig|");
   hist_axis(hist_n_TTL);
   //TGaxis::SetMaxDigits(2);
-  c_TTL->SaveAs(plotpath+"/n_TTL.png");
+  c_TTL->SaveAs(plotpath+"/n_TTL.pdf");
   c_TTL->Close();
 
   //==== TLL
@@ -107,7 +107,7 @@ void syst_FR_get_unct(){
   hist_n_TLL->GetXaxis()->SetTitle("Minimum |dXYSig|");
   hist_axis(hist_n_TLL);
   //TGaxis::SetMaxDigits(2);
-  c_TLL->SaveAs(plotpath+"/n_TLL.png");
+  c_TLL->SaveAs(plotpath+"/n_TLL.pdf");
   c_TLL->Close();
 
   //==== LLL
@@ -120,7 +120,7 @@ void syst_FR_get_unct(){
   hist_n_LLL->GetXaxis()->SetTitle("Minimum |dXYSig|");
   hist_axis(hist_n_LLL);
   //TGaxis::SetMaxDigits(2);
-  c_LLL->SaveAs(plotpath+"/n_LLL.png");
+  c_LLL->SaveAs(plotpath+"/n_LLL.pdf");
   c_LLL->Close();
 
   //==== HARD CODED
@@ -174,7 +174,7 @@ void syst_FR_get_unct(){
   gr_LLL->Draw("lpsame");
   gr_oneoverFR->Draw("lpsame");
   lg->Draw();
-  c_n_Loose_curves->SaveAs(plotpath+"/n_Loose_curves.png");
+  c_n_Loose_curves->SaveAs(plotpath+"/n_Loose_curves.pdf");
   c_n_Loose_curves->Close();
 
 
@@ -188,7 +188,7 @@ void syst_FR_get_unct(){
   hist_yield->GetXaxis()->SetTitle("Minimum |dXYSig|");
   hist_axis(hist_yield);
   gStyle->SetPaintTextFormat("0.2f");
-  c_yield->SaveAs(plotpath+"/yield.png");
+  c_yield->SaveAs(plotpath+"/yield.pdf");
   c_yield->Close();
 
   //==== syst
@@ -210,7 +210,7 @@ void syst_FR_get_unct(){
   hist_syst->Draw("coltexte1");
   hist_syst->GetYaxis()->SetTitle("Maximum Loose Isolation");
   hist_syst->GetXaxis()->SetTitle("Minimum |dXYSig|");
-  c_syst->SaveAs(plotpath+"/syst.png");
+  c_syst->SaveAs(plotpath+"/syst.pdf");
   
   
 }

@@ -60,7 +60,7 @@ void draw_BR(){
 
   gr_Wl->GetYaxis()->SetRangeUser(0, 1.1);
   
-  c1->SaveAs(plotpath+"/BR.png");
+  c1->SaveAs(plotpath+"/BR.pdf");
 
 }
 

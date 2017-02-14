@@ -111,7 +111,7 @@ void signal_study(){
     hist_SS->Draw("histsame");
     lg_pt->AddEntry(hist_SS, "GEN SS", "l");
     lg_pt->Draw();
-    c_pt->SaveAs(plotpath+"/Pts_HN"+TString::Itoa(int(x_all[i]), 10)+".png");
+    c_pt->SaveAs(plotpath+"/Pts_HN"+TString::Itoa(int(x_all[i]), 10)+".pdf");
     c_pt->Close();
     delete c_pt;
 
@@ -209,7 +209,7 @@ void signal_study(){
       hist_GEN_solsel_dR_best->GetXaxis()->SetTitle("#DeltaR(#nu_{True}, #nu_{Sol})");
       hist_axis(hist_GEN_solsel_dR_best);
       
-      c_dR->SaveAs(plotpath+"/dR_nus_HN"+TString::Itoa(int(x_all[i]), 10)+".png");
+      c_dR->SaveAs(plotpath+"/dR_nus_HN"+TString::Itoa(int(x_all[i]), 10)+".pdf");
       c_dR->Close();
       delete c_dR;
 
@@ -293,7 +293,7 @@ void signal_study(){
   //cout << "2) subleading is matched to gen_l_1" << endl;
   //gr_reco_subleading_SS_match_gen_l_1->Print();
   //==== save canvas
-  c1->SaveAs(plotpath+"/gen_l_1_assigning.png");
+  c1->SaveAs(plotpath+"/gen_l_1_assigning.pdf");
   c1->Close();
   
   //==================================================================
@@ -346,7 +346,7 @@ void signal_study(){
   lg2->AddEntry(gr_gen_l_2_leading, "GEN l_{2} : Leading", "lp");
   lg2->Draw();
   
-  c2->SaveAs(plotpath+"/leading_lepton.png");
+  c2->SaveAs(plotpath+"/leading_lepton.pdf");
   c2->Close();
 
   
@@ -403,7 +403,7 @@ void signal_study(){
   cout << "2) total" << endl;
   gr_gen_l_1_first_mlmet_next_total->Print();
   //==== save canvas
-  c3->SaveAs(plotpath+"/highmass_gen_l_1_first.png");
+  c3->SaveAs(plotpath+"/highmass_gen_l_1_first.pdf");
   c3->Close();
   
   //=====================================================================================
@@ -478,7 +478,7 @@ void signal_study(){
   cout << "2) total" << endl;
   gr_gen_l_3_first_pt_order_next_total->Print();
   //==== save canvas
-  c4->SaveAs(plotpath+"/highmass_gen_l_3_first.png");
+  c4->SaveAs(plotpath+"/highmass_gen_l_3_first.pdf");
   c4->Close();
 
   

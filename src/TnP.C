@@ -59,9 +59,9 @@ void TnP(){
           if( !c_data || !c_MC ) continue;
 
           //==== Data
-          c_data->SaveAs(plotpath+"ID/fitresult/Data/"+dirname_fit_result+fitftns.at(i_fn)+".png");
+          c_data->SaveAs(plotpath+"ID/fitresult/Data/"+dirname_fit_result+fitftns.at(i_fn)+".pdf");
           //==== MC
-          c_MC->SaveAs(plotpath+"ID/fitresult/MC/"+dirname_fit_result+fitftns.at(i_fn)+".png");
+          c_MC->SaveAs(plotpath+"ID/fitresult/MC/"+dirname_fit_result+fitftns.at(i_fn)+".pdf");
 
           break;
 
@@ -163,7 +163,7 @@ void TnP(){
     latex_Lumi.SetTextSize(0.035);
     latex_Lumi.DrawLatex(0.7, 0.96, "27.66 fb^{-1} (13 TeV)");
 
-    c_eff->SaveAs(plotpath+"ID/pt_PLOT_abseta_bin"+TString::Itoa(i_eta,10)+".png");
+    c_eff->SaveAs(plotpath+"ID/pt_PLOT_abseta_bin"+TString::Itoa(i_eta,10)+".pdf");
     
     c_eff->Close();
 
@@ -252,7 +252,7 @@ void TnP(){
     latex_Lumi.DrawLatex(0.7, 0.96, "27.66 fb^{-1} (13 TeV)");
     
     
-    c_eff->SaveAs(plotpath+"ID/abseta_PLOT_pt_bin"+TString::Itoa(i_pt,10)+".png");
+    c_eff->SaveAs(plotpath+"ID/abseta_PLOT_pt_bin"+TString::Itoa(i_pt,10)+".pdf");
     
     c_eff->Close();
     delete c_eff;

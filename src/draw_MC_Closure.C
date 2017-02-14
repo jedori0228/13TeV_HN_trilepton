@@ -92,7 +92,7 @@ void draw_MC_Closure(){
 
     c1->cd();
     lg->Draw();
-    c1->SaveAs(plotpath+this_sample+"_"+channel+"_leadingLepton_Pt.png");
+    c1->SaveAs(plotpath+this_sample+"_"+channel+"_leadingLepton_Pt.pdf");
     c1->Close();
   }
 }

@@ -63,6 +63,6 @@ void draw_mll_os(){
   }
 
   lg->Draw();
-  c1->SaveAs(plotpath+"./mll_os.png");
+  c1->SaveAs(plotpath+"./mll_os.pdf");
   
 }

@@ -89,7 +89,7 @@ void syst_MC_Closure(){
     hist_yield->GetXaxis()->SetTitle("Minimum |dXYSig|");
     hist_axis(hist_yield);
     //TGaxis::SetMaxDigits(2);
-    c_yield->SaveAs(plotpath+this_sample+"_"+channel+"_yield.png");
+    c_yield->SaveAs(plotpath+this_sample+"_"+channel+"_yield.pdf");
     c_yield->Close();
     
     //==== syst
@@ -110,14 +110,14 @@ void syst_MC_Closure(){
     hist_syst->Draw("coltexte1");
     hist_syst->GetYaxis()->SetTitle("Maximum Loose Isolation");
     hist_syst->GetXaxis()->SetTitle("Minimum |dXYSig|");
-    c_syst->SaveAs(plotpath+this_sample+"_"+channel+"_diff.png");
+    c_syst->SaveAs(plotpath+this_sample+"_"+channel+"_diff.pdf");
     //==== syst
     hist_syst->SetMarkerSize(2);
     hist_syst->Draw("coltexte1");
     hist_syst->GetYaxis()->SetTitle("Maximum Loose Isolation");
     hist_syst->GetXaxis()->SetTitle("Minimum |dXYSig|");
     hist_syst->Divide(hist_yield_cent);
-    c_syst->SaveAs(plotpath+this_sample+"_"+channel+"_syst.png");
+    c_syst->SaveAs(plotpath+this_sample+"_"+channel+"_syst.pdf");
     c_syst->Close();
 
   }
