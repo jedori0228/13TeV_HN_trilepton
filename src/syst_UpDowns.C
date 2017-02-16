@@ -14,9 +14,10 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
   double uncert_fake = 0.30;
   double N_MC = 100000.;
 
-  TString region = "Preselection";
+  //TString region = "Preselection";
   //TString region = "WZ";
   //TString region = "ZJets";
+  TString region = "ZZ";
   
   int SignalClass;
   if(sig_mass <= 50) SignalClass = 1;
@@ -266,6 +267,9 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
 
       TString str_mass = TString::Itoa(sig_mass, 10);
 
+      double data_yield = yields_data.at(0);
+      if(region=="Preselection") data_yield = 9999;
+
       //==== low mass
       if(sig_mass < 80){
         cout
@@ -282,7 +286,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
         <<"$"<<std::fixed<<std::setprecision(2)<<100.*yields_signal.at(0)/N_MC
         <<" \\pm "<<std::fixed<<std::setprecision(2)<<100.*stat_error_signal/N_MC<<"~\\stat"
         <<" \\pm "<<std::fixed<<std::setprecision(2)<<100.*sqrt(squared_syst_signal)/N_MC << "~\\syst$\t& "
-        <<"$9999$ \\\\" << endl;
+        <<"$"<<data_yield<<"$ \\\\" << endl;
       }
       //==== high mass
       else{
@@ -300,7 +304,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
         <<"$"<<std::fixed<<std::setprecision(2)<<100.*yields_signal.at(0)/N_MC
         <<" \\pm "<<std::fixed<<std::setprecision(2)<<100.*stat_error_signal/N_MC<<"~\\stat"
         <<" \\pm "<<std::fixed<<std::setprecision(2)<<100.*sqrt(squared_syst_signal)/N_MC << "~\\syst$\t& "
-        <<"$9999$ \\\\" << endl;
+        <<"$"<<data_yield<<"$ \\\\" << endl;
       }
 
     }

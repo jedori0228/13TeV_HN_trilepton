@@ -176,7 +176,7 @@ void run_trilepton_mumumu_CR(int XXX){
   m.CutVarSkips.push_back( make_pair("_WZ", "mll") );
   m.CutVarSkips.push_back( make_pair("_ZJets", "mll") );
  
-  //===========================
+  //============================
   //==== HOT FIX FOR DILEP CR
   //==== RE-SET HIST VARIABLES
   //============================
@@ -209,6 +209,46 @@ void run_trilepton_mumumu_CR(int XXX){
       "# of vertices"
     };
     
+  }
+
+  //============================
+  //==== HOT FIX FOR 4-LEP CR
+  //==== RE-SET HIST VARIABLES
+  //============================
+
+  if(XXX==3){
+    m.histname_suffix = {"_ZZ"};
+    m.drawdata = {true};
+    m.samples_to_use = {"fake_sfed_HighdXY", "ZZ_excl", "Vgamma", "VVV", "ttV"};
+
+    m.histname = {
+      "leadingLepton_Pt", "leadingLepton_Eta", "leadingLepton_RelIso", "leadingLepton_Chi2",
+      "secondLepton_Pt", "secondLepton_Eta", "secondLepton_RelIso", "secondLepton_Chi2",
+      "thirdLepton_Pt", "thirdLepton_Eta", "thirdLepton_RelIso", "thirdLepton_Chi2",
+      "fourthLepton_Pt", "fourthLepton_Eta", "fourthLepton_RelIso", "fourthLepton_Chi2",
+      "osllmass",
+      "m_llll",
+      "n_events",
+      "PFMET", "PFMET_phi",
+      "n_bjets",
+      "n_jets",
+      "n_vertices"
+    };
+
+    m.x_title = {
+      "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2",
+      "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2",
+      "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2",
+      "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2",
+      "m(OS) [GeV]",
+      "m(#mu#mu#mu#mu) [GeV]",
+      "onebin",
+      "#slash{E}_{T}^{miss} [GeV]", "#phi of #slash{E}_{T}^{miss}",
+      "# of b-tagged jets",
+      "# of jets",
+      "# of vertices"
+    };
+
   }
 
   //====================
@@ -301,8 +341,6 @@ void run_trilepton_mumumu_CR(int XXX){
   m.rebins[make_pair("_ZJets", "thirdLepton_Eta")] = 5;
   m.rebins[make_pair("_ZJets", "PFMET_phi")] = 4;
   m.rebins[make_pair("_ZJets", "PFMET")] = 10;
-  m.rebins[make_pair("_ZJets", "m_Z_candidate_before_cut")] = 5;
-  //m.rebins[make_pair("_ZJets", "m_Z_candidate")] = 5;
   m.rebins[make_pair("_ZJets", "m_Z_candidate")] = 1;
   m.rebins[make_pair("_ZJets", "mt_W_candidate")] = 10;
   m.rebins[make_pair("_ZJets", "osllmass")] = 5;
@@ -329,6 +367,19 @@ void run_trilepton_mumumu_CR(int XXX){
   m.rebins[make_pair("_OSDiMuon_Z_10GeV", "leadingLepton_Eta")] = 5;
   m.rebins[make_pair("_OSDiMuon_Z_10GeV", "secondLepton_Pt")] = 5;
   m.rebins[make_pair("_OSDiMuon_Z_10GeV", "secondLepton_Eta")] = 5;
+
+  m.rebins[make_pair("_ZZ", "leadingLepton_Pt")] = 5;
+  m.rebins[make_pair("_ZZ", "leadingLepton_Eta")] = 5;
+  m.rebins[make_pair("_ZZ", "secondLepton_Pt")] = 5;
+  m.rebins[make_pair("_ZZ", "secondLepton_Eta")] = 5;
+  m.rebins[make_pair("_ZZ", "thirdLepton_Pt")] = 5;
+  m.rebins[make_pair("_ZZ", "thirdLepton_Eta")] = 5;
+  m.rebins[make_pair("_ZZ", "fourthLepton_Pt")] = 5;
+  m.rebins[make_pair("_ZZ", "fourthLepton_Eta")] = 5;
+  m.rebins[make_pair("_ZZ", "PFMET_phi")] = 4;
+  m.rebins[make_pair("_ZZ", "PFMET")] = 10;
+  m.rebins[make_pair("_ZZ", "osllmass")] = 5;
+  m.rebins[make_pair("_ZZ", "m_llll")] = 20;
 
   //=============
   //==== y_maxs
@@ -357,23 +408,23 @@ void run_trilepton_mumumu_CR(int XXX){
   m.y_maxs[make_pair("_WZ", "dRZMuonWMuon")] = 800;
   m.y_maxs[make_pair("_WZ", "leadingLepton_Chi2")] = 250;
   m.y_maxs[make_pair("_WZ", "leadingLepton_Eta")] = 300;
-  m.y_maxs[make_pair("_WZ", "leadingLepton_Pt")] = 150;
-  m.y_maxs[make_pair("_WZ", "leadingLepton_RelIso")] = 800;
-  m.y_maxs[make_pair("_WZ", "m_lll_before_cut")] = 900;
+  m.y_maxs[make_pair("_WZ", "leadingLepton_Pt")] = 200;
+  m.y_maxs[make_pair("_WZ", "leadingLepton_RelIso")] = 1000;
+  m.y_maxs[make_pair("_WZ", "m_lll_before_cut")] = 1200;
   m.y_maxs[make_pair("_WZ", "m_lll")] = 300;
   m.y_maxs[make_pair("_WZ", "m_Z_candidate_before_cut")] = 2000;
   m.y_maxs[make_pair("_WZ", "m_Z_candidate")] = 300;
-  m.y_maxs[make_pair("_WZ", "mt_W_candidate")] = 250;
-  m.y_maxs[make_pair("_WZ", "n_bjets_before_cut")] = 5000;
+  m.y_maxs[make_pair("_WZ", "mt_W_candidate")] = 300;
+  m.y_maxs[make_pair("_WZ", "n_bjets_before_cut")] = 6000;
   m.y_maxs[make_pair("_WZ", "n_bjets")] = 2000;
-  m.y_maxs[make_pair("_WZ", "n_electrons_before_cut")] = 3000;
+  m.y_maxs[make_pair("_WZ", "n_electrons_before_cut")] = 6000;
   m.y_maxs[make_pair("_WZ", "n_events")] = 2000;
-  m.y_maxs[make_pair("_WZ", "n_jets")] = 700;
+  m.y_maxs[make_pair("_WZ", "n_jets")] = 1000;
   m.y_maxs[make_pair("_WZ", "n_vertices_before_cut")] = 500;
   m.y_maxs[make_pair("_WZ", "n_vertices")] = 150;
-  m.y_maxs[make_pair("_WZ", "N1_mlll")] = 300;
+  m.y_maxs[make_pair("_WZ", "N1_mlll")] = 350;
   m.y_maxs[make_pair("_WZ", "N1_n_bjets")] = 1800;
-  m.y_maxs[make_pair("_WZ", "N1_PFMET")] = 400;
+  m.y_maxs[make_pair("_WZ", "N1_PFMET")] = 450;
   m.y_maxs[make_pair("_WZ", "N1_Z_mass")] = 600;
   m.y_maxs[make_pair("_WZ", "osllmass")] = 1000;
   m.y_maxs[make_pair("_WZ", "PFMET_before_cut")] = 1500;
@@ -391,7 +442,7 @@ void run_trilepton_mumumu_CR(int XXX){
   m.y_maxs[make_pair("_WZ", "WMuon_Chi2")] = 250;
   m.y_maxs[make_pair("_WZ", "WMuon_dXY")] = 150;
   m.y_maxs[make_pair("_WZ", "WMuon_Eta")] = 300;
-  m.y_maxs[make_pair("_WZ", "WMuon_Pt")] = 300;
+  m.y_maxs[make_pair("_WZ", "WMuon_Pt")] = 350;
   m.y_maxs[make_pair("_WZ", "WMuon_RelIso")] = 800;
   m.y_maxs[make_pair("_WZ", "Z_candidate_Pt")] = 400;
   m.y_maxs[make_pair("_WZ", "ZMuon_leading_Chi2")] = 250;
@@ -405,7 +456,7 @@ void run_trilepton_mumumu_CR(int XXX){
   m.y_maxs[make_pair("_WZ", "ZMuon_subleading_Pt")] = 300;
   m.y_maxs[make_pair("_WZ", "ZMuon_subleading_RelIso")] = 800;
   m.y_maxs[make_pair("_ZJets", "dRMETWMuon")] = 200;
-  m.y_maxs[make_pair("_ZJets", "dRZMuonWMuon")] = 300;
+  m.y_maxs[make_pair("_ZJets", "dRZMuonWMuon")] = 350;
   m.y_maxs[make_pair("_ZJets", "leadingLepton_Chi2")] = 100;
   m.y_maxs[make_pair("_ZJets", "leadingLepton_Eta")] = 150;
   m.y_maxs[make_pair("_ZJets", "leadingLepton_Pt")] = 150;
@@ -415,9 +466,9 @@ void run_trilepton_mumumu_CR(int XXX){
   m.y_maxs[make_pair("_ZJets", "mt_W_candidate")] = 200;
   m.y_maxs[make_pair("_ZJets", "n_bjets")] = 1000;
   m.y_maxs[make_pair("_ZJets", "n_events")] = 1000;
-  m.y_maxs[make_pair("_ZJets", "n_jets")] = 1000;
+  m.y_maxs[make_pair("_ZJets", "n_jets")] = 800;
   m.y_maxs[make_pair("_ZJets", "n_vertices")] = 60;
-  m.y_maxs[make_pair("_ZJets", "osllmass")] = 400;
+  m.y_maxs[make_pair("_ZJets", "osllmass")] = 450;
   m.y_maxs[make_pair("_ZJets", "PFMET_phi")] = 150;
   m.y_maxs[make_pair("_ZJets", "PFMET")] = 500;
   m.y_maxs[make_pair("_ZJets", "secondLepton_Chi2")] = 100;
@@ -466,6 +517,31 @@ void run_trilepton_mumumu_CR(int XXX){
 
   }
 
+  m.y_maxs[make_pair("_ZZ", "fourthLepton_Chi2")] = 40;
+  m.y_maxs[make_pair("_ZZ", "fourthLepton_Eta")] = 50;
+  m.y_maxs[make_pair("_ZZ", "fourthLepton_Pt")] = 50;
+  m.y_maxs[make_pair("_ZZ", "fourthLepton_RelIso")] = 100;
+  m.y_maxs[make_pair("_ZZ", "leadingLepton_Chi2")] = 40;
+  m.y_maxs[make_pair("_ZZ", "leadingLepton_Eta")] = 50;
+  m.y_maxs[make_pair("_ZZ", "leadingLepton_Pt")] = 25;
+  m.y_maxs[make_pair("_ZZ", "leadingLepton_RelIso")] = 100;
+  m.y_maxs[make_pair("_ZZ", "m_llll")] = 50;
+  m.y_maxs[make_pair("_ZZ", "n_bjets")] = 200;
+  m.y_maxs[make_pair("_ZZ", "n_events")] = 200;
+  m.y_maxs[make_pair("_ZZ", "n_jets")] = 120;
+  m.y_maxs[make_pair("_ZZ", "n_vertices")] = 30;
+  m.y_maxs[make_pair("_ZZ", "osllmass")] = 200;
+  m.y_maxs[make_pair("_ZZ", "PFMET_phi")] = 150;
+  m.y_maxs[make_pair("_ZZ", "PFMET")] = 70;
+  m.y_maxs[make_pair("_ZZ", "secondLepton_Chi2")] = 40;
+  m.y_maxs[make_pair("_ZZ", "secondLepton_Eta")] = 50;
+  m.y_maxs[make_pair("_ZZ", "secondLepton_Pt")] = 40;
+  m.y_maxs[make_pair("_ZZ", "secondLepton_RelIso")] = 100;
+  m.y_maxs[make_pair("_ZZ", "thirdLepton_Chi2")] = 40;
+  m.y_maxs[make_pair("_ZZ", "thirdLepton_Eta")] = 50;
+  m.y_maxs[make_pair("_ZZ", "thirdLepton_Pt")] = 50;
+  m.y_maxs[make_pair("_ZZ", "thirdLepton_RelIso")] = 100;
+
   //=============
   //==== x_mins
   //=============
@@ -493,13 +569,24 @@ void run_trilepton_mumumu_CR(int XXX){
   //==== ZJets
   m.x_mins[make_pair("_ZJets", "m_Z_candidate")] = 75;
   m.x_maxs[make_pair("_ZJets", "m_Z_candidate")] = 105;
-
   m.x_maxs[make_pair("_ZJets", "PFMET_before_cut")] = 200.;
   m.x_maxs[make_pair("_ZJets", "PFMET")] = 200.;
   m.x_maxs[make_pair("_ZJets", "osllmass")] = 150.;
 
   m.x_mins[make_pair("_OSDiMuon_Z_10GeV", "mll")] = 75.;
   m.x_maxs[make_pair("_OSDiMuon_Z_10GeV", "mll")] = 110.;
+
+  m.x_maxs[make_pair("_ZZ", "fourthLepton_Pt")] = 100;
+  m.x_maxs[make_pair("_ZZ", "leadingLepton_Pt")] = 200;
+  m.x_maxs[make_pair("_ZZ", "m_llll")] = 600;
+  m.x_maxs[make_pair("_ZZ", "n_jets")] = 5;
+  m.x_maxs[make_pair("_ZZ", "n_vertices")] = 30;
+  m.x_mins[make_pair("_ZZ", "osllmass")] = 75;
+  m.x_maxs[make_pair("_ZZ", "osllmass")] = 105;
+  m.x_maxs[make_pair("_ZZ", "PFMET_phi")] = 150;
+  m.x_maxs[make_pair("_ZZ", "PFMET")] = 100;
+  m.x_maxs[make_pair("_ZZ", "secondLepton_Pt")] = 40;
+  m.x_maxs[make_pair("_ZZ", "thirdLepton_Pt")] = 100;
 
   //===============
   //==== k-factor

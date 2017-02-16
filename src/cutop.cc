@@ -72,6 +72,9 @@ bool cutop::isSearchRegion(){
   else if(SearchRegion=="ZJets"){
     if(isZJets==0) pass = false;
   }
+  else if(SearchRegion=="ZZ"){
+    if(isZZ==0) pass = false;
+  }
   else{
 
   }

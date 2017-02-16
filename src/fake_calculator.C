@@ -47,7 +47,9 @@ void fake_calculator(double dXYMin, double RelIsoMax){
   map_string_to_MC_list["SingleMuon"] = {"singletop", "TTJets_aMC", "DY", "WJets"};
   map_string_to_MC_alias["SingleMuon"] = {"singletop", "ttbar", "DY", "WJets"};
   map_string_to_MC_color["SingleMuon"] = {kOrange, kRed, kYellow, kGreen};
-  map_string_to_MC_list["TagZ"] = {"singletop", "TTJets_aMC", "DY", "WJets", "QCD_mu", "VV"};
+  map_string_to_MC_list["DiMuon"] = {"DY", "VV"};
+  map_string_to_MC_alias["DiMuon"] = {"DY", "VV"};
+  map_string_to_MC_color["DiMuon"] = {kYellow, kGreen};
   
   //==== get all files here
   map< TString, TFile* > map_string_to_file;
@@ -239,13 +241,14 @@ void fake_calculator(double dXYMin, double RelIsoMax){
     "SingleMuonTrigger_HighdXY_withjet",
     "SingleMuonTrigger_HighdXY_withjet_0bjet",
     "SingleMuonTrigger_HighdXY_withjet_withbjet",
+    "DiMuonTrigger_ZTag_Small",
   };
   vector<TString> FR_method_alias = {
     "HighdXY",
     "HighdXY no jet",
     "HighdXY with jet",
     "HighdXY with jet but no bjet",
-    "HighdXY with bjet",
+    "HighdXY with bjet"
   };
   vector<Color_t> FR_method_color = {
     kBlack,
@@ -363,6 +366,44 @@ void fake_calculator(double dXYMin, double RelIsoMax){
       
       //==== Y axis range
       if(this_FR_method == "SingleMuonTrigger_HighdXY"){
+        if(this_var_FR == "pt"){
+          num_MC_stack->SetMaximum(10000000);
+          num_MC_stack->SetMinimum(1);
+          den_MC_stack->SetMaximum(10000000);
+          den_MC_stack->SetMinimum(1);
+        }
+        if(this_var_FR == "eta"){
+          num_MC_stack->SetMaximum(1000000);
+          num_MC_stack->SetMinimum(1);
+          den_MC_stack->SetMaximum(1000000);
+          den_MC_stack->SetMinimum(1);
+        }
+        if(this_var_FR == "RelIso"){
+          num_MC_stack->SetMaximum(1000000);
+          num_MC_stack->SetMinimum(1);
+          den_MC_stack->SetMaximum(1000000);
+          den_MC_stack->SetMinimum(1);
+        }
+        if(this_var_FR == "Chi2"){
+          num_MC_stack->SetMaximum(1000000);
+          num_MC_stack->SetMinimum(1);
+          den_MC_stack->SetMaximum(1000000);
+          den_MC_stack->SetMinimum(1);
+        }
+        if(this_var_FR == "dXY"){
+          num_MC_stack->SetMaximum(1000000);
+          num_MC_stack->SetMinimum(1);
+          den_MC_stack->SetMaximum(1000000);
+          den_MC_stack->SetMinimum(1);
+        }
+        if(this_var_FR == "dXYSig"){
+          num_MC_stack->SetMaximum(10000000);
+          num_MC_stack->SetMinimum(1);
+          den_MC_stack->SetMaximum(10000000);
+          den_MC_stack->SetMinimum(1);
+        }
+      }
+      if(this_FR_method == "DiMuonTrigger_ZTag_Small"){
         if(this_var_FR == "pt"){
           num_MC_stack->SetMaximum(10000000);
           num_MC_stack->SetMinimum(1);
@@ -555,6 +596,7 @@ void fake_calculator(double dXYMin, double RelIsoMax){
       TH1D *FR_curve = new TH1D("FR_eta_"+TString::Itoa(j,10), "", n_pt_bins, x_bins);
       for(int k=0; k<n_pt_bins; k++){
         FR_curve->SetBinContent(k+1, num_data_subtracted->GetBinContent(k+1, j+1) );
+        FR_curve->SetBinError(k+1, num_data_subtracted->GetBinError(k+1, j+1) );
       }
       gr_FR_curve[j] = hist_to_graph(FR_curve);
       gr_FR_curve[j]->SetLineColor(colors[j]);
@@ -567,7 +609,7 @@ void fake_calculator(double dXYMin, double RelIsoMax){
         gr_FR_curve[j]->Draw("alp");
         gr_FR_curve[j]->GetYaxis()->SetRangeUser(0, 0.5);
       }
-      else gr_FR_curve[j]->Draw("lpsame");
+      else gr_FR_curve[j]->Draw("e1lpsame");
     }
     lg_FR_curve->AddEntry(gr_FR_curve[0], "0 < |#eta| < 0.8", "l");
     lg_FR_curve->AddEntry(gr_FR_curve[1], "0.8 < |#eta| < 1.479", "l");
@@ -692,36 +734,43 @@ void fake_calculator(double dXYMin, double RelIsoMax){
       delete c_2D_FR_SF;
       
       //==== draw SF curve for each eta region
-      TCanvas *c_2D_SF_curve = new TCanvas("c_2D_SF_curve", "", 800, 800);
-      canvas_margin(c_2D_SF_curve);
-      c_2D_SF_curve->cd();
+      TCanvas *c_1D_SF_curve = new TCanvas("c_1D_SF_curve", "", 800, 800);
+      canvas_margin(c_1D_SF_curve);
+      c_1D_SF_curve->cd();
       TLegend* lg_SF_curve = new TLegend(0.6, 0.6, 0.9, 0.9);
       lg_SF_curve->SetFillStyle(0);
       lg_SF_curve->SetBorderSize(0);
-      TH1D* SF_curve[4];
+
+      TGraphAsymmErrors *gr_SF_curve[4];
+
       double x_bins[8] = {10, 15, 20, 25, 30, 35, 45, 60};
       double y_bins[5] = {0.0, 0.8, 1.479, 2.0, 2.5};
       Color_t colors[4] = {kBlack, kRed, kBlue, kViolet};
       for(int j=0; j<4; j++){
-        SF_curve[j] = new TH1D("FR_eta_"+TString::Itoa(j,10), "", 7, x_bins);
+        TH1D *SF_curve = new TH1D("FR_eta_"+TString::Itoa(j,10), "", 7, x_bins);
         for(int k=0; k<7; k++){
-          SF_curve[j]->SetBinContent(k+1, small_2D->GetBinContent(k+1, j+1) );
+          SF_curve->SetBinContent(k+1, small_2D->GetBinContent(k+1, j+1) );
+          SF_curve->SetBinError(k+1, small_2D->GetBinError(k+1, j+1) );
         }
-        SF_curve[j]->SetLineColor(colors[j]);
-        SF_curve[j]->SetYTitle("Fake Rate Scale Factor");
-        SF_curve[j]->SetXTitle("p_{T} [GeV/c]");
-        hist_axis(SF_curve[j]);
-        SF_curve[j]->Draw("Lsame");
+        gr_SF_curve[j] = hist_to_graph(SF_curve);
+        gr_SF_curve[j]->SetLineColor(colors[j]);
+        gr_SF_curve[j]->GetYaxis()->SetTitle("Fake Rate Scale Factor");
+        gr_SF_curve[j]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+        hist_axis(gr_SF_curve[j]);
+        if(j==0){
+          gr_SF_curve[j]->Draw("e1alp");
+          gr_SF_curve[j]->GetYaxis()->SetRangeUser(0.8, 2.0);
+        }
+        else gr_SF_curve[j]->Draw("e1lpsame");
       }
-      SF_curve[0]->GetYaxis()->SetRangeUser(0, 10.0);
-      lg_SF_curve->AddEntry(SF_curve[0], "0 < |#eta| < 0.8", "l");
-      lg_SF_curve->AddEntry(SF_curve[1], "0.8 < |#eta| < 1.479", "l");
-      lg_SF_curve->AddEntry(SF_curve[2], "1.479 < |#eta| < 2.0", "l");
-      lg_SF_curve->AddEntry(SF_curve[3], "2.0 < |#eta| < 2.5", "l");
+      lg_SF_curve->AddEntry(gr_SF_curve[0], "0 < |#eta| < 0.8", "l");
+      lg_SF_curve->AddEntry(gr_SF_curve[1], "0.8 < |#eta| < 1.479", "l");
+      lg_SF_curve->AddEntry(gr_SF_curve[2], "1.479 < |#eta| < 2.0", "l");
+      lg_SF_curve->AddEntry(gr_SF_curve[3], "2.0 < |#eta| < 2.5", "l");
       lg_SF_curve->Draw();
-      c_2D_SF_curve->SaveAs(plotpath+"/1D_pt_each_eta_FRSF_MCTruth_"+this_MCTruth_trigger+"_"+this_MC_sample_MCTruth+".pdf");
-      c_2D_SF_curve->Close();
-      delete c_2D_SF_curve;
+      c_1D_SF_curve->SaveAs(plotpath+"/1D_pt_each_eta_FRSF_MCTruth_"+this_MCTruth_trigger+"_"+this_MC_sample_MCTruth+".pdf");
+      c_1D_SF_curve->Close();
+      delete c_1D_SF_curve;
       
       //==== write rootfile
       file_FR->cd();

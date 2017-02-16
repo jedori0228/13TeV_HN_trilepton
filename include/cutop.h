@@ -39,6 +39,7 @@ class cutop {
   Double_t        isPreselection;
   Double_t        isWZ;
   Double_t        isZJets;
+  Double_t        isZZ;
   
   // List of branches
   TBranch        *b_first_pt;   //!
@@ -58,6 +59,7 @@ class cutop {
   TBranch        *b_isPreselection;
   TBranch        *b_isWZ;
   TBranch        *b_isZJets;
+  TBranch        *b_isZZ;
   
   double TotalEvent;
   double n_weighted;
@@ -177,6 +179,7 @@ void cutop::Init(TTree *tree)
   fChain->SetBranchAddress("isPreselection", &isPreselection, &b_isPreselection);
   fChain->SetBranchAddress("isWZ", &isWZ, &b_isWZ);
   fChain->SetBranchAddress("isZJets", &isZJets, &b_isZJets);
+  fChain->SetBranchAddress("isZZ", &isZZ, &b_isZZ);
 
   Notify();
 }
