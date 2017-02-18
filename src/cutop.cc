@@ -18,7 +18,7 @@ void cutop::Loop()
   for(Long64_t jentry=0; jentry<nentries;jentry++) {
     GetEntry(jentry);
     bool pass = true;
-    double this_weight = 1.;
+    weight *= (MCNormSF+MCNormSF_uncert);
 
     if(!isSearchRegion()) continue;
 

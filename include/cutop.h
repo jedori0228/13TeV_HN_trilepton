@@ -65,6 +65,7 @@ class cutop {
   double n_weighted;
   Long64_t n_unweighted;
   TH1D *hist_for_error, *hist_for_error_up;
+  double MCNormSF, MCNormSF_uncert;
 
   double cut_first_pt;
   double cut_second_pt;
@@ -97,6 +98,7 @@ class cutop {
 #ifdef cutop_cxx
 cutop::cutop(TString sample, TString whichSyst) : fChain(0),
 TotalEvent(0), n_weighted(0.), n_unweighted(0),
+MCNormSF(1.), MCNormSF_uncert(0.),
 cut_first_pt(20.), cut_second_pt(10.), cut_third_pt(10.),
 cut_deltaR_OS_min(0.),
 cut_W_pri_mass(9999.),

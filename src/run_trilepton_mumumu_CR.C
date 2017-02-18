@@ -51,6 +51,7 @@ void run_trilepton_mumumu_CR(int XXX){
   m.map_sample_string_to_list["fake_HighdXY"] = {"fake_HighdXY"};
   m.map_sample_string_to_list["fake_sfed_HighdXY"] = {"fake_sfed_HighdXY"};
   m.map_sample_string_to_list["fake_DiMuon_HighdXY"] = {"fake_HighdXY"};
+  m.map_sample_string_to_list["fake_Dijet"] = {"fake_Dijet"};
   
   m.map_sample_string_to_legendinfo["DY"] = make_pair("DY", kYellow+2);
   m.map_sample_string_to_legendinfo["WJets"] = make_pair("WJets", kGreen);
@@ -69,6 +70,7 @@ void run_trilepton_mumumu_CR(int XXX){
   m.map_sample_string_to_legendinfo["fake_HighdXY"] = make_pair("Misd", kAzure+10);
   m.map_sample_string_to_legendinfo["fake_sfed_HighdXY"] = make_pair("Misd", kAzure+10);
   m.map_sample_string_to_legendinfo["fake_DiMuon_HighdXY"] = make_pair("Misd", kAzure+10);
+  m.map_sample_string_to_legendinfo["fake_Dijet"] = make_pair("Misd", kAzure+10);
   
   //===============================
   //==== set and make sample list
@@ -84,6 +86,12 @@ void run_trilepton_mumumu_CR(int XXX){
     m.histname_suffix = {"_WZ", "_ZJets"};
     m.drawdata = {true, true};
     m.samples_to_use = {"fake_sfed_HighdXY", "WZ_excl", "ZZ_excl", "Vgamma", "VVV", "ttV"};
+    //m.samples_to_use = {"fake_sfed_HighdXY", "VV_incl", "VVV", "top"};
+  }
+  else if(XXX==2){
+    m.histname_suffix = {"_WZ", "_ZJets"};
+    m.drawdata = {true, true};
+    m.samples_to_use = {"fake_Dijet", "WZ_excl", "ZZ_excl", "Vgamma", "VVV", "ttV"};
     //m.samples_to_use = {"fake_sfed_HighdXY", "VV_incl", "VVV", "top"};
   }
   
@@ -181,7 +189,7 @@ void run_trilepton_mumumu_CR(int XXX){
   //==== RE-SET HIST VARIABLES
   //============================
   
-  if(XXX==2){
+  if(XXX==3){
     m.histname_suffix = {"_OSDiMuon", "_OSDiMuon_Z_10GeV"};
     m.drawdata = {true, true};
     m.samples_to_use = {"DY", "fake_sfed_HighdXY"};
@@ -216,7 +224,7 @@ void run_trilepton_mumumu_CR(int XXX){
   //==== RE-SET HIST VARIABLES
   //============================
 
-  if(XXX==3){
+  if(XXX==4){
     m.histname_suffix = {"_ZZ"};
     m.drawdata = {true};
     m.samples_to_use = {"fake_sfed_HighdXY", "ZZ_excl", "Vgamma", "VVV", "ttV"};

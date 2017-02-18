@@ -111,6 +111,13 @@ void syst_FR_make_matrix(){
     }
   }
 
+  //==== HOT FIX FOR DIJET
+  TFile *file_dijet = new TFile(filepath+"dXYSigMin_4p0_LooseRelIsoMax_0p4/13TeV_trimuon_FR_SingleMuonTrigger_Dijet.root");
+  TH2D *hist_FR_dijet = (TH2D*)file_dijet->Get("SingleMuonTrigger_Dijet_events_F");
+  hist_FR_dijet->SetName("FR_Dijet");
+  file_FRs->cd();
+  hist_FR_dijet->Write();
+
   file_FRs->Close();
 
   //==== n_muons

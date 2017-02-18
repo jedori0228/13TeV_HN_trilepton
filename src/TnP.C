@@ -10,7 +10,7 @@ void TnP(){
 
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
   TString dataset = getenv("CATANVERSION");
-  TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/TnP/";
+  TString filepath = "rootfiles/TnP_Results/RunGH/";
   TString plotpath = WORKING_DIR+"/plots/"+dataset+"/TnP/";
 
   if( !gSystem->mkdir(plotpath, kTRUE) ){
@@ -30,9 +30,9 @@ void TnP(){
   gSystem->mkdir(plotpath+"PR/fitresult/MC", kTRUE);
 
   vector<double> abseta = {0.0, 0.8, 1.479, 2.0, 2.5};
-  vector<double> pt = {5., 15., 20., 25., 30., 35., 45., 60., 80., 100., 200.};
+  vector<double> pt = {10., 20., 25., 30., 35., 45., 60., 80., 100., 200.};
 
-  TString dirname = "tpTree/HN_muonsel_pt_eta/";
+  TString dirname = "tpTree/HN_TRI_TIGHT_pt_eta/";
 
   vector<TString> fitftns = {"vpvPlusExpo", "vpvPlusCheb", "vpvPlusCheb_4th"};
 
@@ -40,9 +40,8 @@ void TnP(){
   //==== ID SF
   //============
 
-  TFile *file_ID_Data = new TFile(filepath+"TnP_Muon_ID_Data_fix_2.root");
-  TFile *file_ID_MC = new TFile(filepath+"TnP_Muon_ID_MC_fix_2.root");
-
+  TFile *file_ID_Data = new TFile(filepath+"TnP_Muon_ID_Data.root");
+  TFile *file_ID_MC = new TFile(filepath+"TnP_Muon_ID_MC.root");
 
   //==== FitResult
   if(DrawFitResult){
@@ -54,16 +53,10 @@ void TnP(){
         for(unsigned int i_fn = 0; i_fn<fitftns.size(); i_fn++){
 
           TCanvas *c_data = (TCanvas*)file_ID_Data->Get(dirname+dirname_fit_result+fitftns.at(i_fn)+"/fit_canvas");
+          if(c_data) c_data->SaveAs(plotpath+"ID/fitresult/Data/"+dirname_fit_result+fitftns.at(i_fn)+".pdf");
+
           TCanvas *c_MC = (TCanvas*)file_ID_MC->Get(dirname+dirname_fit_result+fitftns.at(i_fn)+"/fit_canvas");
-
-          if( !c_data || !c_MC ) continue;
-
-          //==== Data
-          c_data->SaveAs(plotpath+"ID/fitresult/Data/"+dirname_fit_result+fitftns.at(i_fn)+".pdf");
-          //==== MC
-          c_MC->SaveAs(plotpath+"ID/fitresult/MC/"+dirname_fit_result+fitftns.at(i_fn)+".pdf");
-
-          break;
+          if(c_MC) c_MC->SaveAs(plotpath+"ID/fitresult/MC/"+dirname_fit_result+fitftns.at(i_fn)+".pdf");
 
         }
 
@@ -133,7 +126,7 @@ void TnP(){
     ratio->Draw("AP");
     ratio->GetXaxis()->SetTitle("p_{T} [GeV]");
     ratio->GetYaxis()->SetTitle("Data/MC");
-    ratio->GetYaxis()->SetRangeUser(0, 1.5);
+    ratio->GetYaxis()->SetRangeUser(0.8, 1.2);
 
 /*
     for(size_t i = 0, n = eff_Data->GetN(); i < n; ++i){
@@ -233,7 +226,7 @@ void TnP(){
     ratio->Draw("AP");
     ratio->GetXaxis()->SetTitle("|#eta|");
     ratio->GetYaxis()->SetTitle("Data/MC");
-    ratio->GetYaxis()->SetRangeUser(0, 1.5);
+    ratio->GetYaxis()->SetRangeUser(0.8, 1.2);
     
     hist_axis(eff_Data, ratio);
     
@@ -274,17 +267,19 @@ void TnP(){
   hist_IDSF->Write();
   file_IDSF->Close();
 
+/*
   //==== make PR root file
 
   TFile *file_PR = new TFile(plotpath+"PR/PR.root", "RECREATE");
 
-  TFile *file_PR_Data = new TFile(filepath+"TnP_Muon_PR_Data_fix_2.root");
+  TFile *file_PR_Data = new TFile(filepath+"TnP_Muon_PR_Data.root");
   TCanvas *c_PReff_Data = (TCanvas*)file_PR_Data->Get(dirname+"fit_eff_plots/pt_abseta_PLOT_combRelIsoPF04dBeta_bin0");
   TH2F *hist_PReff_Data = (TH2F*)c_PReff_Data->GetPrimitive("pt_abseta_PLOT_combRelIsoPF04dBeta_bin0");
   hist_PReff_Data->SetName("PR_pt_abseta");
   file_PR->cd();
   hist_PReff_Data->Write();
   file_PR->Close();
+*/
 
 
 }

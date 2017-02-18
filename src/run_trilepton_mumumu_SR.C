@@ -382,7 +382,7 @@ void run_trilepton_mumumu_SR(int XXX){
   m.x_maxs[make_pair("_cut0", "HN_mass_class2")] = 600;
   m.x_maxs[make_pair("_cut0", "HN_mass_class3")] = 1000;
   m.x_maxs[make_pair("_cut0", "HN_mass_class4")] = 300;
-  m.x_maxs[make_pair("_cut0", "W_pri_lowmass_mass")] = 1000;
+  m.x_maxs[make_pair("_cut0", "W_pri_lowmass_mass")] = 500;
   m.x_maxs[make_pair("_cut0", "W_sec_highmass_mass")] = 500;
   m.x_maxs[make_pair("_cutWlow", "h_leadingLepton_dXY")] = 0.01;
   m.x_maxs[make_pair("_cutWlow", "h_secondLepton_dXY")] = 0.01;

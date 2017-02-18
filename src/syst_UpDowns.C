@@ -10,14 +10,32 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
 
   TH1::SetDefaultSumw2(true);
   
-  double uncert_lumi = 0.062;
-  double uncert_fake = 0.30;
+  double uncert_lumi = 0.026;
+  double uncert_fake = 0.28;
+
+  vector<TString> bkg_prompt_list = {
+    "WZTo3LNu_powheg",
+    //"ZZTo4L_powheg",
+    //"Vgamma",
+    //"top",
+    //"VVV"
+  };
+  map<TString, double> MCNormSF, MCNormSF_uncert;
+  for(unsigned int i=0; i<bkg_prompt_list.size(); i++){
+    MCNormSF[bkg_prompt_list.at(i)] = 1.;
+    MCNormSF_uncert[bkg_prompt_list.at(i)] = 0.;
+  }
+  MCNormSF["ZZTo4L_powheg"] = 1.22;
+  MCNormSF_uncert["ZZTo4L_powheg"] = 0.08;
+  MCNormSF["WZTo3LNu_powheg"] = 0.96;
+  MCNormSF_uncert["WZTo3LNu_powheg"] = 0.10;
+
   double N_MC = 100000.;
 
   //TString region = "Preselection";
-  //TString region = "WZ";
+  TString region = "WZ";
   //TString region = "ZJets";
-  TString region = "ZZ";
+  //TString region = "ZZ";
   
   int SignalClass;
   if(sig_mass <= 50) SignalClass = 1;
@@ -31,14 +49,6 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
 
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/UpDownSyst/";
 
-  vector<TString> bkg_prompt_list = {
-    "WZTo3LNu_powheg",
-    "ZZTo4L_powheg",
-    "Vgamma",
-    "top",
-    "VVV"
-  };
-  
   double cut_first_pt, cut_second_pt, cut_third_pt, cut_W_pri_mass, cut_PFMET;
   setCutsForEachSignalMass(sig_mass, cut_first_pt, cut_second_pt, cut_third_pt, cut_W_pri_mass, cut_PFMET);
 
@@ -111,62 +121,18 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       m_bkg_prompt.cut_W_pri_mass = cut_W_pri_mass;
       m_bkg_prompt.cut_PFMET = cut_PFMET;
       m_bkg_prompt.signalclass = SignalClass;
+      m_bkg_prompt.MCNormSF = MCNormSF[this_samplename];
+      double MCNormDir(0.);
+      if(systtypes.at(i) == "MCxsec_up") MCNormDir = 1.;
+      else if(systtypes.at(i) == "MCxsec_down") MCNormDir = -1.;
+      m_bkg_prompt.MCNormSF_uncert = MCNormDir*MCNormSF_uncert[this_samplename];
       m_bkg_prompt.Loop();
+
+      n_bkg_prompt += m_bkg_prompt.n_weighted;
       
       if(systtypes.at(i)=="Central"){
         hist_bkg_for_error->Add(m_bkg_prompt.hist_for_error);
-
         if(printnumber && !forlatex) cout << this_samplename << " : " << m_bkg_prompt.n_weighted << ", error = " << m_bkg_prompt.hist_for_error->GetBinError(1) << endl;
-      }
-
-      if(systtypes.at(i).Contains("MCxsec_")){
-
-        if(systtypes.at(i) == "MCxsec_up"){
-          if(this_samplename=="WZTo3LNu_powheg"){
-            n_bkg_prompt += (1+0.12)*m_bkg_prompt.n_weighted;
-          }
-          else if(this_samplename=="ZZTo4L_powheg"){
-            n_bkg_prompt += (1+0.13)*m_bkg_prompt.n_weighted;
-          }
-          else if(this_samplename=="Vgamma"){
-            n_bkg_prompt += (1+0.06)*m_bkg_prompt.n_weighted;
-          }
-          else if(this_samplename=="top"){
-            n_bkg_prompt += (1+0.15)*m_bkg_prompt.n_weighted;
-          }
-          else if(this_samplename=="VVV"){
-            n_bkg_prompt += (1+0.06)*m_bkg_prompt.n_weighted;
-          }
-          else{
-            n_bkg_prompt += m_bkg_prompt.n_weighted;
-          }
-        }
-        else if(systtypes.at(i) == "MCxsec_down"){
-          if(this_samplename=="WZTo3LNu_powheg"){
-            n_bkg_prompt += (1-0.12)*m_bkg_prompt.n_weighted;
-          }
-          else if(this_samplename=="ZZTo4L_powheg"){
-            n_bkg_prompt += (1-0.13)*m_bkg_prompt.n_weighted;
-          }
-          else if(this_samplename=="Vgamma"){
-            n_bkg_prompt += (1-0.06)*m_bkg_prompt.n_weighted;
-          }
-          else if(this_samplename=="top"){
-            n_bkg_prompt += (1-0.15)*m_bkg_prompt.n_weighted;
-          }
-          else if(this_samplename=="VVV"){
-            n_bkg_prompt += (1-0.06)*m_bkg_prompt.n_weighted;
-          }
-          else{
-            n_bkg_prompt += m_bkg_prompt.n_weighted;
-          }
-        }
-        else{ }
-  
-
-      }
-      else{
-        n_bkg_prompt += m_bkg_prompt.n_weighted;
       }
 
     }

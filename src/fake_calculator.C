@@ -43,13 +43,13 @@ void fake_calculator(double dXYMin, double RelIsoMax){
   map< TString, vector<Color_t> > map_string_to_MC_color;
   vector<TString> all_MC_list;
   
-  all_MC_list = {"singletop", "TTJets_aMC", "DY", "WJets", "QCD_mu", "HN_MuMuMu_40", "VV"};
-  map_string_to_MC_list["SingleMuon"] = {"singletop", "TTJets_aMC", "DY", "WJets"};
-  map_string_to_MC_alias["SingleMuon"] = {"singletop", "ttbar", "DY", "WJets"};
-  map_string_to_MC_color["SingleMuon"] = {kOrange, kRed, kYellow, kGreen};
-  map_string_to_MC_list["DiMuon"] = {"DY", "VV"};
-  map_string_to_MC_alias["DiMuon"] = {"DY", "VV"};
-  map_string_to_MC_color["DiMuon"] = {kYellow, kGreen};
+  all_MC_list = {"singletop", "TTJets_aMC", "VGamma", "DY", "WJets", "QCD_mu", "HN_MuMuMu_40", "VV"};
+  map_string_to_MC_list["SingleMuon"] = {"singletop", "TTJets_aMC", "VGamma", "DY", "WJets"};
+  map_string_to_MC_alias["SingleMuon"] = {"singletop", "ttbar", "V#gamma", "DY", "WJets"};
+  map_string_to_MC_color["SingleMuon"] = {kOrange, kRed, kSpring-7, kYellow, kGreen};
+  map_string_to_MC_list["DiMuon"] = {"VGamma", "DY", "VV"};
+  map_string_to_MC_alias["DiMuon"] = {"V#gamma", "DY", "VV"};
+  map_string_to_MC_color["DiMuon"] = {kSpring-7, kYellow, kGreen};
   
   //==== get all files here
   map< TString, TFile* > map_string_to_file;
@@ -242,6 +242,7 @@ void fake_calculator(double dXYMin, double RelIsoMax){
     "SingleMuonTrigger_HighdXY_withjet_0bjet",
     "SingleMuonTrigger_HighdXY_withjet_withbjet",
     "DiMuonTrigger_ZTag_Small",
+    "SingleMuonTrigger_Dijet"
   };
   vector<TString> FR_method_alias = {
     "HighdXY",
@@ -271,6 +272,9 @@ void fake_calculator(double dXYMin, double RelIsoMax){
     TString this_FR_method = FR_method.at(it_FR_method);
     cout << "######################## " << this_FR_method << endl;
     
+    TString hist_prefix = str_dXYCut+"_";
+    if(this_FR_method=="SingleMuonTrigger_Dijet") hist_prefix = "";
+    
     //==== store # of (data-prompt MC), to optimize which dXYSig min to use
     TH1F *hist_n_data_prompt_subtraction_num = new TH1F("hist_n_data_prompt_subtraction_num", "", 1, 0, 1);
     TH1F *hist_n_data_prompt_subtraction_den = new TH1F("hist_n_data_prompt_subtraction_den", "", 1, 0, 1);
@@ -290,8 +294,8 @@ void fake_calculator(double dXYMin, double RelIsoMax){
       TString this_x_title_FR = x_title_FR.at(it_var_FR);
       
       //==== data
-      TH1D *num_data = (TH1D*)map_string_to_file["data"]->Get(str_dXYCut+"_"+this_FR_method+"_"+this_var_FR+"_F");
-      TH1D *den_data = (TH1D*)map_string_to_file["data"]->Get(str_dXYCut+"_"+this_FR_method+"_"+this_var_FR+"_F0");
+      TH1D *num_data = (TH1D*)map_string_to_file["data"]->Get(hist_prefix+this_FR_method+"_"+this_var_FR+"_F");
+      TH1D *den_data = (TH1D*)map_string_to_file["data"]->Get(hist_prefix+this_FR_method+"_"+this_var_FR+"_F0");
       num_data->SetMarkerStyle(8);
       num_data->SetMarkerColor(kBlack);
       den_data->SetMarkerStyle(8);
@@ -326,8 +330,8 @@ void fake_calculator(double dXYMin, double RelIsoMax){
       //==== MC loop
       for(int aaa=0; it_MC != it_MC_END; ++it_MC, aaa++ ){
         TString this_samplename = *it_MC;
-        TH1D* num_MC_temp = (TH1D*)map_string_to_file[this_samplename]->Get(str_dXYCut+"_"+this_FR_method+"_"+this_var_FR+"_F");
-        TH1D* den_MC_temp = (TH1D*)map_string_to_file[this_samplename]->Get(str_dXYCut+"_"+this_FR_method+"_"+this_var_FR+"_F0");
+        TH1D* num_MC_temp = (TH1D*)map_string_to_file[this_samplename]->Get(hist_prefix+this_FR_method+"_"+this_var_FR+"_F");
+        TH1D* den_MC_temp = (TH1D*)map_string_to_file[this_samplename]->Get(hist_prefix+this_FR_method+"_"+this_var_FR+"_F0");
         
         if( !num_MC_temp || !den_MC_temp ){
           cout << "No Histogram : " << this_samplename << endl;
@@ -441,6 +445,44 @@ void fake_calculator(double dXYMin, double RelIsoMax){
           den_MC_stack->SetMinimum(1);
         }
       }
+      if(this_FR_method == "SingleMuonTrigger_Dijet"){
+        if(this_var_FR == "pt"){
+          num_MC_stack->SetMaximum(10000000);
+          num_MC_stack->SetMinimum(1);
+          den_MC_stack->SetMaximum(10000000);
+          den_MC_stack->SetMinimum(1);
+        }
+        if(this_var_FR == "eta"){
+          num_MC_stack->SetMaximum(1000000);
+          num_MC_stack->SetMinimum(1);
+          den_MC_stack->SetMaximum(1000000);
+          den_MC_stack->SetMinimum(1);
+        }
+        if(this_var_FR == "RelIso"){
+          num_MC_stack->SetMaximum(1000000);
+          num_MC_stack->SetMinimum(1);
+          den_MC_stack->SetMaximum(1000000);
+          den_MC_stack->SetMinimum(1);
+        }
+        if(this_var_FR == "Chi2"){
+          num_MC_stack->SetMaximum(1000000);
+          num_MC_stack->SetMinimum(1);
+          den_MC_stack->SetMaximum(1000000);
+          den_MC_stack->SetMinimum(1);
+        }
+        if(this_var_FR == "dXY"){
+          num_MC_stack->SetMaximum(1000000);
+          num_MC_stack->SetMinimum(1);
+          den_MC_stack->SetMaximum(1000000);
+          den_MC_stack->SetMinimum(1);
+        }
+        if(this_var_FR == "dXYSig"){
+          num_MC_stack->SetMaximum(10000000);
+          num_MC_stack->SetMinimum(1);
+          den_MC_stack->SetMaximum(10000000);
+          den_MC_stack->SetMinimum(1);
+        }
+      }
       
       //==== draw numerator
       TCanvas* c_num = new TCanvas("c_num", "", 800, 800);
@@ -484,8 +526,8 @@ void fake_calculator(double dXYMin, double RelIsoMax){
     //==== 2D FR
     
     //==== data
-    TH2F* num_data = (TH2F*)map_string_to_file["data"]->Get(str_dXYCut+"_"+this_FR_method+"_events_F");
-    TH2F* den_data = (TH2F*)map_string_to_file["data"]->Get(str_dXYCut+"_"+this_FR_method+"_events_F0");
+    TH2F* num_data = (TH2F*)map_string_to_file["data"]->Get(hist_prefix+this_FR_method+"_events_F");
+    TH2F* den_data = (TH2F*)map_string_to_file["data"]->Get(hist_prefix+this_FR_method+"_events_F0");
     TH2F* num_data_subtracted = (TH2F*)num_data->Clone();
     TH2F* den_data_subtracted = (TH2F*)den_data->Clone();
     
@@ -496,8 +538,8 @@ void fake_calculator(double dXYMin, double RelIsoMax){
     //==== MC loop
     for(int aaa=0; it_MC != it_MC_END; ++it_MC, aaa++ ){
       TString this_samplename = *it_MC;
-      TH2F *num_MC_temp = (TH2F*)map_string_to_file[this_samplename]->Get(str_dXYCut+"_"+this_FR_method+"_events_F");
-      TH2F *den_MC_temp = (TH2F*)map_string_to_file[this_samplename]->Get(str_dXYCut+"_"+this_FR_method+"_events_F0");
+      TH2F *num_MC_temp = (TH2F*)map_string_to_file[this_samplename]->Get(hist_prefix+this_FR_method+"_events_F");
+      TH2F *den_MC_temp = (TH2F*)map_string_to_file[this_samplename]->Get(hist_prefix+this_FR_method+"_events_F0");
       if( !num_MC_temp || !den_MC_temp ){
         cout << "No Histogram : " << this_samplename << endl;
         continue;
@@ -845,8 +887,8 @@ void fake_calculator(double dXYMin, double RelIsoMax){
   cout << hist_FR_ZTag_Small->GetBinContent(2)<<" / " << hist_FR_ZTag_Small->GetBinContent(1) << endl;
   cout << endl;
 
-  for(unsigned int i=0; i<map_string_to_MC_list["TagZ"].size(); i++){
-    TString this_sample = map_string_to_MC_list["TagZ"].at(i);
+  for(unsigned int i=0; i<map_string_to_MC_list["DiMuon"].size(); i++){
+    TString this_sample = map_string_to_MC_list["DiMuon"].at(i);
     cout << this_sample << endl;
     TH1D *hist_Large_tmp = (TH1D*)map_string_to_file[this_sample]->Get(str_dXYCut+"_DiMuonTrigger_ZTag_Large_dXYSig");
     TH1D *hist_Small_tmp = (TH1D*)map_string_to_file[this_sample]->Get(str_dXYCut+"_DiMuonTrigger_ZTag_Small_dXYSig");

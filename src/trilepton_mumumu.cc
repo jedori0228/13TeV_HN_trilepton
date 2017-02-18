@@ -534,13 +534,13 @@ void trilepton_mumumu::draw_canvas(THStack* mc_stack, TH1D* mc_error, TH1D* hist
     latex_CMSPriliminary.SetTextSize(0.035);
     latex_CMSPriliminary.DrawLatex(0.15, 0.96, "#font[62]{CMS} #font[42]{#it{#scale[0.8]{Preliminary}}}");
     latex_Lumi.SetTextSize(0.035);
-    latex_Lumi.DrawLatex(0.7, 0.96, "27.2 fb^{-1} (13 TeV)");
+    latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
   }
   else{
     latex_CMSPriliminary.SetTextSize(0.035);
     latex_CMSPriliminary.DrawLatex(0.15, 0.96, "#font[62]{CMS} Simulation");
     latex_Lumi.SetTextSize(0.035);
-    latex_Lumi.DrawLatex(0.7, 0.96, "27.2 fb^{-1} (13 TeV)");
+    latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
   }
 
   mkdir(plotpath+"/"+histname_suffix[i_cut]);
@@ -704,7 +704,11 @@ void trilepton_mumumu::make_plot_directory(){
 
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
   plotpath = WORKING_DIR+"/plots/"+data_class;
-  
+
+  if( find(samples_to_use.begin(), samples_to_use.end(), "fake_Dijet") != samples_to_use.end() ){
+    plotpath = plotpath+"/use_FR_method/Dijet";
+  }
+
   if( find(samples_to_use.begin(), samples_to_use.end(), "fake_HighdXY") != samples_to_use.end() ){
     plotpath = plotpath+"/use_FR_method/HighdXY";
   }
