@@ -1,4 +1,5 @@
 #include "cutop.cc"
+#define uncert_lumi 0.28
 
 double PunziFunction(double eff_sig, double bkg_tot, double bkg_fake, double prompt_syst_error);
 void printcurrunttime();
@@ -8,6 +9,23 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max);
 void run_cutop(int sig_mass, bool inclusive=false){
 
   TH1::SetDefaultSumw2(true);
+
+  vector<TString> bkg_prompt_list = {
+    "WZTo3LNu_powheg",
+    "ZZTo4L_powheg",
+    "Vgamma",
+    "top",
+    "VVV"
+  };
+  map<TString, double> MCNormSF, MCNormSF_uncert;
+  for(unsigned int i=0; i<bkg_prompt_list.size(); i++){
+    MCNormSF[bkg_prompt_list.at(i)] = 1.;
+    MCNormSF_uncert[bkg_prompt_list.at(i)] = 0.;
+  }
+  MCNormSF["ZZTo4L_powheg"] = 1.22;
+  MCNormSF_uncert["ZZTo4L_powheg"] = 0.08;
+  MCNormSF["WZTo3LNu_powheg"] = 0.96;
+  MCNormSF_uncert["WZTo3LNu_powheg"] = 0.10;
 
   int SignalClass;
   if(sig_mass <= 50) SignalClass = 1;
@@ -20,13 +38,6 @@ void run_cutop(int sig_mass, bool inclusive=false){
   TString dataset = getenv("CATANVERSION");
   
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/UpDownSyst/";
-  vector<TString> bkg_prompt_list = {
-    "WZTo3LNu_powheg",
-    "ZZTo4L_powheg",
-    "Vgamma",
-    "top",
-    "VVV"
-  };
   
   vector<double> cuts_first_pt, cuts_second_pt, cuts_third_pt, cuts_W_pri_mass, cuts_PFMET;
   
@@ -214,19 +225,14 @@ void run_cutop(int sig_mass, bool inclusive=false){
               m_bkg_prompt.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
               m_bkg_prompt.cut_PFMET = cuts_PFMET.at(i_PFMET);
               m_bkg_prompt.signalclass = SignalClass;
+              m_bkg_prompt.MCNormSF = 1.;
+              m_bkg_prompt.MCNormSF_uncert = 0.;
               m_bkg_prompt.Loop();
-              n_bkg_prompt += m_bkg_prompt.n_weighted;
 
-              //==== fill prompt syst.
-              double mcnorm_frac = 0.;
-              if(this_samplename=="WZTo3LNu_powheg") mcnorm_frac = 0.12;
-              else if(this_samplename=="ZZTo4L_powheg") mcnorm_frac = 0.13;
-              else if(this_samplename=="Vgamma") mcnorm_frac = 0.06;
-              else if(this_samplename=="top") mcnorm_frac = 0.15;
-              else if(this_samplename=="VVV") mcnorm_frac = 0.06;
-              else{
-              }
-              prompt_syst += mcnorm_frac * m_bkg_prompt.n_weighted;
+              //==== for convenience, we keep "SF==1 n_bkg",
+              //==== and then multiply MC Norm. SF, after we run Loop()
+              n_bkg_prompt += MCNormSF[this_samplename]        *m_bkg_prompt.n_weighted;
+              prompt_syst  += MCNormSF_uncert[this_samplename] *m_bkg_prompt.n_weighted;
 
               if(TOTAL_it==1){
                 cout << this_samplename << " : " << m_bkg_prompt.n_weighted << ", error = " << m_bkg_prompt.hist_for_error->GetBinError(1) << endl;
@@ -331,7 +337,7 @@ void run_cutop(int sig_mass, bool inclusive=false){
 
 double PunziFunction(double eff_sig, double bkg_tot, double bkg_fake, double prompt_syst_error){
   
-  double den = 1 + sqrt( bkg_tot + (0.30 * bkg_fake)*(0.30 * bkg_fake) + prompt_syst_error*prompt_syst_error );
+  double den = 1 + sqrt( bkg_tot + (uncert_lumi * bkg_fake)*(uncert_lumi * bkg_fake) + prompt_syst_error*prompt_syst_error );
   //double den = 1 + sqrt( bkg_tot );
   
   return eff_sig/den;
