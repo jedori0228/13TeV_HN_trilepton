@@ -128,6 +128,7 @@ void Validation(){
             TH1D *hist_MC_stacked = (TH1D*)MC_stacked->GetStack()->Last()->Clone();
             hist_ratio->Divide(hist_MC_stacked);
             hist_ratio->GetYaxis()->SetRangeUser(0.8, 1.2);
+            hist_ratio->GetYaxis()->SetTitle("DATA/MC");
             if(this_var=="mll") hist_ratio->GetXaxis()->SetRangeUser(75,105);
             if(this_var=="PFMET") hist_ratio->GetXaxis()->SetRangeUser(0,150);
             hist_ratio->Draw("pe1same");
