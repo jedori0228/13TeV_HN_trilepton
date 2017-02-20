@@ -276,8 +276,8 @@ void fake_calculator(double dXYMin, double RelIsoMax){
     if(this_FR_method=="SingleMuonTrigger_Dijet") hist_prefix = "";
     
     //==== store # of (data-prompt MC), to optimize which dXYSig min to use
-    TH1F *hist_n_data_prompt_subtraction_num = new TH1F("hist_n_data_prompt_subtraction_num", "", 1, 0, 1);
-    TH1F *hist_n_data_prompt_subtraction_den = new TH1F("hist_n_data_prompt_subtraction_den", "", 1, 0, 1);
+    TH1D *hist_n_data_prompt_subtraction_num = new TH1D("hist_n_data_prompt_subtraction_num", "", 1, 0, 1);
+    TH1D *hist_n_data_prompt_subtraction_den = new TH1D("hist_n_data_prompt_subtraction_den", "", 1, 0, 1);
     
     //==== prepare MC iterator end point
     vector<TString>::iterator it_MC_END;
@@ -526,10 +526,10 @@ void fake_calculator(double dXYMin, double RelIsoMax){
     //==== 2D FR
     
     //==== data
-    TH2F* num_data = (TH2F*)map_string_to_file["data"]->Get(hist_prefix+this_FR_method+"_events_F");
-    TH2F* den_data = (TH2F*)map_string_to_file["data"]->Get(hist_prefix+this_FR_method+"_events_F0");
-    TH2F* num_data_subtracted = (TH2F*)num_data->Clone();
-    TH2F* den_data_subtracted = (TH2F*)den_data->Clone();
+    TH2D* num_data = (TH2D*)map_string_to_file["data"]->Get(hist_prefix+this_FR_method+"_events_F");
+    TH2D* den_data = (TH2D*)map_string_to_file["data"]->Get(hist_prefix+this_FR_method+"_events_F0");
+    TH2D* num_data_subtracted = (TH2D*)num_data->Clone();
+    TH2D* den_data_subtracted = (TH2D*)den_data->Clone();
     
     //==== MC iterator
     vector<TString>::iterator it_MC;
@@ -538,8 +538,8 @@ void fake_calculator(double dXYMin, double RelIsoMax){
     //==== MC loop
     for(int aaa=0; it_MC != it_MC_END; ++it_MC, aaa++ ){
       TString this_samplename = *it_MC;
-      TH2F *num_MC_temp = (TH2F*)map_string_to_file[this_samplename]->Get(hist_prefix+this_FR_method+"_events_F");
-      TH2F *den_MC_temp = (TH2F*)map_string_to_file[this_samplename]->Get(hist_prefix+this_FR_method+"_events_F0");
+      TH2D *num_MC_temp = (TH2D*)map_string_to_file[this_samplename]->Get(hist_prefix+this_FR_method+"_events_F");
+      TH2D *den_MC_temp = (TH2D*)map_string_to_file[this_samplename]->Get(hist_prefix+this_FR_method+"_events_F0");
       if( !num_MC_temp || !den_MC_temp ){
         cout << "No Histogram : " << this_samplename << endl;
         continue;
@@ -548,6 +548,53 @@ void fake_calculator(double dXYMin, double RelIsoMax){
       den_data_subtracted->Add(den_MC_temp, -1.);
     }
 
+    TH2D *num_prompt_ratio = new TH2D("num_prompt_ratio", "", num_data->GetXaxis()->GetNbins(), num_data->GetXaxis()->GetXbins()->GetArray(), num_data->GetYaxis()->GetNbins(), num_data->GetYaxis()->GetXbins()->GetArray());
+    TH2D *den_prompt_ratio = new TH2D("den_prompt_ratio", "", num_data->GetXaxis()->GetNbins(), num_data->GetXaxis()->GetXbins()->GetArray(), num_data->GetYaxis()->GetNbins(), num_data->GetYaxis()->GetXbins()->GetArray());
+    //==== check numbers
+    for(int aaa=1;aaa<=num_data->GetXaxis()->GetNbins();aaa++){
+      for(int bbb=1;bbb<=num_data->GetYaxis()->GetNbins();bbb++){
+        if(num_data->GetXaxis()->GetBinLowEdge(aaa)>=60) continue;
+        cout << "x : ["<<num_data->GetXaxis()->GetBinLowEdge(aaa)<<","<<num_data->GetXaxis()->GetBinUpEdge(aaa)<<"], y : ["<<num_data->GetYaxis()->GetBinLowEdge(bbb)<<","<<num_data->GetYaxis()->GetBinUpEdge(bbb)<<"]"<<endl;
+        //cout << "num, before : " << num_data->GetBinContent(aaa,bbb) << endl;
+        //cout << "num, after : " << num_data_subtracted->GetBinContent(aaa,bbb) << endl;
+        cout << "==> " << (num_data->GetBinContent(aaa,bbb)-num_data_subtracted->GetBinContent(aaa,bbb))/num_data->GetBinContent(aaa,bbb) << endl;
+        num_prompt_ratio->SetBinContent(aaa,bbb, (num_data->GetBinContent(aaa,bbb)-num_data_subtracted->GetBinContent(aaa,bbb))/num_data->GetBinContent(aaa,bbb));
+        //cout << "den, before : " << den_data->GetBinContent(aaa,bbb) << endl;
+        //cout << "den, after : " << den_data_subtracted->GetBinContent(aaa,bbb) << endl;
+        cout << "==> " << (den_data->GetBinContent(aaa,bbb)-den_data_subtracted->GetBinContent(aaa,bbb))/den_data->GetBinContent(aaa,bbb) << endl;
+        den_prompt_ratio->SetBinContent(aaa,bbb, (den_data->GetBinContent(aaa,bbb)-den_data_subtracted->GetBinContent(aaa,bbb))/den_data->GetBinContent(aaa,bbb));
+      }
+    }
+    TCanvas* c_num_prompt_ratio = new TCanvas("c_num_prompt_ratio", "", 1600, 1100);
+    //canvas_margin(c_data);
+    c_num_prompt_ratio->SetLeftMargin(0.07);
+    c_num_prompt_ratio->SetRightMargin( 0.1 );
+    gStyle->SetPaintTextFormat("0.4f");
+    num_prompt_ratio->Draw("colztexte1");
+    num_prompt_ratio->GetXaxis()->SetRangeUser(10, 60);
+    num_prompt_ratio->SetXTitle("p_{T} [GeV/c]");
+    num_prompt_ratio->SetYTitle("|#eta|");
+    num_prompt_ratio->SetTitle("");
+    num_prompt_ratio->SetMarkerSize(1.3);
+    c_num_prompt_ratio->SaveAs(plotpath+"/2D_fakerate_"+this_FR_method+"_num_prompt_ratio.pdf");
+    c_num_prompt_ratio->Close();
+    delete c_num_prompt_ratio;
+    
+    TCanvas* c_den_prompt_ratio = new TCanvas("c_den_prompt_ratio", "", 1600, 1100);
+    //canvas_margin(c_data);
+    c_den_prompt_ratio->SetLeftMargin(0.07);
+    c_den_prompt_ratio->SetRightMargin( 0.1 );
+    gStyle->SetPaintTextFormat("0.4f");
+    den_prompt_ratio->Draw("colztexte1");
+    den_prompt_ratio->GetXaxis()->SetRangeUser(10, 60);
+    den_prompt_ratio->SetXTitle("p_{T} [GeV/c]");
+    den_prompt_ratio->SetYTitle("|#eta|");
+    den_prompt_ratio->SetTitle("");
+    den_prompt_ratio->SetMarkerSize(1.3);
+    c_den_prompt_ratio->SaveAs(plotpath+"/2D_fakerate_"+this_FR_method+"_den_prompt_ratio.pdf");
+    c_den_prompt_ratio->Close();
+    delete c_den_prompt_ratio;
+    
     int n_xbins = num_data->GetXaxis()->GetNbins();
     int n_ybins = num_data->GetYaxis()->GetNbins();
 
@@ -710,17 +757,17 @@ void fake_calculator(double dXYMin, double RelIsoMax){
       
       //==== 2D
       
-      TH2F *large_2D, *small_2D;
+      TH2D *large_2D, *small_2D;
 
       //==== FR for each significanve region
       //==== and save FR for SF
       for(unsigned int it_sig_region=0; it_sig_region<sig_region.size(); it_sig_region++){
-        TH2F* hist_num = (TH2F*)map_string_to_file[this_MC_sample_MCTruth]->Get(str_dXYCut+"_"+this_MCTruth_trigger+"_MCTruth_"+sig_region.at(it_sig_region)+"events_F");
-        TH2F* hist_den = (TH2F*)map_string_to_file[this_MC_sample_MCTruth]->Get(str_dXYCut+"_"+this_MCTruth_trigger+"_MCTruth_"+sig_region.at(it_sig_region)+"events_F0");
+        TH2D* hist_num = (TH2D*)map_string_to_file[this_MC_sample_MCTruth]->Get(str_dXYCut+"_"+this_MCTruth_trigger+"_MCTruth_"+sig_region.at(it_sig_region)+"events_F");
+        TH2D* hist_den = (TH2D*)map_string_to_file[this_MC_sample_MCTruth]->Get(str_dXYCut+"_"+this_MCTruth_trigger+"_MCTruth_"+sig_region.at(it_sig_region)+"events_F0");
         if( !hist_num || !hist_den ) continue;
         hist_num->Divide(hist_den);
-        if(sig_region.at(it_sig_region)=="HighdXY_") large_2D = (TH2F*)hist_num->Clone();
-        if(sig_region.at(it_sig_region)=="")         small_2D = (TH2F*)hist_num->Clone();
+        if(sig_region.at(it_sig_region)=="HighdXY_") large_2D = (TH2D*)hist_num->Clone();
+        if(sig_region.at(it_sig_region)=="")         small_2D = (TH2D*)hist_num->Clone();
         TCanvas* c_MCTruth = new TCanvas("c_MCTruth", "", 1600, 1100);
         //canvas_margin(c_MCTruth);
         c_MCTruth->SetLeftMargin(0.07);
