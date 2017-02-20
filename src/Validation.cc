@@ -91,6 +91,7 @@ void Validation(){
             for(unsigned int i_sample=0; i_sample<samples.size(); i_sample++){
               TString this_sample = samples.at(i_sample);
               TH1D *hist_tmp = (TH1D*)map_str_to_file[this_sample]->Get(this_var+"_"+thid_id+"_"+this_cut+"_"+this_pu);
+              if(this_sample=="DYJets") hist_tmp->Scale(5765.40000/6025.20000);
               hist_tmp->SetFillColor(kYellow+2);
               hist_tmp->SetLineColor(kYellow+2);
               hist_tmp->Scale(this_ratio);
@@ -128,6 +129,7 @@ void Validation(){
             TH1D *hist_MC_stacked = (TH1D*)MC_stacked->GetStack()->Last()->Clone();
             hist_ratio->Divide(hist_MC_stacked);
             hist_ratio->GetYaxis()->SetRangeUser(0.8, 1.2);
+            //hist_ratio->GetYaxis()->SetRangeUser(0., 2.);
             hist_ratio->GetYaxis()->SetTitle("DATA/MC");
             if(this_var=="mll") hist_ratio->GetXaxis()->SetRangeUser(75,105);
             if(this_var=="PFMET") hist_ratio->GetXaxis()->SetRangeUser(0,150);
@@ -138,6 +140,8 @@ void Validation(){
             
             gSystem->mkdir(plotpath+this_per, kTRUE);
             c1->SaveAs(plotpath+this_per+"/"+thid_id+"_"+this_cut+"_"+this_pu+"_"+this_var+".pdf");
+            c1->Close();
+            delete c1;
             
           }
           
