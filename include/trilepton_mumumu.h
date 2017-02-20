@@ -58,7 +58,8 @@ public:
   bool DrawPU=true;
   TString filename_prefix, filename_suffix, data_class, plotpath;
   vector<TString> histname_suffix, bkglist, samples_to_use, histname, x_title;
-  vector<bool> drawdata;
+  vector<bool> drawdata, ApplyMCNormSF;
+  map<TString, double> MCNormSF, MCNormSF_uncert;
   vector< pair<TString, TString> > CutVarSkips;
   map< TString, vector<TString> > map_sample_string_to_list;
   map< TString, pair<TString, Color_t> > map_sample_string_to_legendinfo;

@@ -19,6 +19,7 @@ void run_trilepton_mumumu_SR(int XXX){
   m.filename_suffix = "_cat_"+catversion+".root";
   m.histname_suffix = {"_cut0", "_cutWlow", "_cutWhigh"};
   m.drawdata = {false, false, false};
+  m.ApplyMCNormSF = {true, true, true};
 
   m.DrawPU = true;
 
@@ -68,6 +69,19 @@ void run_trilepton_mumumu_SR(int XXX){
   if(XXX==2) m.samples_to_use = {"fake_sfed_HighdXY", "VV_excl", "Vgamma", "ttV", "VVV"};
 
   m.make_bkglist();
+
+  //=====================
+  //==== Fill MCNorm SF
+  //=====================
+
+  for(unsigned int i=0; i<m.bkglist.size(); i++){
+    m.MCNormSF[m.bkglist.at(i)] = 1.;
+    m.MCNormSF_uncert[m.bkglist.at(i)] = 0.;
+  }
+  m.MCNormSF["ZZTo4L_powheg"] = 1.22;
+  m.MCNormSF_uncert["ZZTo4L_powheg"] = 0.08;
+  m.MCNormSF["WZTo3LNu_powheg"] = 0.96;
+  m.MCNormSF_uncert["WZTo3LNu_powheg"] = 0.10;
  
   //==== set variables to draw
   m.histname = {

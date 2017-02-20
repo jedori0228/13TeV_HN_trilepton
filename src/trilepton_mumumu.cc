@@ -140,6 +140,10 @@ void trilepton_mumumu::draw_hist(){
           }
           hist_final->SetFillColor(map_sample_string_to_legendinfo[current_MCsector].second);
           hist_final->SetLineColor(map_sample_string_to_legendinfo[current_MCsector].second);
+
+          //==== MC Norm Scaling
+          if(ApplyMCNormSF.at(i_cut)) hist_final->Scale(MCNormSF[current_sample]);
+
           MC_stacked->Add(hist_final);
           MC_stacked_err->Add(hist_final);
         }
@@ -543,8 +547,10 @@ void trilepton_mumumu::draw_canvas(THStack* mc_stack, TH1D* mc_error, TH1D* hist
     latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
   }
 
-  mkdir(plotpath+"/"+histname_suffix[i_cut]);
-  c1->SaveAs(plotpath+"/"+histname_suffix[i_cut]+"/"+histname[i_var]+histname_suffix[i_cut]+".pdf");
+  TString this_plotpath = plotpath+"/"+histname_suffix[i_cut];
+  if(ApplyMCNormSF.at(i_cut)) this_plotpath = plotpath+"/MCNormSFed"+histname_suffix[i_cut];
+  mkdir(this_plotpath);
+  c1->SaveAs(this_plotpath+"/"+histname[i_var]+histname_suffix[i_cut]+".pdf");
   outputfile->cd(histname_suffix[i_cut]);
   c1->Write();
   
