@@ -512,6 +512,7 @@ void trilepton_mumumu::draw_canvas(THStack* mc_stack, TH1D* mc_error, TH1D* hist
   mc_error->SetFillColor(kBlue);
   mc_error->Draw("sameE2");
   //==== legend
+  legend->AddEntry(mc_error, "Stat. Uncert.", "f");
   draw_legend(legend, this_sc, DrawData);
   
   //==== MC-DATA

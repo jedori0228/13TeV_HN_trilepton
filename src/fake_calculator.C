@@ -695,10 +695,10 @@ void fake_calculator(double dXYMin, double RelIsoMax){
       gr_FR_curve[j]->SetTitle("");
       hist_axis(gr_FR_curve[j]);  
       if(j==0){
-        gr_FR_curve[j]->Draw("alp");
+        gr_FR_curve[j]->Draw("e1al");
         gr_FR_curve[j]->GetYaxis()->SetRangeUser(0, 0.5);
       }
-      else gr_FR_curve[j]->Draw("e1lpsame");
+      else gr_FR_curve[j]->Draw("e1lsame");
     }
     lg_FR_curve->AddEntry(gr_FR_curve[0], "0 < |#eta| < 0.8", "l");
     lg_FR_curve->AddEntry(gr_FR_curve[1], "0.8 < |#eta| < 1.479", "l");
@@ -847,10 +847,10 @@ void fake_calculator(double dXYMin, double RelIsoMax){
         gr_SF_curve[j]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
         hist_axis(gr_SF_curve[j]);
         if(j==0){
-          gr_SF_curve[j]->Draw("e1alp");
+          gr_SF_curve[j]->Draw("e1al");
           gr_SF_curve[j]->GetYaxis()->SetRangeUser(0.8, 2.0);
         }
-        else gr_SF_curve[j]->Draw("e1lpsame");
+        else gr_SF_curve[j]->Draw("e1lsame");
       }
       lg_SF_curve->AddEntry(gr_SF_curve[0], "0 < |#eta| < 0.8", "l");
       lg_SF_curve->AddEntry(gr_SF_curve[1], "0.8 < |#eta| < 1.479", "l");

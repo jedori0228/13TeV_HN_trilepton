@@ -85,8 +85,11 @@ void run_trilepton_mumumu_CR(int XXX){
   else if(XXX==1){
     m.histname_suffix = {"_WZ", "_ZJets", "_ZMu"};
     m.drawdata = {true, true, true};
-    //m.ApplyMCNormSF = {false, true, true};
-    m.ApplyMCNormSF = {true, true, true};
+    m.ApplyMCNormSF = {false, true, true}; // default
+
+    //m.ApplyMCNormSF = {true, true, true};
+    //m.ApplyMCNormSF = {false, false, false};
+    
     m.samples_to_use = {"fake_sfed_HighdXY", "WZ_excl", "ZZ_excl", "Vgamma", "VVV", "ttV"};
     //m.samples_to_use = {"fake_sfed_HighdXY", "VV_incl", "VVV", "top"};
   }
@@ -231,8 +234,8 @@ void run_trilepton_mumumu_CR(int XXX){
   if(XXX==4){
     m.histname_suffix = {"_ZZ"};
     m.drawdata = {true};
-    //m.ApplyMCNormSF = {false};
-    m.ApplyMCNormSF = {true};
+    m.ApplyMCNormSF = {false}; // default
+    //m.ApplyMCNormSF = {true};
     m.samples_to_use = {"fake_sfed_HighdXY", "ZZ_excl", "Vgamma", "VVV", "ttV"};
 
     m.histname = {
