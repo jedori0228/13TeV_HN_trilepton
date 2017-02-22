@@ -6,7 +6,10 @@
 //==== then, first will be filled at the bottom, so we want them in the bottom of legend
 void make_legend(TLegend *lg, TString MCtype, vector<TH1D*> hists, vector<TString> alias);
 
-void fake_calculator(double dXYMin, double RelIsoMax){
+double GetMCRescale(int period);
+TString GetPeriod(int period);
+
+void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
 
   TH1::SetDefaultSumw2(true);
   TH2::SetDefaultSumw2(true);
@@ -30,14 +33,6 @@ void fake_calculator(double dXYMin, double RelIsoMax){
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/FakeRateCalculator/";
   TString plotpath = WORKING_DIR+"/plots/"+dataset+"/FakeRateCalculator/"+str_dXYCut+"/";
   
-  if( !gSystem->mkdir(plotpath, kTRUE) ){
-    cout
-    << "###################################################" << endl
-    << "Directoy " << plotpath << " is created" << endl
-    << "###################################################" << endl
-    << endl;
-  }
-
   map< TString, vector<TString> > map_string_to_MC_list;
   map< TString, vector<TString> > map_string_to_MC_alias;
   map< TString, vector<Color_t> > map_string_to_MC_color;
@@ -50,10 +45,42 @@ void fake_calculator(double dXYMin, double RelIsoMax){
   map_string_to_MC_list["DiMuon"] = {"VGamma", "DY", "VV"};
   map_string_to_MC_alias["DiMuon"] = {"V#gamma", "DY", "VV"};
   map_string_to_MC_color["DiMuon"] = {kSpring-7, kYellow, kGreen};
+
+  //==== Data Period
+  //==== 0 (default) : BCDEFGH
+  //==== 1 : B
+  //==== 2 : C
+  //==== 3 : D
+  //==== 4 : E
+  //==== 5 : F
+  //==== 6 : G
+  //==== 7 : H (_v2+_v3)
+  //==== 8 : BCDEF
+  //==== 9 : GH
+  
+  TString DataFileName = "data_";
+  TString DataPeriod = "BCDEFGH";
+  double MCRescale = 1.;
+  if(period!=0){
+    DataPeriod = GetPeriod(period);
+    DataFileName = "period"+DataPeriod+"_SK";
+    MCRescale = GetMCRescale(period);
+    cout << "MCRescale = " << MCRescale << endl;
+    plotpath = plotpath+DataPeriod+"/";
+  }
+
+  if( !gSystem->mkdir(plotpath, kTRUE) ){
+    cout
+    << "###################################################" << endl
+    << "Directoy " << plotpath << " is created" << endl
+    << "###################################################" << endl
+    << endl;
+  }
+  
   
   //==== get all files here
   map< TString, TFile* > map_string_to_file;
-  map_string_to_file["data"] = new TFile(filepath+"/FakeRateCalculator_Mu_data_DoubleMuon_cat_"+cmssw_version+".root");
+  map_string_to_file["data"] = new TFile(filepath+"/FakeRateCalculator_Mu_"+DataFileName+"DoubleMuon_cat_"+cmssw_version+".root");
   for(unsigned int i=0; i<all_MC_list.size(); i++){
     TString this_samplename = all_MC_list.at(i);
     map_string_to_file[this_samplename] = new TFile(filepath+"/FakeRateCalculator_Mu_SK"+this_samplename+"_cat_"+cmssw_version+".root");
@@ -117,6 +144,9 @@ void fake_calculator(double dXYMin, double RelIsoMax){
           MC_temp->SetFillColor( map_string_to_MC_color[this_MC_type].at(aaa) );
           MC_temp->SetLineColor( map_string_to_MC_color[this_MC_type].at(aaa) );
         }
+        
+        //==== MCRescale
+        MC_temp->Scale(MCRescale);
         
         MChist_for_legend.push_back( (TH1D*)MC_temp->Clone() );
         MCalias_for_legend.push_back( map_string_to_MC_alias[this_MC_type].at(aaa) );
@@ -338,6 +368,11 @@ void fake_calculator(double dXYMin, double RelIsoMax){
           continue;
         }
         else{
+          
+          //==== MCRescale
+          num_MC_temp->Scale(MCRescale);
+          den_MC_temp->Scale(MCRescale);
+          
           if(this_var_FR == "pt"){
             num_MC_temp->Rebin(5);
             den_MC_temp->Rebin(5);
@@ -544,6 +579,11 @@ void fake_calculator(double dXYMin, double RelIsoMax){
         cout << "No Histogram : " << this_samplename << endl;
         continue;
       }
+      
+      //==== MCRescale
+      num_MC_temp->Scale(MCRescale);
+      den_MC_temp->Scale(MCRescale);
+      
       num_data_subtracted->Add(num_MC_temp, -1.);
       den_data_subtracted->Add(den_MC_temp, -1.);
     }
@@ -554,14 +594,14 @@ void fake_calculator(double dXYMin, double RelIsoMax){
     for(int aaa=1;aaa<=num_data->GetXaxis()->GetNbins();aaa++){
       for(int bbb=1;bbb<=num_data->GetYaxis()->GetNbins();bbb++){
         if(num_data->GetXaxis()->GetBinLowEdge(aaa)>=60) continue;
-        cout << "x : ["<<num_data->GetXaxis()->GetBinLowEdge(aaa)<<","<<num_data->GetXaxis()->GetBinUpEdge(aaa)<<"], y : ["<<num_data->GetYaxis()->GetBinLowEdge(bbb)<<","<<num_data->GetYaxis()->GetBinUpEdge(bbb)<<"]"<<endl;
+        //cout << "x : ["<<num_data->GetXaxis()->GetBinLowEdge(aaa)<<","<<num_data->GetXaxis()->GetBinUpEdge(aaa)<<"], y : ["<<num_data->GetYaxis()->GetBinLowEdge(bbb)<<","<<num_data->GetYaxis()->GetBinUpEdge(bbb)<<"]"<<endl;
         //cout << "num, before : " << num_data->GetBinContent(aaa,bbb) << endl;
         //cout << "num, after : " << num_data_subtracted->GetBinContent(aaa,bbb) << endl;
-        cout << "==> " << (num_data->GetBinContent(aaa,bbb)-num_data_subtracted->GetBinContent(aaa,bbb))/num_data->GetBinContent(aaa,bbb) << endl;
+        //cout << "==> " << (num_data->GetBinContent(aaa,bbb)-num_data_subtracted->GetBinContent(aaa,bbb))/num_data->GetBinContent(aaa,bbb) << endl;
         num_prompt_ratio->SetBinContent(aaa,bbb, (num_data->GetBinContent(aaa,bbb)-num_data_subtracted->GetBinContent(aaa,bbb))/num_data->GetBinContent(aaa,bbb));
         //cout << "den, before : " << den_data->GetBinContent(aaa,bbb) << endl;
         //cout << "den, after : " << den_data_subtracted->GetBinContent(aaa,bbb) << endl;
-        cout << "==> " << (den_data->GetBinContent(aaa,bbb)-den_data_subtracted->GetBinContent(aaa,bbb))/den_data->GetBinContent(aaa,bbb) << endl;
+        //cout << "==> " << (den_data->GetBinContent(aaa,bbb)-den_data_subtracted->GetBinContent(aaa,bbb))/den_data->GetBinContent(aaa,bbb) << endl;
         den_prompt_ratio->SetBinContent(aaa,bbb, (den_data->GetBinContent(aaa,bbb)-den_data_subtracted->GetBinContent(aaa,bbb))/den_data->GetBinContent(aaa,bbb));
       }
     }
@@ -939,6 +979,10 @@ void fake_calculator(double dXYMin, double RelIsoMax){
     cout << this_sample << endl;
     TH1D *hist_Large_tmp = (TH1D*)map_string_to_file[this_sample]->Get(str_dXYCut+"_DiMuonTrigger_ZTag_Large_dXYSig");
     TH1D *hist_Small_tmp = (TH1D*)map_string_to_file[this_sample]->Get(str_dXYCut+"_DiMuonTrigger_ZTag_Small_dXYSig");
+    
+    hist_Large_tmp->Scale(MCRescale);
+    hist_Small_tmp->Scale(MCRescale);
+    
     hist_FR_ZTag_Large->Add(hist_Large_tmp, -1.);
     hist_FR_ZTag_Small->Add(hist_Small_tmp, -1.);
 
@@ -975,6 +1019,79 @@ void make_legend(TLegend *lg, TString MCtype, vector<TH1D*> hists, vector<TStrin
   }
   
 }
+
+
+double GetMCRescale(int period){
+  
+  //==== 0 (default) : BCDEFGH
+  //==== 1 : B
+  //==== 2 : C
+  //==== 3 : D
+  //==== 4 : E
+  //==== 5 : F
+  //==== 6 : G
+  //==== 7 : H (_v2+_v3)
+  //==== 8 : BCDEF
+  //==== 9 : GH
+  
+  double lumi_periodB = 5.929001722;
+  double lumi_periodC = 2.645968083;
+  double lumi_periodD = 4.35344881;
+  double lumi_periodE = 4.049732039;
+  double lumi_periodF = 3.157020934;
+  double lumi_periodG = 7.549615806;
+  double lumi_periodH = 8.545039549 + 0.216782873;
+  double total_lumi = (lumi_periodB+lumi_periodC+lumi_periodD+lumi_periodE+lumi_periodF+lumi_periodG+lumi_periodH) ;
+
+  if(period==1) return lumi_periodB/total_lumi;
+  else if(period==2) return lumi_periodC/total_lumi;
+  else if(period==3) return lumi_periodD/total_lumi;
+  else if(period==4) return lumi_periodE/total_lumi;
+  else if(period==5) return lumi_periodF/total_lumi;
+  else if(period==6) return lumi_periodG/total_lumi;
+  else if(period==7) return lumi_periodH/total_lumi;
+  else if(period==8) return (lumi_periodB+lumi_periodC+lumi_periodD+lumi_periodE+lumi_periodF)/total_lumi;
+  else if(period==9) return (lumi_periodG+lumi_periodH)/total_lumi;
+  else{
+    cout << "[Error] Period Wrong" << endl;
+    return 0.;
+  }
+  
+}
+
+TString GetPeriod(int period){
+  //==== 0 (default) : BCDEFGH
+  //==== 1 : B
+  //==== 2 : C
+  //==== 3 : D
+  //==== 4 : E
+  //==== 5 : F
+  //==== 6 : G
+  //==== 7 : H (_v2+_v3)
+  //==== 8 : BCDEF
+  //==== 9 : GH
+  
+  if(period==1) return "B";
+  else if(period==2) return "C";
+  else if(period==3) return "D";
+  else if(period==4) return "E";
+  else if(period==5) return "F";
+  else if(period==6) return "G";
+  else if(period==7) return "H";
+  else if(period==8) return "BCDEF";
+  else if(period==9) return "GH";
+  else{
+    cout << "[Error] Period Wrong" << endl;
+    return "ERROR_PERIOD_WRONG";
+  }
+}
+
+
+
+
+
+
+
 
 
 
