@@ -6,7 +6,7 @@ void printcurrunttime();
 void fillarray(vector<double>& array, double start, double end, double d);
 void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max);
 
-void run_cutop(int sig_mass, bool inclusive=false){
+void run_cutop(int sig_mass){
 
   TH1::SetDefaultSumw2(true);
 
@@ -22,10 +22,10 @@ void run_cutop(int sig_mass, bool inclusive=false){
     MCNormSF[bkg_prompt_list.at(i)] = 1.;
     MCNormSF_uncert[bkg_prompt_list.at(i)] = 0.;
   }
-  MCNormSF["ZZTo4L_powheg"] = 1.22;
-  MCNormSF_uncert["ZZTo4L_powheg"] = 0.08;
-  MCNormSF["WZTo3LNu_powheg"] = 0.96;
-  MCNormSF_uncert["WZTo3LNu_powheg"] = 0.10;
+  MCNormSF["ZZTo4L_powheg"] = 1.20803;
+  MCNormSF_uncert["ZZTo4L_powheg"] = 0.0869206;
+  MCNormSF["WZTo3LNu_powheg"] = 0.945281;
+  MCNormSF_uncert["WZTo3LNu_powheg"] = 0.153901;
 
   int SignalClass;
   if(sig_mass <= 50) SignalClass = 1;
@@ -83,45 +83,6 @@ void run_cutop(int sig_mass, bool inclusive=false){
   else{
     cout << "Signal Class Wrong" << endl;
     return;
-  }
-
-  if(inclusive){
-
-    cuts_first_pt.clear(); 
-    cuts_second_pt.clear();
-    cuts_third_pt.clear();
-    cuts_W_pri_mass.clear();
-    cuts_PFMET.clear();
-
-    //==== preselection
-    if(sig_mass < 0){
-      sig_mass = 5;
-      cout << "[Preselection]" << endl;
-      cuts_first_pt = {99999999.};
-      cuts_second_pt = {99999999.};
-      cuts_third_pt = {99999999.};
-      cuts_W_pri_mass = {99999999.};
-      cuts_PFMET = {99999999.};
-    }
-    //==== low mass
-    else if(sig_mass < 80){
-      cout << "[Low Mass]" << endl;
-      cuts_first_pt = {99999999.}; 
-      cuts_second_pt = {99999999.};
-      cuts_third_pt = {99999999.};
-      cuts_W_pri_mass = {150};
-      cuts_PFMET = {0.};
-    }
-    //==== high mass
-    else{
-      cout << "[High Mass]" << endl;
-      cuts_first_pt = {20.};
-      cuts_second_pt = {10.};
-      cuts_third_pt = {10.};
-      cuts_W_pri_mass = {0.};
-      cuts_PFMET = {200.};
-    }
-
   }
 
   //===============
@@ -250,6 +211,8 @@ void run_cutop(int sig_mass, bool inclusive=false){
             m_sig.signalclass = SignalClass;
             m_sig.Loop();
             double n_generated = 100000.;
+            if(sig_mass==200) n_generated = 96193.;
+            if(sig_mass==400) n_generated = 99070.;
             n_signal = m_sig.n_unweighted;
 
             cutop m_bkg_fake(filepath+"trilepton_mumumu_ntp_SKfake_sfed_HighdXY_dilep_cat_"+catversion+".root", "Ntp_Central");

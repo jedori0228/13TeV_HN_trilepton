@@ -2,8 +2,6 @@
 
 void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
 
-  double N_MC = 100000.;
-
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
   TString LIMIT_PATH = getenv("LIMIT_PATH");
 
@@ -28,6 +26,10 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
   for(unsigned int i=0; i<masses.size(); i++){
 
     double mass = masses.at(i);
+
+    double N_MC = 100000.;
+    if(mass==200) N_MC = 96193.;
+    if(mass==400) N_MC = 99070.;
 
     // syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bool inclusive=false, bool makeroot=false)
     NLimit n_limit = syst_UpDowns(mass, false, false, false, true);

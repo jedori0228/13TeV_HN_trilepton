@@ -85,9 +85,9 @@ void run_trilepton_mumumu_CR(int XXX){
   else if(XXX==1){
     m.histname_suffix = {"_WZ", "_ZJets", "_ZMu"};
     m.drawdata = {true, true, true};
-    m.ApplyMCNormSF = {false, true, true}; // default
+    //m.ApplyMCNormSF = {false, true, true}; // default
 
-    //m.ApplyMCNormSF = {true, true, true};
+    m.ApplyMCNormSF = {true, true, true};
     //m.ApplyMCNormSF = {false, false, false};
     
     m.samples_to_use = {"fake_sfed_HighdXY", "WZ_excl", "ZZ_excl", "Vgamma", "VVV", "ttV"};
@@ -234,8 +234,8 @@ void run_trilepton_mumumu_CR(int XXX){
   if(XXX==4){
     m.histname_suffix = {"_ZZ"};
     m.drawdata = {true};
-    m.ApplyMCNormSF = {false}; // default
-    //m.ApplyMCNormSF = {true};
+    //m.ApplyMCNormSF = {false}; // default
+    m.ApplyMCNormSF = {true};
     m.samples_to_use = {"fake_sfed_HighdXY", "ZZ_excl", "Vgamma", "VVV", "ttV"};
 
     m.histname = {
@@ -282,10 +282,10 @@ void run_trilepton_mumumu_CR(int XXX){
     m.MCNormSF[m.bkglist.at(i)] = 1.;
     m.MCNormSF_uncert[m.bkglist.at(i)] = 0.;
   }
-  m.MCNormSF["ZZTo4L_powheg"] = 1.22;
-  m.MCNormSF_uncert["ZZTo4L_powheg"] = 0.08;
-  m.MCNormSF["WZTo3LNu_powheg"] = 0.96;
-  m.MCNormSF_uncert["WZTo3LNu_powheg"] = 0.10;
+  m.MCNormSF["ZZTo4L_powheg"] = 1.20803;
+  m.MCNormSF_uncert["ZZTo4L_powheg"] = 0.0869206;
+  m.MCNormSF["WZTo3LNu_powheg"] = 0.945281;
+  m.MCNormSF_uncert["WZTo3LNu_powheg"] = 0.153901;
 
   /*
   //=============================

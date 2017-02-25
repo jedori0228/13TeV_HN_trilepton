@@ -25,12 +25,14 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     MCNormSF[bkg_prompt_list.at(i)] = 1.;
     MCNormSF_uncert[bkg_prompt_list.at(i)] = 0.;
   }
-  MCNormSF["ZZTo4L_powheg"] = 1.22;
-  MCNormSF_uncert["ZZTo4L_powheg"] = 0.08;
-  MCNormSF["WZTo3LNu_powheg"] = 0.96;
-  MCNormSF_uncert["WZTo3LNu_powheg"] = 0.10;
+  MCNormSF["ZZTo4L_powheg"] = 1.20803;
+  MCNormSF_uncert["ZZTo4L_powheg"] = 0.0869206;
+  MCNormSF["WZTo3LNu_powheg"] = 0.945281;
+  MCNormSF_uncert["WZTo3LNu_powheg"] = 0.153901;
 
   double N_MC = 100000.;
+  if(sig_mass==200) N_MC = 96193.;
+  if(sig_mass==400) N_MC = 99070.;
 
   //TString region = "Preselection";
   TString region = "WZ";
