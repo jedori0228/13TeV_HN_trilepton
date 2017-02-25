@@ -1,99 +1,184 @@
-#include "canvas_margin.h"
+#include "cutop.cc"
+#include "NLimit.cc"
 
 void MCNormalizationSF(){
   
   TH1::SetDefaultSumw2(true);
-
-  TString cmssw_version = getenv("CATVERSION");
-  TString dataset = getenv("CATANVERSION");
   
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
-  TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/CR/";
+  TString catversion = getenv("CATVERSION");
+  TString dataset = getenv("CATANVERSION");
   
-  map<TString, TFile*> map_string_to_file;
-  map_string_to_file["data"] = new TFile(filepath+"trilepton_mumumu_CR_data_DoubleMuon_cat_"+cmssw_version+".root");
-  vector<TString> MC_all = {"WZTo3LNu_powheg", "ttW", "ttZ", "ttH_nonbb", "WWW", "WWZ", "WZZ", "ZZZ", "ZGTo2LG", "ZZTo4L_powheg", "fake_sfed_HighdXY"};
-  vector<TString> MC_nonWZ = {"ttW", "ttZ", "ttH_nonbb", "WWW", "WWZ", "WZZ", "ZZZ", "ZGTo2LG", "ZZTo4L_powheg"};
-  vector<TString> MC_nonZZ = {"ttW", "ttZ", "ttH_nonbb", "WWZ", "WZZ", "ZZZ", "ZGTo2LG"};
-  for(unsigned int i=0; i<MC_all.size(); i++){
-    //cout << MC_all.at(i) << endl;
-    map_string_to_file[MC_all.at(i)] = new TFile(filepath+"trilepton_mumumu_CR_SK"+MC_all.at(i)+"_dilep_cat_"+cmssw_version+".root");
+  TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/UpDownSyst/";
+  
+  double uncert_lumi = 0.026;
+  double uncert_fake = 0.28;
+  
+  vector<TString> bkg_prompt_list = {
+    "WZTo3LNu_powheg",
+    "ZZTo4L_powheg",
+    "Vgamma",
+    "top",
+    "VVV"
+  };
+  vector<TString> NormCalcOrder_region = {
+    "ZZ",
+    "WZ",
+  };
+  vector<TString> NormCalcOrder = {
+    "ZZTo4L_powheg",
+    "WZTo3LNu_powheg",
+  };
+  
+  //==== Initialise
+  map<TString, double> MCNormSF, MCNormSF_uncert;
+  for(unsigned int i=0; i<bkg_prompt_list.size(); i++){
+    MCNormSF[bkg_prompt_list.at(i)] = 1.;
+    MCNormSF_uncert[bkg_prompt_list.at(i)] = 0.;
   }
   
-  cout << "============" << endl;
-  cout << "==== WZ ====" << endl;
-  cout << "============" << endl;
+  for(unsigned int it_region=0; it_region<NormCalcOrder_region.size(); it_region++){
+    
+    TString region = NormCalcOrder_region.at(it_region);
+    TString this_signal = NormCalcOrder.at(it_region);
+    cout << endl;
+    cout << "#### Calculating " << this_signal << " MC Normalisation Scale Factor ####" << endl << endl;
+    
+    vector<TString> systtypes = {"Central", "MuonEn_up", "MuonEn_down", "JetEn_up", "JetEn_down", "JetRes_up", "JetRes_down", "Unclustered_up", "Unclustered_down", "MCxsec_up", "MCxsec_down", "MuonIDSF_up", "MuonIDSF_down"};
+    vector<double> yields_prompt, yields_fake, yields_data, yields_signal, yields_signal_weighted;
+    vector<double> syst_error_prompt, syst_error_fake, syst_error_data, syst_error_signal;
+    vector<double> rel_syst_error_prompt, rel_syst_error_fake, rel_syst_error_data, rel_syst_error_signal;
+    double stat_error_prompt, stat_error_fake, stat_error_data, stat_error_signal;
+    
+    for(int i=0; i<systtypes.size(); i++){
+      
+      TString this_syst = systtypes.at(i);
+      if(this_syst.Contains("MCxsec_")) this_syst = "Central";
+      
+      double n_bkg_prompt(0.), n_bkg_fake(0.), n_data(0.), n_signal(0.), n_signal_weighted(0.);
+      
+      TH1D *hist_bkg_for_error = NULL;
+      if(systtypes.at(i)=="Central") hist_bkg_for_error = new TH1D("hist_bkg_for_error", "", 1, 0., 1.);
+      
+      for(unsigned int k=0; k<bkg_prompt_list.size(); k++){
+        TString this_samplename = bkg_prompt_list.at(k);
+        if(this_samplename==this_signal) continue;
+        
+        cutop m_bkg_prompt(filepath+"trilepton_mumumu_ntp_SK"+this_samplename+"_dilep_cat_"+catversion+".root", "Ntp_"+this_syst);
+        m_bkg_prompt.SearchRegion = region;
+        m_bkg_prompt.MCNormSF = MCNormSF[this_samplename];
+        double MCNormDir(0.);
+        if(systtypes.at(i) == "MCxsec_up") MCNormDir = 1.;
+        else if(systtypes.at(i) == "MCxsec_down") MCNormDir = -1.;
+        m_bkg_prompt.MCNormSF_uncert = MCNormDir*MCNormSF_uncert[this_samplename];
+        m_bkg_prompt.Loop();
 
-  //==== data
-  TH1D *hist_WZ_n_data_event = (TH1D*)map_string_to_file["data"]->Get("n_events_WZ");
-  //==== WZ MC
-  TH1D *hist_WZ_n_WZ_MC = (TH1D*)map_string_to_file["WZTo3LNu_powheg"]->Get("n_events_WZ");
-  //=== fake error propagation
-  TH1D *hist_WZ_n_WZ_fake = (TH1D*)map_string_to_file["fake_sfed_HighdXY"]->Get("n_events_WZ");
-  TH1D *hist_WZ_n_WZ_fake_up = (TH1D*)map_string_to_file["fake_sfed_HighdXY"]->Get("n_events_WZ_up");
-  double e1_WZ = hist_WZ_n_WZ_fake->GetBinError(1);
-  double e2_WZ = hist_WZ_n_WZ_fake_up->GetBinContent(1)-hist_WZ_n_WZ_fake->GetBinContent(1);
-  hist_WZ_n_WZ_fake->SetBinError(1, sqrt(e1_WZ*e1_WZ+e2_WZ*e2_WZ));
-  cout << "Fake : " << hist_WZ_n_WZ_fake->GetBinContent(1) << " +- " << hist_WZ_n_WZ_fake->GetBinError(1) << endl;
-  //==== Add non WZ MC
-  for(unsigned int i=0; i<MC_nonWZ.size(); i++){
-    TH1D *hist_tmp = (TH1D*)map_string_to_file[MC_nonWZ.at(i)]->Get("n_events_WZ");
-    if(hist_tmp){
-      cout << MC_nonWZ.at(i) << " : " << hist_tmp->GetBinContent(1) << " +- " << hist_tmp->GetBinError(1) << endl;
-      hist_WZ_n_WZ_fake->Add(hist_tmp);
+        n_bkg_prompt += m_bkg_prompt.n_weighted;
+        
+        if(systtypes.at(i)=="Central"){
+          hist_bkg_for_error->Add(m_bkg_prompt.hist_for_error);
+          //cout << this_samplename << " : " << m_bkg_prompt.n_weighted << ", error = " << m_bkg_prompt.hist_for_error->GetBinError(1) << endl;
+        }
+        
+      }
+      
+      cutop m_bkg_fake(filepath+"trilepton_mumumu_ntp_SKfake_sfed_HighdXY_dilep_cat_"+catversion+".root", "Ntp_"+this_syst);
+      m_bkg_fake.SearchRegion = region;
+      m_bkg_fake.Loop();
+      n_bkg_fake = m_bkg_fake.n_weighted;
+      
+      cutop m_data(filepath+"trilepton_mumumu_ntp_data_DoubleMuon_cat_"+catversion+".root", "Ntp_"+this_syst);
+      m_data.SearchRegion = region;
+      m_data.Loop();
+      n_data = m_data.n_weighted;
+
+      cutop m_sig(filepath+"trilepton_mumumu_ntp_SK"+this_signal+"_dilep_cat_"+catversion+".root", "Ntp_"+this_syst);
+      m_sig.SearchRegion = region;
+      m_sig.MCNormSF = MCNormSF[this_signal];
+      m_sig.Loop();
+      n_signal = m_sig.n_weighted;
+      
+      yields_prompt.push_back(n_bkg_prompt);
+      yields_fake.push_back(n_bkg_fake);
+      yields_signal.push_back(n_signal);
+      yields_data.push_back(n_data);
+      
+      syst_error_prompt.push_back( n_bkg_prompt-yields_prompt.at(0) );
+      syst_error_fake.push_back( n_bkg_fake-yields_fake.at(0) );
+      syst_error_signal.push_back( n_signal-yields_signal.at(0) );
+      syst_error_data.push_back( n_data-yields_data.at(0) );
+      
+      if( yields_prompt.at(0) != 0) rel_syst_error_prompt.push_back( syst_error_prompt.at(i)/yields_prompt.at(0) );
+      else rel_syst_error_prompt.push_back( 0. );
+      if( yields_fake.at(0) != 0) rel_syst_error_fake.push_back( syst_error_fake.at(i)/yields_fake.at(0) );
+      else rel_syst_error_fake.push_back( 0. );
+      if( yields_signal.at(0) != 0) rel_syst_error_signal.push_back( syst_error_signal.at(i)/yields_signal.at(0) );
+      else rel_syst_error_signal.push_back( 0. );
+      if( yields_data.at(0) != 0) rel_syst_error_data.push_back( syst_error_data.at(i)/yields_data.at(0) );
+      else rel_syst_error_data.push_back( 0. );
+      
+      if(systtypes.at(i)=="Central"){
+
+        stat_error_prompt = hist_bkg_for_error->GetBinError(1);
+        
+        double err_fake_sumw2 = m_bkg_fake.hist_for_error->GetBinError(1);
+        double err_fake_prop = m_bkg_fake.hist_for_error_up->GetBinContent(1) - m_bkg_fake.hist_for_error->GetBinContent(1);
+        stat_error_fake = sqrt(err_fake_sumw2*err_fake_sumw2+err_fake_prop*err_fake_prop);
+
+        stat_error_data = m_data.hist_for_error->GetBinError(1);
+        stat_error_signal = m_sig.hist_for_error->GetBinError(1);
+
+      }
+      
     }
+    
+    double squared_syst_prompt = uncert_lumi*uncert_lumi*yields_prompt.at(0)*yields_prompt.at(0);
+    for(unsigned int i=1; i<syst_error_prompt.size(); i++) squared_syst_prompt += 0.5*syst_error_prompt.at(i)*syst_error_prompt.at(i);
+    double squared_syst_fake = uncert_fake*uncert_fake*yields_fake.at(0)*yields_fake.at(0);
+    for(unsigned int i=1; i<syst_error_fake.size(); i++) squared_syst_fake += 0.5*syst_error_fake.at(i)*syst_error_fake.at(i);
+    double squared_syst_signal = uncert_lumi*uncert_lumi*yields_signal.at(0)*yields_signal.at(0);
+    for(unsigned int i=1; i<syst_error_signal.size(); i++) squared_syst_signal += 0.5*syst_error_signal.at(i)*syst_error_signal.at(i);
+
+    double data = yields_data.at(0);
+    double prompt = yields_prompt.at(0);
+    double prompt_stat = stat_error_prompt;
+    double prompt_syst = sqrt(squared_syst_prompt);
+    double fake = yields_fake.at(0);
+    double fake_stat = stat_error_fake;
+    double fake_syst = sqrt(squared_syst_fake);
+
+    double total = prompt+fake;
+    double total_stat = sqrt(prompt_stat*prompt_stat + fake_stat*fake_stat);
+    double total_syst = sqrt(prompt_syst*prompt_syst + fake_syst*fake_syst);
+    double total_err = sqrt(total_stat*total_stat+total_syst*total_syst);
+
+    double signal = yields_signal.at(0);
+    double signal_stat = stat_error_signal;
+    double signal_syst = sqrt(squared_syst_signal);
+    double signal_err = sqrt(signal_stat*signal_stat+signal_syst*signal_syst);
+
+    cout << endl;
+    cout << "data = " << data << endl;
+    cout << "total bkg = " << total << " +- " << total_err << endl;
+    cout << "==> data - total bkg = " << data-total << " +- " << total_err << endl;
+    cout << "signal = " << signal << " +- " << signal_err <<  endl;
+
+    double total_err_ratio = total_err/(data-total);
+    double signal_err_ratio = signal_err/signal;
+    double SF_err_ratio = total_err_ratio+signal_err_ratio;
+
+    double SF = (data-total)/signal;
+    double SF_err = SF*SF_err_ratio;
+
+    cout << "==> SF = " << SF << " +- " << SF_err << endl;
+
+    MCNormSF[this_signal] = SF;
+    MCNormSF_uncert[this_signal] = SF_err;
+    
   }
-
-  cout << "--------------------------------------" << endl; 
-  cout << "Data : " << hist_WZ_n_data_event->GetBinContent(1) << endl;
-  cout << "Non-WZ : " << hist_WZ_n_WZ_fake->GetBinContent(1) << " +- " << hist_WZ_n_WZ_fake->GetBinError(1) << endl;
-  cout << "==> Data - (Non-WZ MC) = " << hist_WZ_n_data_event->GetBinContent(1) - hist_WZ_n_WZ_fake->GetBinContent(1) << endl;
-  cout << "WZ MC : " << hist_WZ_n_WZ_MC->GetBinContent(1) << " => " << 100.*hist_WZ_n_WZ_MC->GetBinContent(1)/(hist_WZ_n_WZ_fake->GetBinContent(1)+hist_WZ_n_WZ_MC->GetBinContent(1)) << "%" << endl;
-  //==== divide to get SF
-  hist_WZ_n_data_event->Add(hist_WZ_n_WZ_fake, -1.);
-  hist_WZ_n_data_event->Divide(hist_WZ_n_WZ_MC);
-  cout << "==> Norm. SF = " << hist_WZ_n_data_event->GetBinContent(1) << " +- " << hist_WZ_n_data_event->GetBinError(1) << endl;
-  
-  
-  
-  //=========
-  //==== ZZ
-  //=========
-
-  cout << endl;
-  cout << "============" << endl;
-  cout << "==== ZZ ====" << endl;
-  cout << "============" << endl;
-
-  //==== data
-  TH1D *hist_ZZ_n_data_event = (TH1D*)map_string_to_file["data"]->Get("n_events_ZZ");
-  //==== ZZ MC
-  TH1D *hist_ZZ_n_ZZ_MC = (TH1D*)map_string_to_file["ZZTo4L_powheg"]->Get("n_events_ZZ");
-  //=== fake error propagation
-  TH1D *hist_ZZ_n_ZZ_fake = (TH1D*)map_string_to_file["fake_sfed_HighdXY"]->Get("n_events_ZZ");
-  TH1D *hist_ZZ_n_ZZ_fake_up = (TH1D*)map_string_to_file["fake_sfed_HighdXY"]->Get("n_events_ZZ_up");
-  double e1_ZZ = hist_ZZ_n_ZZ_fake->GetBinError(1);
-  double e2_ZZ = hist_ZZ_n_ZZ_fake_up->GetBinContent(1)-hist_ZZ_n_ZZ_fake->GetBinContent(1);
-  hist_ZZ_n_ZZ_fake->SetBinError(1, sqrt(e1_ZZ*e1_ZZ+e2_ZZ*e2_ZZ));
-  cout << "Fake : " << hist_ZZ_n_ZZ_fake->GetBinContent(1) << " +- " << hist_ZZ_n_ZZ_fake->GetBinError(1) << endl;
-  //==== Add non ZZ MC
-  for(unsigned int i=0; i<MC_nonZZ.size(); i++){
-    TH1D *hist_tmp = (TH1D*)map_string_to_file[MC_nonZZ.at(i)]->Get("n_events_ZZ");
-    if(hist_tmp){
-      cout << MC_nonZZ.at(i) << " : " << hist_tmp->GetBinContent(1) << " +- " << hist_tmp->GetBinError(1) << endl;
-      hist_ZZ_n_ZZ_fake->Add(hist_tmp);
-    }
-  }
-  
-  cout << "--------------------------------------" << endl;
-  cout << "Data : " << hist_ZZ_n_data_event->GetBinContent(1) << endl;
-  cout << "Non-ZZ : " << hist_ZZ_n_ZZ_fake->GetBinContent(1) << " +- " << hist_ZZ_n_ZZ_fake->GetBinError(1) << endl;
-  cout << "==> Data - (Non-ZZ MC) = " << hist_ZZ_n_data_event->GetBinContent(1) - hist_ZZ_n_ZZ_fake->GetBinContent(1) << endl;
-  cout << "ZZ MC : " << hist_ZZ_n_ZZ_MC->GetBinContent(1) << " => " << 100.*hist_ZZ_n_ZZ_MC->GetBinContent(1)/(hist_ZZ_n_ZZ_fake->GetBinContent(1)+hist_ZZ_n_ZZ_MC->GetBinContent(1)) << "%" << endl;;
-  //==== divide to get SF
-  hist_ZZ_n_data_event->Add(hist_ZZ_n_ZZ_fake, -1.);
-  hist_ZZ_n_data_event->Divide(hist_ZZ_n_ZZ_MC);
-  cout << "==> Norm. SF = " << hist_ZZ_n_data_event->GetBinContent(1) << " +- " << hist_ZZ_n_data_event->GetBinError(1) << endl;
-  
   
 }
+
+
+
+
