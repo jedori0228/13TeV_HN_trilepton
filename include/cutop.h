@@ -25,7 +25,6 @@ class cutop {
   Double_t        first_pt;
   Double_t        second_pt;
   Double_t        third_pt;
-  Double_t        deltaR_OS_min;
   Double_t        HN_1_mass;
   Double_t        HN_2_mass;
   Double_t        HN_3_mass;
@@ -39,13 +38,16 @@ class cutop {
   Double_t        isPreselection;
   Double_t        isWZ;
   Double_t        isZJets;
+  Double_t        isZLep;
+  Double_t        isZGamma;
   Double_t        isZZ;
+  Double_t        ThreeLeptonConfig;
+  Double_t        FourLeptonConfig;
   
   // List of branches
   TBranch        *b_first_pt;   //!
   TBranch        *b_second_pt;   //!
   TBranch        *b_third_pt;   //!
-  TBranch        *b_deltaR_OS_min;   //!
   TBranch        *b_HN_1_mass;   //!
   TBranch        *b_HN_2_mass;   //!
   TBranch        *b_HN_3_mass;   //!
@@ -59,7 +61,11 @@ class cutop {
   TBranch        *b_isPreselection;
   TBranch        *b_isWZ;
   TBranch        *b_isZJets;
+  TBranch        *b_isZLep;
+  TBranch        *b_isZGamma;
   TBranch        *b_isZZ;
+  TBranch        *b_ThreeLeptonConfig;
+  TBranch        *b_FourLeptonConfig;
   
   double TotalEvent;
   double n_weighted;
@@ -70,7 +76,6 @@ class cutop {
   double cut_first_pt;
   double cut_second_pt;
   double cut_third_pt;
-  double cut_deltaR_OS_min;
   double cut_W_pri_mass;
   double cut_W_sec_mass;
   int signalclass;
@@ -100,7 +105,6 @@ cutop::cutop(TString sample, TString whichSyst) : fChain(0),
 TotalEvent(0), n_weighted(0.), n_unweighted(0),
 MCNormSF(1.), MCNormSF_uncert(0.),
 cut_first_pt(20.), cut_second_pt(10.), cut_third_pt(10.),
-cut_deltaR_OS_min(0.),
 cut_W_pri_mass(9999.),
 signalclass(1),
 cut_HN_mass(0.),
@@ -167,7 +171,6 @@ void cutop::Init(TTree *tree)
   fChain->SetBranchAddress("first_pt", &first_pt, &b_first_pt);
   fChain->SetBranchAddress("second_pt", &second_pt, &b_second_pt);
   fChain->SetBranchAddress("third_pt", &third_pt, &b_third_pt);
-  fChain->SetBranchAddress("deltaR_OS_min", &deltaR_OS_min, &b_deltaR_OS_min);
   fChain->SetBranchAddress("HN_1_mass", &HN_1_mass, &b_HN_1_mass);
   fChain->SetBranchAddress("HN_2_mass", &HN_2_mass, &b_HN_2_mass);
   fChain->SetBranchAddress("HN_3_mass", &HN_3_mass, &b_HN_3_mass);
@@ -181,7 +184,11 @@ void cutop::Init(TTree *tree)
   fChain->SetBranchAddress("isPreselection", &isPreselection, &b_isPreselection);
   fChain->SetBranchAddress("isWZ", &isWZ, &b_isWZ);
   fChain->SetBranchAddress("isZJets", &isZJets, &b_isZJets);
+  fChain->SetBranchAddress("isZLep", &isZLep, &b_isZLep);
+  fChain->SetBranchAddress("isZGamma", &isZGamma, &b_isZGamma);
   fChain->SetBranchAddress("isZZ", &isZZ, &b_isZZ);
+  fChain->SetBranchAddress("ThreeLeptonConfig", &ThreeLeptonConfig, &b_ThreeLeptonConfig);
+  fChain->SetBranchAddress("FourLeptonConfig", &FourLeptonConfig, &b_FourLeptonConfig);
 
   Notify();
 }

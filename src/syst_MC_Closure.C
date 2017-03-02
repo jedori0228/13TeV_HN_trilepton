@@ -8,6 +8,7 @@ void syst_MC_Closure(){
   TH1::AddDirectory(kFALSE);
   gStyle->SetPaintTextFormat("0.2f");
 
+  TString cmssw_version = getenv("CATVERSION");
   TString dataset = getenv("CATANVERSION");
 
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
@@ -41,7 +42,7 @@ void syst_MC_Closure(){
     
     TH2D *hist_yield = new TH2D(this_sample+"_hist_yield", "", dXYMins.size(), bins_dXYMins, RelIsoMaxs.size(), bins_RelIsoMaxs);
     
-    TFile *file_tmp = new TFile(filepath+"/trilepton_mumumu_syst_FR_SK"+this_sample+"_dilep_cat_v8-0-2.root");
+    TFile *file_tmp = new TFile(filepath+"/trilepton_mumumu_syst_FR_SK"+this_sample+"_dilep_cat_"+cmssw_version+".root");
     
     for(int aaa=0; aaa<dXYMins.size(); aaa++){
       for(int bbb=0; bbb<RelIsoMaxs.size(); bbb++){

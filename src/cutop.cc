@@ -61,20 +61,40 @@ Double_t cutop::HN_mass_by_signalclass(){
 
 bool cutop::isSearchRegion(){
 
-  bool pass = true;
+  bool pass = false;
 
+  //==== Preselection
   if(SearchRegion=="Preselection"){
-    if(isPreselection==0) pass = false;
+    if(isPreselection==1) pass = true;
   }
+
+  //==== WZ
   else if(SearchRegion=="WZ"){
-    if(isWZ==0) pass = false;
+    if(isWZ==1) pass = true;
   }
+  else if(SearchRegion=="WZ_3mu0el"){
+    if(isWZ==1 && ThreeLeptonConfig==0) pass = true;
+  }
+  else if(SearchRegion=="WZ_2mu1el"){
+    if(isWZ==1 && ThreeLeptonConfig==1) pass = true;
+  }
+
+  //==== Z+lep+lowMET
   else if(SearchRegion=="ZJets"){
-    if(isZJets==0) pass = false;
+    if(isZJets==1) pass = true;
   }
+
+  //==== ZZ
   else if(SearchRegion=="ZZ"){
-    if(isZZ==0) pass = false;
+    if(isZZ==1) pass = true;
   }
+  else if(SearchRegion=="ZZ_4mu0el"){
+    if(isZZ==1 && FourLeptonConfig==0) pass = true;
+  }
+  else if(SearchRegion=="ZZ_2mu2el"){
+    if(isZZ==1 && FourLeptonConfig==1) pass = true;
+  }
+
   else{
 
   }

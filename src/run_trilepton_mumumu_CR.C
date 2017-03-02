@@ -78,22 +78,34 @@ void run_trilepton_mumumu_CR(int XXX){
 
   //==== trilep CR
   if(XXX==0){
-    m.histname_suffix = {"_WZ", "_ZJets"};
-    m.drawdata = {true, true};
-    m.samples_to_use = {"fake_HighdXY", "WZ_excl", "ZZ_excl", "VVV", "ttV"};
-  }
-  else if(XXX==1){
-    m.histname_suffix = {"_WZ", "_ZJets", "_ZMu"};
-    m.drawdata = {true, true, true};
-    //m.ApplyMCNormSF = {false, true, true}; // default
-
-    m.ApplyMCNormSF = {true, true, true};
-    //m.ApplyMCNormSF = {false, false, false};
+    m.histname_suffix = {
+      "_WZ", "_WZ_3mu0el", "_WZ_2mu1el",
+      "_ZJets", "_ZJets_3mu0el", "_ZJets_2mu1el",
+      "_ZLep",
+      "_ZGamma", "_ZGamma_3mu0el", "_ZGamma_2mu1el",
+      "_ZZ"
+    };
+    m.drawdata = {
+      true, true, true,
+      true, true, true,
+      true,
+      true, true, true,
+      true
+    };
+    
+    //m.ApplyMCNormSF = {true, true, true, false};
+    m.ApplyMCNormSF = {
+      false, false, false,
+      false, false, false,
+      false,
+      false, false, false,
+      false
+    };
+    //m.ApplyMCNormSF = {false, true, true, true, true};
     
     m.samples_to_use = {"fake_sfed_HighdXY", "WZ_excl", "ZZ_excl", "Vgamma", "VVV", "ttV"};
-    //m.samples_to_use = {"fake_sfed_HighdXY", "VV_incl", "VVV", "top"};
   }
-  else if(XXX==2){
+  else if(XXX==1){
     m.histname_suffix = {"_WZ", "_ZJets"};
     m.drawdata = {true, true};
     m.samples_to_use = {"fake_Dijet", "WZ_excl", "ZZ_excl", "Vgamma", "VVV", "ttV"};
@@ -105,49 +117,65 @@ void run_trilepton_mumumu_CR(int XXX){
   //============================
   
   m.histname = {
-    "leadingLepton_Pt", "leadingLepton_Eta", "leadingLepton_RelIso", "leadingLepton_Chi2",
-    "secondLepton_Pt", "secondLepton_Eta", "secondLepton_RelIso", "secondLepton_Chi2",
-    "thirdLepton_Pt", "thirdLepton_Eta", "thirdLepton_RelIso", "thirdLepton_Chi2",
-    "mll",
     "n_events",
-    "PFMET", "PFMET_phi",
+    "n_vertices",
+    "n_jets",
     "n_bjets",
-    "m_Z_candidate_before_cut", "m_lll_before_cut", "PFMET_before_cut", "n_electrons_before_cut", "n_bjets_before_cut",
+    "PFMET", "PFMET_phi",
+    "osllmass",
     "m_Z_candidate",
     "mt_W_candidate",
-    "osllmass",
     "m_lll",
-    "Z_candidate_Pt", "W_candidate_Pt",
-    "dRZMuonWMuon",
-    "N1_Z_mass", "N1_mlll", "N1_n_bjets", "N1_PFMET", "n_vertices_before_cut",
-    "n_vertices", "n_jets",
-    "ZMuon_leading_Pt", "ZMuon_leading_Eta", "ZMuon_leading_RelIso", "ZMuon_leading_Chi2", "ZMuon_leading_dXY",
-    "ZMuon_subleading_Pt", "ZMuon_subleading_Eta", "ZMuon_subleading_RelIso", "ZMuon_subleading_Chi2", "ZMuon_subleading_dXY",
-    "WMuon_Pt", "WMuon_Eta", "WMuon_RelIso", "WMuon_Chi2", "WMuon_dXY",
-    "dRMETWMuon",
+    "Z_candidate_Pt",
+    "W_candidate_Pt",
+    "dRZLeptonWLepton",
+    "dRMETWLepton",
+    "leadingLepton_Pt", "leadingLepton_Eta", "leadingLepton_RelIso", "leadingLepton_dXY", "leadingLepton_dXYSig", "leadingLepton_dZ",
+    "secondLepton_Pt", "secondLepton_Eta", "secondLepton_RelIso", "secondLepton_dXY", "secondLepton_dXYSig", "secondLepton_dZ",
+    "thirdLepton_Pt", "thirdLepton_Eta", "thirdLepton_RelIso", "thirdLepton_dXY", "thirdLepton_dXYSig", "thirdLepton_dZ",
+    
+    //==== only for ZZ
+    "fourthLepton_Pt", "fourthLepton_Eta", "fourthLepton_RelIso", "fourthLepton_dXY", "fourthLepton_dXYSig", "fourthLepton_dZ",
+    "m_llll",
+    
+    "ZLepton_leading_Pt", "ZLepton_leading_Eta", "ZLepton_leading_RelIso", "ZLepton_leading_dXY", "ZLepton_leading_dXYSig", "ZLepton_leading_dZ",
+    "ZLepton_subleading_Pt", "ZLepton_subleading_Eta", "ZLepton_subleading_RelIso", "ZLepton_subleading_dXY", "ZLepton_subleading_dXYSig", "ZLepton_subleading_dZ",
+    "WLepton_Pt", "WLepton_Eta", "WLepton_RelIso", "WLepton_dXY", "WLepton_dXYSig", "WLepton_dZ",
+    
+    //==== only for WZ
+    "m_Z_candidate_before_cut", "m_lll_before_cut", "PFMET_before_cut", "n_bjets_before_cut", "n_vertices_before_cut",
+    "N1_Z_mass", "N1_mlll", "N1_n_bjets", "N1_PFMET",
   };
 
   m.x_title = {
-    "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2",
-    "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2",
-    "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2",
-    "m(#mu#mu) [GeV]",
     "onebin",
-    "#slash{E}_{T}^{miss} [GeV]", "#phi of #slash{E}_{T}^{miss}",
+    "# of verticies",
+    "# of jets",
     "# of b-tagged jets",
-    "m(Z) [GeV]", "m(lll) [GeV]", "#slash{E}_{T}^{miss} [GeV]", "# of electrons", "# of bjets",
+    "#slash{E}_{T}^{miss} [GeV]", "#phi of #slash{E}_{T}^{miss}",
+    "m(OS) [GeV]",
     "m(Z) [GeV]",
     "m_{T}(W) [GeV]",
-    "m(OS) [GeV]",
     "m(lll) [GeV]",
-    "p_{T}^{Z} [GeV]", "p_{T}^{W} [GeV]",
+    "p_{T}^{Z} [GeV]",
+    "p_{T}^{W} [GeV]",
     "#DeltaR(#mu^{W Lepton}#mu^{Z Leptons})",
-    "|m(ll)-m(Z)| [GeV]", "m(lll) [GeV]", "# of bjets", "#slash{E}_{T}^{miss} [GeV]", "# of vertices",
-    "# of vertices", "# of jets",
-    "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2", "|dXY| [cm]",
-    "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2", "|dXY| [cm]",
-    "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2", "|dXY| [cm]",
-    "#DeltaR(#slash{E}_{T}^{miss},#mu^{W Lepton})"
+    "#DeltaR(#slash{E}_{T}^{miss},#mu^{W Lepton})",
+    "p_{T} [GeV]", "|#eta|", "LeptonRelIso", "|dXY| [cm]", "|Sig(dXY)|", "|dZ| [cm]",
+    "p_{T} [GeV]", "|#eta|", "LeptonRelIso", "|dXY| [cm]", "|Sig(dXY)|", "|dZ| [cm]",
+    "p_{T} [GeV]", "|#eta|", "LeptonRelIso", "|dXY| [cm]", "|Sig(dXY)|", "|dZ| [cm]",
+    
+    //==== only for ZZ
+    "p_{T} [GeV]", "|#eta|", "LeptonRelIso", "|dXY| [cm]", "|Sig(dXY)|", "|dZ| [cm]",
+    "m(llll) [GeV]",
+    
+    "p_{T} [GeV]", "|#eta|", "LeptonRelIso", "|dXY| [cm]", "|Sig(dXY)|", "|dZ| [cm]",
+    "p_{T} [GeV]", "|#eta|", "LeptonRelIso", "|dXY| [cm]", "|Sig(dXY)|", "|dZ| [cm]",
+    "p_{T} [GeV]", "|#eta|", "LeptonRelIso", "|dXY| [cm]", "|Sig(dXY)|", "|dZ| [cm]",
+    
+    //==== only for WZ,
+    "m(Z) [GeV]", "m(lll) [GeV]", "#slash{E}_{T}^{miss} [GeV]", "# of b-tagged jets",  "# of vertices",
+    "|m(ll)-m(Z)| [GeV]", "m(lll) [GeV]", "# of bjets", "#slash{E}_{T}^{miss} [GeV]",
   };
 
   //====================
@@ -157,46 +185,65 @@ void run_trilepton_mumumu_CR(int XXX){
   //==== N-1 and before_cut is only for WZ
   for(unsigned int i=0; i<m.histname.size(); i++){
     TString this_var = m.histname.at(i);
-    if(this_var.Contains("third") ||
-       this_var == "m_Z_candidate_before_cut" ||
+    
+    //==== only for ZZ
+    if(this_var.Contains("fourth") || this_var=="m_llll"){
+      m.CutVarSkips.push_back( make_pair("_WZ_3mu0el", this_var) );
+      m.CutVarSkips.push_back( make_pair("_WZ_2mu1el", this_var) );
+      m.CutVarSkips.push_back( make_pair("_WZ", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZJets", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZJets_3mu0el", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZJets_2mu1el", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZLep", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZGamma", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZGamma_3mu0el", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZGamma_2mu1el", this_var) );
+    }
+    
+    //==== only not for ZZ
+    if(this_var=="m_Z_candidate" ||
+       this_var=="mt_W_candidate" ||
+       this_var=="m_lll" ||
+       this_var=="Z_candidate_Pt" ||
+       this_var=="W_candidate_Pt" ||
+       this_var=="dRZLeptonWLepton" ||
+       this_var=="dRMETWLepton" ||
+       this_var.Contains("ZLepton") ||
+       this_var.Contains("WLepton")){
+      m.CutVarSkips.push_back( make_pair("_ZZ", this_var) );
+    }
+    
+    
+    //==== only for WZ
+    if(this_var == "m_Z_candidate_before_cut" ||
        this_var == "m_lll_before_cut" ||
        this_var == "PFMET_before_cut" ||
-       this_var == "n_electrons_before_cut" ||
        this_var == "n_bjets_before_cut" ||
-       this_var == "m_Z_candidate" ||
-       this_var == "mt_W_candidate" ||
-       this_var == "osllmass" ||
-       this_var == "m_lll" ||
-       this_var == "WMuon_Pt" ||
-       this_var == "Z_candidate_Pt" ||
-       this_var == "W_candidate_Pt" ||
-       this_var == "dRZMuonWMuon" ||
+       this_var == "n_vertices_before_cut" ||
        this_var == "N1_Z_mass" ||
        this_var == "N1_mlll" ||
        this_var == "N1_n_bjets" ||
-       this_var == "N1_PFMET" ||
-       this_var == "n_vertices_before_cut" ||
-       this_var == "n_vertices" ||
-       this_var.Contains("ZMuon") ||
-       this_var.Contains("WMuon") ||
-       this_var == "dRMETWMuon"
-      ){
-      if(this_var.Contains("before_cut") || this_var.Contains("N1")){
-        m.CutVarSkips.push_back( make_pair("_ZJets", this_var) );
-        m.CutVarSkips.push_back( make_pair("_ZMu", this_var) );
-      }
+       this_var == "N1_PFMET"){
+      m.CutVarSkips.push_back( make_pair("_WZ_3mu0el", this_var) );
+      m.CutVarSkips.push_back( make_pair("_WZ_2mu1el", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZJets", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZJets_3mu0el", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZJets_2mu1el", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZLep", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZGamma", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZGamma_3mu0el", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZGamma_2mu1el", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZZ", this_var) );
     }
   }
-  m.CutVarSkips.push_back( make_pair("_WZ", "mll") );
-  m.CutVarSkips.push_back( make_pair("_ZJets", "mll") );
-  m.CutVarSkips.push_back( make_pair("_ZMu", "mll") );
+
  
   //============================
   //==== HOT FIX FOR DILEP CR
   //==== RE-SET HIST VARIABLES
   //============================
   
-  if(XXX==3){
+  if(XXX==2){
     m.histname_suffix = {"_OSDiMuon", "_OSDiMuon_Z_10GeV"};
     m.drawdata = {true, true};
     m.samples_to_use = {"DY", "fake_sfed_HighdXY"};
@@ -224,48 +271,6 @@ void run_trilepton_mumumu_CR(int XXX){
       "# of vertices"
     };
     
-  }
-
-  //============================
-  //==== HOT FIX FOR 4-LEP CR
-  //==== RE-SET HIST VARIABLES
-  //============================
-
-  if(XXX==4){
-    m.histname_suffix = {"_ZZ"};
-    m.drawdata = {true};
-    //m.ApplyMCNormSF = {false}; // default
-    m.ApplyMCNormSF = {true};
-    m.samples_to_use = {"fake_sfed_HighdXY", "ZZ_excl", "Vgamma", "VVV", "ttV"};
-
-    m.histname = {
-      "leadingLepton_Pt", "leadingLepton_Eta", "leadingLepton_RelIso", "leadingLepton_Chi2",
-      "secondLepton_Pt", "secondLepton_Eta", "secondLepton_RelIso", "secondLepton_Chi2",
-      "thirdLepton_Pt", "thirdLepton_Eta", "thirdLepton_RelIso", "thirdLepton_Chi2",
-      "fourthLepton_Pt", "fourthLepton_Eta", "fourthLepton_RelIso", "fourthLepton_Chi2",
-      "osllmass",
-      "m_llll",
-      "n_events",
-      "PFMET", "PFMET_phi",
-      "n_bjets",
-      "n_jets",
-      "n_vertices"
-    };
-
-    m.x_title = {
-      "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2",
-      "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2",
-      "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2",
-      "p_{T} [GeV]", "|#eta|", "LeptonRelIso04", "GlobalChi2",
-      "m(OS) [GeV]",
-      "m(#mu#mu#mu#mu) [GeV]",
-      "onebin",
-      "#slash{E}_{T}^{miss} [GeV]", "#phi of #slash{E}_{T}^{miss}",
-      "# of b-tagged jets",
-      "# of jets",
-      "# of vertices"
-    };
-
   }
 
   //====================
@@ -324,93 +329,21 @@ void run_trilepton_mumumu_CR(int XXX){
   //==== rebins
   //=============
   
-  /*
+/*
   //==== script to generate rebins
   ofstream skeleton_rebins("./txt/CR_skeleton_rebins.txt", ios::trunc);
   for(unsigned int i=0; i<m.histname_suffix.size(); i++){
     for(unsigned int j=0; j<m.histname.size(); j++){
       skeleton_rebins
-      << "m.rebins[make_pair(\""+m.histname_suffix.at(i)+"\", \""+m.histname.at(j)+"\")] = 1;" << endl;
+      //<< "m.rebins[make_pair(\""+m.histname_suffix.at(i)+"\", \""+m.histname.at(j)+"\")] = 1;" << endl;
+      <<m.histname_suffix.at(i)<<"\t"<<m.histname.at(j)<<"\t"<<-999<<endl;
     }
   }
   skeleton_rebins.close();
   return;
-  */
-  
-  m.rebins[make_pair("_WZ", "leadingLepton_Pt")] = 5;
-  m.rebins[make_pair("_WZ", "leadingLepton_Eta")] = 5;
-  m.rebins[make_pair("_WZ", "secondLepton_Pt")] = 5;
-  m.rebins[make_pair("_WZ", "secondLepton_Eta")] = 5;
-  m.rebins[make_pair("_WZ", "thirdLepton_Pt")] = 5;
-  m.rebins[make_pair("_WZ", "thirdLepton_Eta")] = 5;
-  m.rebins[make_pair("_WZ", "PFMET")] = 10;
-  m.rebins[make_pair("_WZ", "m_Z_candidate_before_cut")] = 5;
-  m.rebins[make_pair("_WZ", "m_lll_before_cut")] = 20;
-  m.rebins[make_pair("_WZ", "PFMET_before_cut")] = 10;
-  m.rebins[make_pair("_WZ", "PFMET_phi")] = 4;
-  //m.rebins[make_pair("_WZ", "m_Z_candidate")] = 5;
-  m.rebins[make_pair("_WZ", "m_Z_candidate")] = 1;
-  m.rebins[make_pair("_WZ", "mt_W_candidate")] = 10;
-  m.rebins[make_pair("_WZ", "osllmass")] = 5;
-  m.rebins[make_pair("_WZ", "m_lll")] = 20;
-  m.rebins[make_pair("_WZ", "Z_candidate_Pt")] = 20;
-  m.rebins[make_pair("_WZ", "W_candidate_Pt")] = 20;
-  m.rebins[make_pair("_WZ", "ZMuon_leading_Pt")] = 5;
-  m.rebins[make_pair("_WZ", "ZMuon_leading_Eta")] = 5;
-  m.rebins[make_pair("_WZ", "ZMuon_subleading_Pt")] = 5;
-  m.rebins[make_pair("_WZ", "ZMuon_subleading_Eta")] = 5;
-  m.rebins[make_pair("_WZ", "WMuon_Pt")] = 5;
-  m.rebins[make_pair("_WZ", "WMuon_Eta")] = 5;
-  m.rebins[make_pair("_WZ", "dRMETWMuon")] = 5;
-  m.rebins[make_pair("_WZ", "dRZMuonWMuon")] = 5;
-  m.rebins[make_pair("_ZJets", "leadingLepton_Pt")] = 5;
-  m.rebins[make_pair("_ZJets", "leadingLepton_Eta")] = 5;
-  m.rebins[make_pair("_ZJets", "secondLepton_Pt")] = 5;
-  m.rebins[make_pair("_ZJets", "secondLepton_Eta")] = 5;
-  m.rebins[make_pair("_ZJets", "thirdLepton_Pt")] = 5;
-  m.rebins[make_pair("_ZJets", "thirdLepton_Eta")] = 5;
-  m.rebins[make_pair("_ZJets", "PFMET_phi")] = 4;
-  m.rebins[make_pair("_ZJets", "PFMET")] = 10;
-  m.rebins[make_pair("_ZJets", "m_Z_candidate")] = 1;
-  m.rebins[make_pair("_ZJets", "mt_W_candidate")] = 10;
-  m.rebins[make_pair("_ZJets", "osllmass")] = 5;
-  m.rebins[make_pair("_ZJets", "m_lll")] = 20;
-  m.rebins[make_pair("_ZJets", "Z_candidate_Pt")] = 20;
-  m.rebins[make_pair("_ZJets", "W_candidate_Pt")] = 20;
-  m.rebins[make_pair("_ZJets", "Z_candidate_Pt")] = 20;
-  m.rebins[make_pair("_ZJets", "W_candidate_Pt")] = 20;
-  m.rebins[make_pair("_ZJets", "ZMuon_leading_Pt")] = 5;
-  m.rebins[make_pair("_ZJets", "ZMuon_leading_Eta")] = 5;
-  m.rebins[make_pair("_ZJets", "ZMuon_subleading_Pt")] = 5;
-  m.rebins[make_pair("_ZJets", "ZMuon_subleading_Eta")] = 5;
-  m.rebins[make_pair("_ZJets", "WMuon_Pt")] = 5;
-  m.rebins[make_pair("_ZJets", "WMuon_Eta")] = 5;
-  m.rebins[make_pair("_ZJets", "dRMETWMuon")] = 5;
-  m.rebins[make_pair("_ZJets", "dRZMuonWMuon")] = 5;
-  m.rebins[make_pair("_ZMu", "leadingLepton_Pt")] = 5;
-  m.rebins[make_pair("_ZMu", "leadingLepton_Eta")] = 5;
-  m.rebins[make_pair("_ZMu", "secondLepton_Pt")] = 5;
-  m.rebins[make_pair("_ZMu", "secondLepton_Eta")] = 5;
-  m.rebins[make_pair("_ZMu", "thirdLepton_Pt")] = 5;
-  m.rebins[make_pair("_ZMu", "thirdLepton_Eta")] = 5;
-  m.rebins[make_pair("_ZMu", "PFMET_phi")] = 4;
-  m.rebins[make_pair("_ZMu", "PFMET")] = 10;
-  m.rebins[make_pair("_ZMu", "m_Z_candidate")] = 1;
-  m.rebins[make_pair("_ZMu", "mt_W_candidate")] = 10;
-  m.rebins[make_pair("_ZMu", "osllmass")] = 5;
-  m.rebins[make_pair("_ZMu", "m_lll")] = 20;
-  m.rebins[make_pair("_ZMu", "Z_candidate_Pt")] = 20;
-  m.rebins[make_pair("_ZMu", "W_candidate_Pt")] = 20;
-  m.rebins[make_pair("_ZMu", "Z_candidate_Pt")] = 20;
-  m.rebins[make_pair("_ZMu", "W_candidate_Pt")] = 20;
-  m.rebins[make_pair("_ZMu", "ZMuon_leading_Pt")] = 5;
-  m.rebins[make_pair("_ZMu", "ZMuon_leading_Eta")] = 5;
-  m.rebins[make_pair("_ZMu", "ZMuon_subleading_Pt")] = 5;
-  m.rebins[make_pair("_ZMu", "ZMuon_subleading_Eta")] = 5;
-  m.rebins[make_pair("_ZMu", "WMuon_Pt")] = 5;
-  m.rebins[make_pair("_ZMu", "WMuon_Eta")] = 5;
-  m.rebins[make_pair("_ZMu", "dRMETWMuon")] = 5;
-  m.rebins[make_pair("_ZMu", "dRZMuonWMuon")] = 5;
+*/
+
+  m.SetRebins(WORKING_DIR+"/txts/"+dataset+"/CR_rebins.txt");
 
   m.rebins[make_pair("_OSDiMuon", "leadingLepton_Pt")] = 5;
   m.rebins[make_pair("_OSDiMuon", "leadingLepton_Eta")] = 5;
@@ -422,175 +355,31 @@ void run_trilepton_mumumu_CR(int XXX){
   m.rebins[make_pair("_OSDiMuon_Z_10GeV", "secondLepton_Pt")] = 5;
   m.rebins[make_pair("_OSDiMuon_Z_10GeV", "secondLepton_Eta")] = 5;
 
-  m.rebins[make_pair("_ZZ", "leadingLepton_Pt")] = 5;
-  m.rebins[make_pair("_ZZ", "leadingLepton_Eta")] = 5;
-  m.rebins[make_pair("_ZZ", "secondLepton_Pt")] = 5;
-  m.rebins[make_pair("_ZZ", "secondLepton_Eta")] = 5;
-  m.rebins[make_pair("_ZZ", "thirdLepton_Pt")] = 5;
-  m.rebins[make_pair("_ZZ", "thirdLepton_Eta")] = 5;
-  m.rebins[make_pair("_ZZ", "fourthLepton_Pt")] = 5;
-  m.rebins[make_pair("_ZZ", "fourthLepton_Eta")] = 5;
-  m.rebins[make_pair("_ZZ", "PFMET_phi")] = 4;
-  m.rebins[make_pair("_ZZ", "PFMET")] = 10;
-  m.rebins[make_pair("_ZZ", "osllmass")] = 5;
-  m.rebins[make_pair("_ZZ", "m_llll")] = 20;
-
   //=============
   //==== y_maxs
   //=============
   
-  /*
+/*
   //==== script to generate rebins
-  ofstream skeleton_y_maxs("./txt/CR_skeleton_y_maxs.txt", ios::trunc);
+  ofstream skeleton_y_maxs("./txts/CR_skeleton_y_maxs.txt", ios::trunc);
   for(unsigned int i=0; i<m.histname_suffix.size(); i++){
     for(unsigned int j=0; j<m.histname.size(); j++){
       skeleton_y_maxs
-      << "  m.y_maxs[make_pair(\""+m.histname_suffix.at(i)+"\", \""+m.histname.at(j)+"\")] = 1;" << endl;
+      //<< "  m.y_maxs[make_pair(\""+m.histname_suffix.at(i)+"\", \""+m.histname.at(j)+"\")] = 1;" << endl;
+      <<m.histname_suffix.at(i)<<"\t"<<m.histname.at(j)<<"\t"<<-999<<endl;
     }
   }
   skeleton_y_maxs.close();
   return;
-  */
+*/
 
   //==== default max
-  m.default_y_max = 1000.;
+  m.default_y_max = 150.;
   m.default_y_min = 0.;
   //==== log y?
   m.UseSetLogy = false;
 
-  m.y_maxs[make_pair("_WZ", "dRMETWMuon")] = 400;
-  m.y_maxs[make_pair("_WZ", "dRZMuonWMuon")] = 800;
-  m.y_maxs[make_pair("_WZ", "leadingLepton_Chi2")] = 250;
-  m.y_maxs[make_pair("_WZ", "leadingLepton_Eta")] = 300;
-  m.y_maxs[make_pair("_WZ", "leadingLepton_Pt")] = 200;
-  m.y_maxs[make_pair("_WZ", "leadingLepton_RelIso")] = 1000;
-  m.y_maxs[make_pair("_WZ", "m_lll_before_cut")] = 1200;
-  m.y_maxs[make_pair("_WZ", "m_lll")] = 300;
-  m.y_maxs[make_pair("_WZ", "m_Z_candidate_before_cut")] = 2000;
-  m.y_maxs[make_pair("_WZ", "m_Z_candidate")] = 300;
-  m.y_maxs[make_pair("_WZ", "mt_W_candidate")] = 300;
-  m.y_maxs[make_pair("_WZ", "n_bjets_before_cut")] = 6000;
-  m.y_maxs[make_pair("_WZ", "n_bjets")] = 2000;
-  m.y_maxs[make_pair("_WZ", "n_electrons_before_cut")] = 6000;
-  m.y_maxs[make_pair("_WZ", "n_events")] = 2000;
-  m.y_maxs[make_pair("_WZ", "n_jets")] = 1000;
-  m.y_maxs[make_pair("_WZ", "n_vertices_before_cut")] = 500;
-  m.y_maxs[make_pair("_WZ", "n_vertices")] = 150;
-  m.y_maxs[make_pair("_WZ", "N1_mlll")] = 350;
-  m.y_maxs[make_pair("_WZ", "N1_n_bjets")] = 1800;
-  m.y_maxs[make_pair("_WZ", "N1_PFMET")] = 450;
-  m.y_maxs[make_pair("_WZ", "N1_Z_mass")] = 600;
-  m.y_maxs[make_pair("_WZ", "osllmass")] = 1000;
-  m.y_maxs[make_pair("_WZ", "PFMET_before_cut")] = 1500;
-  m.y_maxs[make_pair("_WZ", "PFMET_phi")] = 200;
-  m.y_maxs[make_pair("_WZ", "PFMET")] = 350;
-  m.y_maxs[make_pair("_WZ", "secondLepton_Chi2")] = 250;
-  m.y_maxs[make_pair("_WZ", "secondLepton_Eta")] = 300;
-  m.y_maxs[make_pair("_WZ", "secondLepton_Pt")] = 250;
-  m.y_maxs[make_pair("_WZ", "secondLepton_RelIso")] = 800;
-  m.y_maxs[make_pair("_WZ", "thirdLepton_Chi2")] = 250;
-  m.y_maxs[make_pair("_WZ", "thirdLepton_Eta")] = 300;
-  m.y_maxs[make_pair("_WZ", "thirdLepton_Pt")] = 350;
-  m.y_maxs[make_pair("_WZ", "thirdLepton_RelIso")] = 800;
-  m.y_maxs[make_pair("_WZ", "W_candidate_Pt")] = 300;
-  m.y_maxs[make_pair("_WZ", "WMuon_Chi2")] = 250;
-  m.y_maxs[make_pair("_WZ", "WMuon_dXY")] = 150;
-  m.y_maxs[make_pair("_WZ", "WMuon_Eta")] = 300;
-  m.y_maxs[make_pair("_WZ", "WMuon_Pt")] = 350;
-  m.y_maxs[make_pair("_WZ", "WMuon_RelIso")] = 800;
-  m.y_maxs[make_pair("_WZ", "Z_candidate_Pt")] = 400;
-  m.y_maxs[make_pair("_WZ", "ZMuon_leading_Chi2")] = 250;
-  m.y_maxs[make_pair("_WZ", "ZMuon_leading_dXY")] = 200;
-  m.y_maxs[make_pair("_WZ", "ZMuon_leading_Eta")] = 300;
-  m.y_maxs[make_pair("_WZ", "ZMuon_leading_Pt")] = 200;
-  m.y_maxs[make_pair("_WZ", "ZMuon_leading_RelIso")] = 800;
-  m.y_maxs[make_pair("_WZ", "ZMuon_subleading_Chi2")] = 250;
-  m.y_maxs[make_pair("_WZ", "ZMuon_subleading_dXY")] = 200;
-  m.y_maxs[make_pair("_WZ", "ZMuon_subleading_Eta")] = 300;
-  m.y_maxs[make_pair("_WZ", "ZMuon_subleading_Pt")] = 300;
-  m.y_maxs[make_pair("_WZ", "ZMuon_subleading_RelIso")] = 800;
-  m.y_maxs[make_pair("_ZJets", "dRMETWMuon")] = 200;
-  m.y_maxs[make_pair("_ZJets", "dRZMuonWMuon")] = 350;
-  m.y_maxs[make_pair("_ZJets", "leadingLepton_Chi2")] = 100;
-  m.y_maxs[make_pair("_ZJets", "leadingLepton_Eta")] = 150;
-  m.y_maxs[make_pair("_ZJets", "leadingLepton_Pt")] = 150;
-  m.y_maxs[make_pair("_ZJets", "leadingLepton_RelIso")] = 500;
-  m.y_maxs[make_pair("_ZJets", "m_lll")] = 200;
-  m.y_maxs[make_pair("_ZJets", "m_Z_candidate")] = 150;
-  m.y_maxs[make_pair("_ZJets", "mt_W_candidate")] = 200;
-  m.y_maxs[make_pair("_ZJets", "n_bjets")] = 1000;
-  m.y_maxs[make_pair("_ZJets", "n_events")] = 1000;
-  m.y_maxs[make_pair("_ZJets", "n_jets")] = 800;
-  m.y_maxs[make_pair("_ZJets", "n_vertices")] = 60;
-  m.y_maxs[make_pair("_ZJets", "osllmass")] = 450;
-  m.y_maxs[make_pair("_ZJets", "PFMET_phi")] = 150;
-  m.y_maxs[make_pair("_ZJets", "PFMET")] = 500;
-  m.y_maxs[make_pair("_ZJets", "secondLepton_Chi2")] = 100;
-  m.y_maxs[make_pair("_ZJets", "secondLepton_Eta")] = 150;
-  m.y_maxs[make_pair("_ZJets", "secondLepton_Pt")] = 150;
-  m.y_maxs[make_pair("_ZJets", "secondLepton_RelIso")] = 500;
-  m.y_maxs[make_pair("_ZJets", "thirdLepton_Chi2")] = 100;
-  m.y_maxs[make_pair("_ZJets", "thirdLepton_Eta")] = 150;
-  m.y_maxs[make_pair("_ZJets", "thirdLepton_Pt")] = 300;
-  m.y_maxs[make_pair("_ZJets", "thirdLepton_RelIso")] = 500;
-  m.y_maxs[make_pair("_ZJets", "W_candidate_Pt")] = 300;
-  m.y_maxs[make_pair("_ZJets", "WMuon_Chi2")] = 100;
-  m.y_maxs[make_pair("_ZJets", "WMuon_dXY")] = 60;
-  m.y_maxs[make_pair("_ZJets", "WMuon_Eta")] = 150;
-  m.y_maxs[make_pair("_ZJets", "WMuon_Pt")] = 300;
-  m.y_maxs[make_pair("_ZJets", "WMuon_RelIso")] = 500;
-  m.y_maxs[make_pair("_ZJets", "Z_candidate_Pt")] = 250;
-  m.y_maxs[make_pair("_ZJets", "ZMuon_leading_Chi2")] = 100;
-  m.y_maxs[make_pair("_ZJets", "ZMuon_leading_dXY")] = 100;
-  m.y_maxs[make_pair("_ZJets", "ZMuon_leading_Eta")] = 150;
-  m.y_maxs[make_pair("_ZJets", "ZMuon_leading_Pt")] = 150;
-  m.y_maxs[make_pair("_ZJets", "ZMuon_leading_RelIso")] = 500;
-  m.y_maxs[make_pair("_ZJets", "ZMuon_subleading_Chi2")] = 100;
-  m.y_maxs[make_pair("_ZJets", "ZMuon_subleading_dXY")] = 100;
-  m.y_maxs[make_pair("_ZJets", "ZMuon_subleading_Eta")] = 150;
-  m.y_maxs[make_pair("_ZJets", "ZMuon_subleading_Pt")] = 150;
-  m.y_maxs[make_pair("_ZJets", "ZMuon_subleading_RelIso")] = 500;
-  m.y_maxs[make_pair("_ZMu", "dRMETWMuon")] = 800;
-  m.y_maxs[make_pair("_ZMu", "dRZMuonWMuon")] = 1500;
-  m.y_maxs[make_pair("_ZMu", "leadingLepton_Chi2")] = 500;
-  m.y_maxs[make_pair("_ZMu", "leadingLepton_Eta")] = 600;
-  m.y_maxs[make_pair("_ZMu", "leadingLepton_Pt")] = 500;
-  m.y_maxs[make_pair("_ZMu", "leadingLepton_RelIso")] = 2000;
-  m.y_maxs[make_pair("_ZMu", "m_lll")] = 800;
-  m.y_maxs[make_pair("_ZMu", "m_Z_candidate")] = 700;
-  m.y_maxs[make_pair("_ZMu", "mt_W_candidate")] = 500;
-  m.y_maxs[make_pair("_ZMu", "n_bjets")] = 5000;
-  m.y_maxs[make_pair("_ZMu", "n_events")] = 5000;
-  m.y_maxs[make_pair("_ZMu", "n_jets")] = 3000;
-  m.y_maxs[make_pair("_ZMu", "n_vertices")] = 300;
-  m.y_maxs[make_pair("_ZMu", "osllmass")] = 2000;
-  m.y_maxs[make_pair("_ZMu", "PFMET_phi")] = 400;
-  m.y_maxs[make_pair("_ZMu", "PFMET")] = 600;
-  m.y_maxs[make_pair("_ZMu", "secondLepton_Chi2")] = 500;
-  m.y_maxs[make_pair("_ZMu", "secondLepton_Eta")] = 600;
-  m.y_maxs[make_pair("_ZMu", "secondLepton_Pt")] = 600;
-  m.y_maxs[make_pair("_ZMu", "secondLepton_RelIso")] = 2000;
-  m.y_maxs[make_pair("_ZMu", "thirdLepton_Chi2")] = 500;
-  m.y_maxs[make_pair("_ZMu", "thirdLepton_Eta")] = 600;
-  m.y_maxs[make_pair("_ZMu", "thirdLepton_Pt")] = 1000;
-  m.y_maxs[make_pair("_ZMu", "thirdLepton_RelIso")] = 2000;
-  m.y_maxs[make_pair("_ZMu", "W_candidate_Pt")] = 1000;
-  m.y_maxs[make_pair("_ZMu", "WMuon_Chi2")] = 500;
-  m.y_maxs[make_pair("_ZMu", "WMuon_dXY")] = 400;
-  m.y_maxs[make_pair("_ZMu", "WMuon_Eta")] = 600;
-  m.y_maxs[make_pair("_ZMu", "WMuon_Pt")] = 800;
-  m.y_maxs[make_pair("_ZMu", "WMuon_RelIso")] = 2000;
-  m.y_maxs[make_pair("_ZMu", "Z_candidate_Pt")] = 900;
-  m.y_maxs[make_pair("_ZMu", "ZMuon_leading_Chi2")] = 500;
-  m.y_maxs[make_pair("_ZMu", "ZMuon_leading_dXY")] = 400;
-  m.y_maxs[make_pair("_ZMu", "ZMuon_leading_Eta")] = 600;
-  m.y_maxs[make_pair("_ZMu", "ZMuon_leading_Pt")] = 600;
-  m.y_maxs[make_pair("_ZMu", "ZMuon_leading_RelIso")] = 2000;
-  m.y_maxs[make_pair("_ZMu", "ZMuon_subleading_Chi2")] = 500;
-  m.y_maxs[make_pair("_ZMu", "ZMuon_subleading_dXY")] = 400;
-  m.y_maxs[make_pair("_ZMu", "ZMuon_subleading_Eta")] = 600;
-  m.y_maxs[make_pair("_ZMu", "ZMuon_subleading_Pt")] = 600;
-  m.y_maxs[make_pair("_ZMu", "ZMuon_subleading_RelIso")] = 2000;
+  m.SetYAxis(WORKING_DIR+"/txts/"+dataset+"/CR_yaxis.txt"); 
 
   if( std::find(m.histname_suffix.begin(), m.histname_suffix.end(), "_OSDiMuon") != m.histname_suffix.end() || 
       std::find(m.histname_suffix.begin(), m.histname_suffix.end(), "_OSDiMuon_Z_10GeV") != m.histname_suffix.end()    ){
@@ -608,85 +397,31 @@ void run_trilepton_mumumu_CR(int XXX){
 
     }
 
-    
-
   }
-
-  m.y_maxs[make_pair("_ZZ", "fourthLepton_Chi2")] = 40;
-  m.y_maxs[make_pair("_ZZ", "fourthLepton_Eta")] = 50;
-  m.y_maxs[make_pair("_ZZ", "fourthLepton_Pt")] = 50;
-  m.y_maxs[make_pair("_ZZ", "fourthLepton_RelIso")] = 100;
-  m.y_maxs[make_pair("_ZZ", "leadingLepton_Chi2")] = 40;
-  m.y_maxs[make_pair("_ZZ", "leadingLepton_Eta")] = 50;
-  m.y_maxs[make_pair("_ZZ", "leadingLepton_Pt")] = 25;
-  m.y_maxs[make_pair("_ZZ", "leadingLepton_RelIso")] = 100;
-  m.y_maxs[make_pair("_ZZ", "m_llll")] = 50;
-  m.y_maxs[make_pair("_ZZ", "n_bjets")] = 200;
-  m.y_maxs[make_pair("_ZZ", "n_events")] = 200;
-  m.y_maxs[make_pair("_ZZ", "n_jets")] = 120;
-  m.y_maxs[make_pair("_ZZ", "n_vertices")] = 30;
-  m.y_maxs[make_pair("_ZZ", "osllmass")] = 200;
-  m.y_maxs[make_pair("_ZZ", "PFMET_phi")] = 150;
-  m.y_maxs[make_pair("_ZZ", "PFMET")] = 70;
-  m.y_maxs[make_pair("_ZZ", "secondLepton_Chi2")] = 40;
-  m.y_maxs[make_pair("_ZZ", "secondLepton_Eta")] = 50;
-  m.y_maxs[make_pair("_ZZ", "secondLepton_Pt")] = 40;
-  m.y_maxs[make_pair("_ZZ", "secondLepton_RelIso")] = 100;
-  m.y_maxs[make_pair("_ZZ", "thirdLepton_Chi2")] = 40;
-  m.y_maxs[make_pair("_ZZ", "thirdLepton_Eta")] = 50;
-  m.y_maxs[make_pair("_ZZ", "thirdLepton_Pt")] = 50;
-  m.y_maxs[make_pair("_ZZ", "thirdLepton_RelIso")] = 100;
 
   //=============
   //==== x_mins
   //=============
   
-  /*
+/*
   //==== script to generate rebins
-  ofstream skeleton_x_mins("./txt/CR_skeleton_x_mins.txt", ios::trunc);
+  ofstream skeleton_x_mins("./txts/CR_skeleton_xaxis.txt", ios::trunc);
   for(unsigned int i=0; i<m.histname_suffix.size(); i++){
   for(unsigned int j=0; j<m.histname.size(); j++){
       skeleton_x_mins
-      << "  m.x_mins[make_pair(\""+m.histname_suffix.at(i)+"\", \""+m.histname.at(j)+"\")] = 1;" << endl;
+      //<< "  m.x_mins[make_pair(\""+m.histname_suffix.at(i)+"\", \""+m.histname.at(j)+"\")] = 1;" << endl;
+      <<m.histname_suffix.at(i)<<"\t"<<m.histname.at(j)<<"\t"<<-999<<"\t"<<-999<<endl;
     }
   }
   skeleton_x_mins.close();
   return;
-  */
+*/
 
-  //==== WZ  
-  m.x_maxs[make_pair("_WZ", "PFMET_before_cut")] = 200.;
-  m.x_maxs[make_pair("_WZ", "PFMET")] = 200.;
-  m.x_maxs[make_pair("_WZ", "osllmass")] = 150.;
-  m.x_mins[make_pair("_WZ", "m_Z_candidate")] = 75;
-  m.x_maxs[make_pair("_WZ", "m_Z_candidate")] = 105;
 
-  //==== ZJets
-  m.x_mins[make_pair("_ZJets", "m_Z_candidate")] = 75;
-  m.x_maxs[make_pair("_ZJets", "m_Z_candidate")] = 105;
-  m.x_maxs[make_pair("_ZJets", "PFMET")] = 200.;
-  m.x_maxs[make_pair("_ZJets", "osllmass")] = 150.;
-
-  //==== ZMu
-  m.x_mins[make_pair("_ZMu", "m_Z_candidate")] = 75;
-  m.x_maxs[make_pair("_ZMu", "m_Z_candidate")] = 105;
-  m.x_maxs[make_pair("_ZMu", "PFMET")] = 200.;
-  m.x_maxs[make_pair("_ZMu", "osllmass")] = 150.;
+  m.SetXAxis(WORKING_DIR+"/txts/"+dataset+"/CR_xaxis.txt");
 
   m.x_mins[make_pair("_OSDiMuon_Z_10GeV", "mll")] = 75.;
   m.x_maxs[make_pair("_OSDiMuon_Z_10GeV", "mll")] = 110.;
-
-  m.x_maxs[make_pair("_ZZ", "fourthLepton_Pt")] = 100;
-  m.x_maxs[make_pair("_ZZ", "leadingLepton_Pt")] = 200;
-  m.x_maxs[make_pair("_ZZ", "m_llll")] = 600;
-  m.x_maxs[make_pair("_ZZ", "n_jets")] = 5;
-  m.x_maxs[make_pair("_ZZ", "n_vertices")] = 30;
-  m.x_mins[make_pair("_ZZ", "osllmass")] = 75;
-  m.x_maxs[make_pair("_ZZ", "osllmass")] = 105;
-  m.x_maxs[make_pair("_ZZ", "PFMET_phi")] = 150;
-  m.x_maxs[make_pair("_ZZ", "PFMET")] = 100;
-  m.x_maxs[make_pair("_ZZ", "secondLepton_Pt")] = 40;
-  m.x_maxs[make_pair("_ZZ", "thirdLepton_Pt")] = 100;
 
   //===============
   //==== k-factor

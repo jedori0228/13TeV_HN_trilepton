@@ -213,6 +213,68 @@ void trilepton_mumumu::make_bkglist(){
   for(unsigned int i=0; i<bkglist.size(); i++) cout << " " << bkglist[i] << endl;
 }
 
+void trilepton_mumumu::SetRebins(TString filepath){
+
+  cout << "[SetRebins] Get rebins from " << filepath << endl;
+
+  string elline;
+  ifstream in(filepath);
+  while(getline(in,elline)){
+    std::istringstream is( elline );
+    TString cut;
+    TString histname;
+    double value;
+    is >> cut;
+    is >> histname;
+    is >> value;
+    //==== if -999, don't set
+    if(value!=-999){
+      rebins[make_pair(cut, histname)] = value;
+    }
+  }
+}
+
+
+void trilepton_mumumu::SetYAxis(TString filepath){
+  string elline;
+  ifstream in(filepath);
+  while(getline(in,elline)){
+    std::istringstream is( elline );
+    TString cut;
+    TString histname;
+    double value;
+    is >> cut;
+    is >> histname;
+    is >> value;
+    //==== if -999, don't set
+    if(value!=-999){
+      y_maxs[make_pair(cut, histname)] = value;
+    }
+  }
+}
+
+void trilepton_mumumu::SetXAxis(TString filepath){
+  string elline;
+  ifstream in(filepath);
+  while(getline(in,elline)){
+    std::istringstream is( elline );
+    TString cut;
+    TString histname;
+    double value_min, value_max;
+    is >> cut;
+    is >> histname;
+    is >> value_min;
+    is >> value_max;
+    //==== if -999, don't set
+    if(value_min!=-999){
+      x_mins[make_pair(cut, histname)] = value_min;
+    }
+    if(value_max!=-999){
+      x_maxs[make_pair(cut, histname)] = value_max;
+    }
+  }
+}
+
 TString trilepton_mumumu::find_MCsector(){
   for(unsigned int i=0; i<MCsector_first_index.size()-1; i++){
     if(MCsector_first_index.at(i) <= i_file && i_file < MCsector_first_index.at(i+1)){

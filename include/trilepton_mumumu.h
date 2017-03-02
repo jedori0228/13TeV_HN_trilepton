@@ -33,21 +33,28 @@ public:
     highmass = 34,
   };
   
-  //==== functions
-  void draw_hist();
+  //==== functions for setting
   void make_bkglist();
+  void SetRebins(TString filepath);
+  void SetYAxis(TString filepath);
+  void SetXAxis(TString filepath);
+
+  //==== functions for drawing
+  void draw_hist();
   TString find_MCsector();
   void clear_legend_info();
   double coupling_constant(int mass);
   void fill_legend(TLegend* lg, TH1D* hist);
   void draw_legend(TLegend* lg, signal_class sc, bool DrawData);
   void draw_canvas(THStack* mc_stack, TH1D* mc_error, TH1D* hist_data, vector<TH1D*> hist_signal, TLegend* legend, bool DrawData);
+
   int n_rebin();
   double y_max();
   void SetXaxisRange(TH1D* hist);
   void SetXaxisRange(THStack* mc_stack);
   void SetXaxisRangeBoth(THStack* mc_stack, TH1D* hist);
   TH1D* MakeOverflowBin(TH1D* hist);
+
   void mkdir(TString path);
   void make_plot_directory();
   TString legend_coupling_label(int mass);
