@@ -92,8 +92,8 @@ void run_trilepton_mumumu_CR(int XXX){
       true, true, true,
       true
     };
-    
-    //m.ApplyMCNormSF = {true, true, true, false};
+
+/*
     m.ApplyMCNormSF = {
       false, false, false,
       false, false, false,
@@ -101,8 +101,17 @@ void run_trilepton_mumumu_CR(int XXX){
       false, false, false,
       false
     };
-    //m.ApplyMCNormSF = {false, true, true, true, true};
-    
+*/
+
+    m.ApplyMCNormSF = {
+      true, true, true,
+      true, true, true,
+      true,
+      true, true, true,
+      true
+    };
+
+
     m.samples_to_use = {"fake_sfed_HighdXY", "WZ_excl", "ZZ_excl", "Vgamma", "VVV", "ttV"};
   }
   else if(XXX==1){
@@ -287,10 +296,7 @@ void run_trilepton_mumumu_CR(int XXX){
     m.MCNormSF[m.bkglist.at(i)] = 1.;
     m.MCNormSF_uncert[m.bkglist.at(i)] = 0.;
   }
-  m.MCNormSF["ZZTo4L_powheg"] = 1.20803;
-  m.MCNormSF_uncert["ZZTo4L_powheg"] = 0.0869206;
-  m.MCNormSF["WZTo3LNu_powheg"] = 0.945281;
-  m.MCNormSF_uncert["WZTo3LNu_powheg"] = 0.153901;
+  m.SetMCSF(WORKING_DIR+"/txts/"+dataset+"/MCSF.txt");
 
   /*
   //=============================

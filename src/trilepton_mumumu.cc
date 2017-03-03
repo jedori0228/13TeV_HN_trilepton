@@ -275,6 +275,26 @@ void trilepton_mumumu::SetXAxis(TString filepath){
   }
 }
 
+void trilepton_mumumu::SetMCSF(TString filepath){
+  string elline;
+  ifstream in(filepath);
+  while(getline(in,elline)){
+    std::istringstream is( elline );
+    TString sample;
+    double MCSF, MCSF_err;
+    is >> sample;
+    is >> MCSF;
+    is >> MCSF_err;
+
+    //cout << "sample : " << sample << endl;
+    //cout << "  MCSF = " << MCSF << ", MCSF_err = " << MCSF_err << endl;
+
+    MCNormSF[sample] = MCSF;
+    MCNormSF_uncert[sample] = MCSF_err;
+
+  }
+}
+
 TString trilepton_mumumu::find_MCsector(){
   for(unsigned int i=0; i<MCsector_first_index.size()-1; i++){
     if(MCsector_first_index.at(i) <= i_file && i_file < MCsector_first_index.at(i+1)){

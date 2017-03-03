@@ -38,6 +38,7 @@ public:
   void SetRebins(TString filepath);
   void SetYAxis(TString filepath);
   void SetXAxis(TString filepath);
+  void SetMCSF(TString filepath);
 
   //==== functions for drawing
   void draw_hist();
