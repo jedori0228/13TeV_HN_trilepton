@@ -8,7 +8,7 @@ void Validation(){
   gStyle->SetOptStat(0);
   TH1::AddDirectory(kFALSE);
   
-  TString cmssw_version = getenv("CATVERSION");
+  TString catversion = getenv("CATVERSION");
   TString dataset = getenv("CATANVERSION");
   
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
@@ -38,14 +38,14 @@ void Validation(){
   vector<TString> vars = {"mll", "n_vertices", "leadingLepton_Pt", "secondLepton_Pt", "PFMET"};
   
   std::map<TString, TFile*> map_str_to_file;
-  map_str_to_file["data"] = new TFile(filepath+"Validation_trilepton_data_DoubleMuon_cat_"+cmssw_version+".root");
-  map_str_to_file["data_BCDEF"] = new TFile(filepath+"Validation_trilepton_data_BCDEF_DoubleMuon_cat_"+cmssw_version+".root");
-  map_str_to_file["data_GH"] = new TFile(filepath+"Validation_trilepton_data_GH_DoubleMuon_cat_"+cmssw_version+".root");
+  map_str_to_file["data"] = new TFile(filepath+"Validation_trilepton_data_DoubleMuon_cat_"+catversion+".root");
+  map_str_to_file["data_BCDEF"] = new TFile(filepath+"Validation_trilepton_data_BCDEF_DoubleMuon_cat_"+catversion+".root");
+  map_str_to_file["data_GH"] = new TFile(filepath+"Validation_trilepton_data_GH_DoubleMuon_cat_"+catversion+".root");
   
   vector<TString> pers = {"all", "BCDEF", "GH"};
   
   for(unsigned int i_sample=0; i_sample<samples.size(); i_sample++){
-    map_str_to_file[samples.at(i_sample)] = new TFile(filepath+"Validation_trilepton_SK"+samples.at(i_sample)+"_dilep_cat_"+cmssw_version+".root");
+    map_str_to_file[samples.at(i_sample)] = new TFile(filepath+"Validation_trilepton_SK"+samples.at(i_sample)+"_dilep_cat_"+catversion+".root");
   }
   
   for(unsigned int i_id=0; i_id<ids.size(); i_id++){

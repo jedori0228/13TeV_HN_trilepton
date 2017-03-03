@@ -26,7 +26,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
 
   str_dXYCut = str_dXYCut+"_"+str_iso;
  
-  TString cmssw_version = getenv("CATVERSION");
+  TString catversion = getenv("CATVERSION");
   TString dataset = getenv("CATANVERSION");
 
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
@@ -80,10 +80,10 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
   
   //==== get all files here
   map< TString, TFile* > map_string_to_file;
-  map_string_to_file["data"] = new TFile(filepath+"/FakeRateCalculator_Mu_"+DataFileName+"DoubleMuon_cat_"+cmssw_version+".root");
+  map_string_to_file["data"] = new TFile(filepath+"/FakeRateCalculator_Mu_"+DataFileName+"DoubleMuon_cat_"+catversion+".root");
   for(unsigned int i=0; i<all_MC_list.size(); i++){
     TString this_samplename = all_MC_list.at(i);
-    map_string_to_file[this_samplename] = new TFile(filepath+"/FakeRateCalculator_Mu_SK"+this_samplename+"_cat_"+cmssw_version+".root");
+    map_string_to_file[this_samplename] = new TFile(filepath+"/FakeRateCalculator_Mu_SK"+this_samplename+"_cat_"+catversion+".root");
     if(!map_string_to_file[this_samplename]) cout << "[No file] :" << this_samplename << endl;
   }
   
@@ -269,8 +269,8 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
     "SingleMuonTrigger_HighdXY",
     "SingleMuonTrigger_HighdXY_0jet",
     "SingleMuonTrigger_HighdXY_withjet",
-    "SingleMuonTrigger_HighdXY_withjet_0bjet",
-    "SingleMuonTrigger_HighdXY_withjet_withbjet",
+    "SingleMuonTrigger_HighdXY_0bjet",
+    "SingleMuonTrigger_HighdXY_withbjet",
     "DiMuonTrigger_ZTag_Small",
     "SingleMuonTrigger_Dijet"
   };
@@ -278,16 +278,24 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
     "HighdXY",
     "HighdXY no jet",
     "HighdXY with jet",
-    "HighdXY with jet but no bjet",
+    "HighdXY no bjet",
     "HighdXY with bjet"
   };
   vector<Color_t> FR_method_color = {
     kBlack,
     kBlue,
     kRed,
-    kOrange,
-    kOrange+8,
+    kBlue,
+    kRed,
   };
+  vector<Color_t> FR_method_style = {
+    1,
+    1,
+    1,
+    3,
+    3,
+  };
+
   vector<TString> var_FR = {"eta", "pt", "RelIso", "Chi2", "dXY", "dXYSig"};
   vector<TString> x_title_FR = {"#eta", "p_{T}", "RelIso", "#chi^{2}", "|dXY|", "|dXY/#sigma(dXY)|"};
   
@@ -763,6 +771,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
     grs_FRcurvesBarrel.at(i)->GetYaxis()->SetTitle("Fake Rate");
     grs_FRcurvesBarrel.at(i)->GetXaxis()->SetTitle("p_{T} [GeV/c]");
     grs_FRcurvesBarrel.at(i)->SetLineColor(FR_method_color.at(i));
+    grs_FRcurvesBarrel.at(i)->SetLineStyle(FR_method_style.at(i));
     grs_FRcurvesBarrel.at(i)->SetLineWidth(2);
     hist_axis(grs_FRcurvesBarrel.at(i));
     if(i==0){
@@ -780,17 +789,16 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
   //=============================
   
   cout << "######################## MC Truth ########################" << endl;
-  
-  vector<TString> MCTruth_trigger = {"SingleMuonTrigger"};
-  //vector<TString> MC_sample_MCTruth = {"QCD_DoubleEM", "QCD_mu"};
+
+  vector<TString> MCTruth_njet = {"", "0jet_", "withjet_", "0bjet_", "withbjet_"};
   vector<TString> MC_sample_MCTruth = {"QCD_mu", "TTJets_aMC", "DY", "WJets"}; //FIXME no bb sample in v8-0-2
 
   vector<TString> sig_region = {"HighdXY_", ""};
   
-  for(unsigned int it_MCTruth_trigger=0; it_MCTruth_trigger<MCTruth_trigger.size(); it_MCTruth_trigger++){
+  for(unsigned int it_MCTruth_njet=0; it_MCTruth_njet<MCTruth_njet.size(); it_MCTruth_njet++){
 
-    TString this_MCTruth_trigger = MCTruth_trigger.at(it_MCTruth_trigger);
-    
+    TString this_MCTruth_njet = MCTruth_njet.at(it_MCTruth_njet); 
+
     for(unsigned int it_MC_sample_MCTruth=0; it_MC_sample_MCTruth<MC_sample_MCTruth.size(); it_MC_sample_MCTruth++){
     
       TString this_MC_sample_MCTruth = MC_sample_MCTruth.at(it_MC_sample_MCTruth);
@@ -799,11 +807,11 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       
       TH2D *large_2D, *small_2D;
 
-      //==== FR for each significanve region
+      //==== FR for each significance region
       //==== and save FR for SF
       for(unsigned int it_sig_region=0; it_sig_region<sig_region.size(); it_sig_region++){
-        TH2D* hist_num = (TH2D*)map_string_to_file[this_MC_sample_MCTruth]->Get(str_dXYCut+"_"+this_MCTruth_trigger+"_MCTruth_"+sig_region.at(it_sig_region)+"events_F");
-        TH2D* hist_den = (TH2D*)map_string_to_file[this_MC_sample_MCTruth]->Get(str_dXYCut+"_"+this_MCTruth_trigger+"_MCTruth_"+sig_region.at(it_sig_region)+"events_F0");
+        TH2D* hist_num = (TH2D*)map_string_to_file[this_MC_sample_MCTruth]->Get(str_dXYCut+"_SingleMuonTrigger_MCTruth_"+sig_region.at(it_sig_region)+this_MCTruth_njet+"events_F");
+        TH2D* hist_den = (TH2D*)map_string_to_file[this_MC_sample_MCTruth]->Get(str_dXYCut+"_SingleMuonTrigger_MCTruth_"+sig_region.at(it_sig_region)+this_MCTruth_njet+"events_F0");
         if( !hist_num || !hist_den ) continue;
         hist_num->Divide(hist_den);
         if(sig_region.at(it_sig_region)=="HighdXY_") large_2D = (TH2D*)hist_num->Clone();
@@ -823,7 +831,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
         TString histname_suffix("");
         if(sig_region.at(it_sig_region) == "HighdXY_") histname_suffix = "Large";
         if(sig_region.at(it_sig_region) == "") histname_suffix = "Small";
-        c_MCTruth->SaveAs(plotpath+"/2D_FR_MCTruth_"+this_MCTruth_trigger+"_"+this_MC_sample_MCTruth+"_"+histname_suffix+".pdf");
+        c_MCTruth->SaveAs(plotpath+"/2D_FR_MCTruth_SingleMuonTrigger_"+this_MCTruth_njet+this_MC_sample_MCTruth+"_"+histname_suffix+".pdf");
         c_MCTruth->Close();
         delete c_MCTruth;
       }
@@ -836,7 +844,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       gStyle->SetPaintTextFormat("0.4f");
       c_2D_FR_SF->cd();
       //==== before dividing, save dXYSig small FR for MC-Closure test
-      TString filename_FR = plotpath+"/13TeV_trimuon_FR_"+this_MCTruth_trigger+"_"+this_MC_sample_MCTruth+".root";
+      TString filename_FR = plotpath+"/13TeV_trimuon_FR_SingleMuonTrigger_"+this_MCTruth_njet+this_MC_sample_MCTruth+".root";
       TFile* file_FR = new TFile(filename_FR, "RECREATE");
       file_FR->cd();
       small_2D->SetName("FR_Small_dXYSig"); 
@@ -858,7 +866,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       small_2D->SetYTitle("|#eta|");
       small_2D->SetTitle("");
       small_2D->SetMarkerSize(1.3);
-      c_2D_FR_SF->SaveAs(plotpath+"/2D_FRSF_MCTruth_"+this_MCTruth_trigger+"_"+this_MC_sample_MCTruth+".pdf");
+      c_2D_FR_SF->SaveAs(plotpath+"/2D_FRSF_MCTruth_SingleMuonTrigger_"+this_MCTruth_njet+this_MC_sample_MCTruth+".pdf");
       c_2D_FR_SF->Close();
       delete c_2D_FR_SF;
       
@@ -897,7 +905,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       lg_SF_curve->AddEntry(gr_SF_curve[2], "1.479 < |#eta| < 2.0", "l");
       lg_SF_curve->AddEntry(gr_SF_curve[3], "2.0 < |#eta| < 2.5", "l");
       lg_SF_curve->Draw();
-      c_1D_SF_curve->SaveAs(plotpath+"/1D_pt_each_eta_FRSF_MCTruth_"+this_MCTruth_trigger+"_"+this_MC_sample_MCTruth+".pdf");
+      c_1D_SF_curve->SaveAs(plotpath+"/1D_pt_each_eta_FRSF_MCTruth_SingleMuonTrigger_"+this_MCTruth_njet+this_MC_sample_MCTruth+".pdf");
       c_1D_SF_curve->Close();
       delete c_1D_SF_curve;
       

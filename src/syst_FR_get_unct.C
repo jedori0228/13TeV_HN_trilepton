@@ -9,7 +9,7 @@ void syst_FR_get_unct(){
   gStyle->SetOptStat(0);
   TH1::AddDirectory(kFALSE);
 
-  TString cmssw_version = getenv("CATVERSION");
+  TString catversion = getenv("CATVERSION");
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");  
   TString dataset = getenv("CATANVERSION");
 
@@ -40,7 +40,7 @@ void syst_FR_get_unct(){
   TH2D *hist_n_TLL = new TH2D("hist_n_TLL", "", dXYMins.size(), bins_dXYMins, RelIsoMaxs.size(), bins_RelIsoMaxs);
   TH2D *hist_n_LLL = new TH2D("hist_n_LLL", "", dXYMins.size(), bins_dXYMins, RelIsoMaxs.size(), bins_RelIsoMaxs);
   
-  TFile *file_tmp = new TFile(filepath+"/trilepton_mumumu_syst_FR_data_DoubleMuon_cat_"+cmssw_version+".root");
+  TFile *file_tmp = new TFile(filepath+"/trilepton_mumumu_syst_FR_data_DoubleMuon_cat_"+catversion+".root");
   
   for(int aaa=0; aaa<dXYMins.size(); aaa++){
     for(int bbb=0; bbb<RelIsoMaxs.size(); bbb++){

@@ -4,7 +4,7 @@ void draw_MC_Closure(){
 
   gStyle->SetOptStat(0);
 
-  TString cmssw_version = getenv("CATVERSION");
+  TString catversion = getenv("CATVERSION");
   TString dataset = getenv("CATANVERSION");
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/FR_MC_Closure/";
@@ -19,12 +19,12 @@ void draw_MC_Closure(){
   }
   
   vector<TString> samples = {"TTJets_aMC", "DYJets", "WJets", "QCD"};
+  vector<TString> channels = {"DiMuon", "DiMuon", "DiMuon", "DiMuon"};
   vector<double> ymaxs = {120, 50, 15, 10};
 
-  TString channel = "SSDiMuon";
-  
   for(unsigned int i=0; i<samples.size(); i++){
     TString this_sample = samples.at(i);
+    TString channel = channels.at(i);
     
     TCanvas *c1 = new TCanvas("c1", "", 800, 800);
     TPad *c1_up =  new TPad("c1_up", "", 0, 0.25, 1, 1);
@@ -41,8 +41,8 @@ void draw_MC_Closure(){
     c1_down->Draw();
     c1_up->cd();
     
-    TFile *file_tt = new TFile(filepath+"trilepton_mumumu_CR_SK"+this_sample+"_dilep_cat_"+cmssw_version+".root");
-    TFile *file_tt_FR = new TFile(filepath+"trilepton_mumumu_CR_FR_method_SK"+this_sample+"_dilep_cat_"+cmssw_version+".root");
+    TFile *file_tt = new TFile(filepath+"trilepton_mumumu_CR_SK"+this_sample+"_dilep_cat_"+catversion+".root");
+    TFile *file_tt_FR = new TFile(filepath+"trilepton_mumumu_CR_FR_method_SK"+this_sample+"_dilep_cat_"+catversion+".root");
     
     TH1D *hist_tt = (TH1D*)file_tt->Get("leadingLepton_Pt_"+channel);
     TH1D *hist_tt_FR = (TH1D*)file_tt_FR->Get("leadingLepton_Pt_"+channel);
