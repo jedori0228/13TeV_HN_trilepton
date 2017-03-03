@@ -47,4 +47,9 @@ if [ $whichRun = "syst" ]; then
     python script/syst_latex_output_cleanup.py $PLOTTER_WORKING_DIR/tmp.txt
   done
 fi
-  
+
+if [ $whichRun = "MCSF" ]; then
+  root -l -b -q "src/MCNormalizationSF.C(true)"
+  root -l -b -q "src/MCNormalizationSF.C(false)"
+fi
+

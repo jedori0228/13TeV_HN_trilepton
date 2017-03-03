@@ -95,6 +95,11 @@ bool cutop::isSearchRegion(){
     if(isZZ==1 && FourLeptonConfig==1) pass = true;
   }
 
+  //==== ZGamma
+  else if(SearchRegion=="ZGamma"){
+    if(isZGamma) pass = true;
+  }
+
   else{
 
   }

@@ -1,7 +1,7 @@
 #include "cutop.cc"
 #include "NLimit.cc"
 
-void MCNormalizationSF(){
+void MCNormalizationSF(bool UpdateSF=true){
   
   TH1::SetDefaultSumw2(true);
   
@@ -24,10 +24,14 @@ void MCNormalizationSF(){
   vector<TString> NormCalcOrder_region = {
     "ZZ",
     "WZ",
+    "ZGamma"
+    //"ZZ_4mu0el",
+    //"WZ_3mu0el",
   };
   vector<TString> NormCalcOrder = {
     "ZZTo4L_powheg",
     "WZTo3LNu_powheg",
+    "Vgamma"
   };
   
   //==== Initialise
@@ -36,23 +40,31 @@ void MCNormalizationSF(){
     MCNormSF[bkg_prompt_list.at(i)] = 1.;
     MCNormSF_uncert[bkg_prompt_list.at(i)] = 0.;
   }
+
+  int n_signal = NormCalcOrder_region.size();
+  TMatrix matrixA(n_signal, n_signal);
+  TMatrix matrixC(n_signal, 1);
+  
   
   for(unsigned int it_region=0; it_region<NormCalcOrder_region.size(); it_region++){
     
     TString region = NormCalcOrder_region.at(it_region);
     TString this_signal = NormCalcOrder.at(it_region);
-    cout << endl;
-    cout << "#### Calculating " << this_signal << " MC Normalisation Scale Factor ####" << endl << endl;
+    if(UpdateSF){
+      cout << endl;
+      cout << "#### Calculating " << this_signal << " MC Normalisation Scale Factor ####" << endl << endl;
+    }
     
     vector<TString> systtypes = {"Central", "MuonEn_up", "MuonEn_down", "JetEn_up", "JetEn_down", "JetRes_up", "JetRes_down", "Unclustered_up", "Unclustered_down", "MCxsec_up", "MCxsec_down", "MuonIDSF_up", "MuonIDSF_down"};
     vector<double> yields_prompt, yields_fake, yields_data, yields_signal, yields_signal_weighted;
     vector<double> syst_error_prompt, syst_error_fake, syst_error_data, syst_error_signal;
     vector<double> rel_syst_error_prompt, rel_syst_error_fake, rel_syst_error_data, rel_syst_error_signal;
     double stat_error_prompt, stat_error_fake, stat_error_data, stat_error_signal;
-    
+
     for(int i=0; i<systtypes.size(); i++){
       
       TString this_syst = systtypes.at(i);
+      if(this_syst.Contains("JetRes")) this_syst = "Central";  //FIXME
       if(this_syst.Contains("MCxsec_")) this_syst = "Central";
       
       double n_bkg_prompt(0.), n_bkg_fake(0.), n_data(0.), n_signal(0.), n_signal_weighted(0.);
@@ -60,10 +72,11 @@ void MCNormalizationSF(){
       TH1D *hist_bkg_for_error = NULL;
       if(systtypes.at(i)=="Central") hist_bkg_for_error = new TH1D("hist_bkg_for_error", "", 1, 0., 1.);
       
+      double n_non_matrix_el(0.);
+
       for(unsigned int k=0; k<bkg_prompt_list.size(); k++){
         TString this_samplename = bkg_prompt_list.at(k);
-        if(this_samplename==this_signal) continue;
-        
+
         cutop m_bkg_prompt(filepath+"trilepton_mumumu_ntp_SK"+this_samplename+"_dilep_cat_"+catversion+".root", "Ntp_"+this_syst);
         m_bkg_prompt.SearchRegion = region;
         m_bkg_prompt.MCNormSF = MCNormSF[this_samplename];
@@ -73,6 +86,21 @@ void MCNormalizationSF(){
         m_bkg_prompt.MCNormSF_uncert = MCNormDir*MCNormSF_uncert[this_samplename];
         m_bkg_prompt.Loop();
 
+        //==== make matrix
+        if(i==0){
+          bool isMatrixEl = false;
+          for(unsigned int j=0; j<NormCalcOrder.size(); j++){
+            if(this_samplename==NormCalcOrder.at(j)){
+              matrixA(it_region, j) = m_bkg_prompt.n_weighted;
+              isMatrixEl = true;
+            }
+          }
+          if(!isMatrixEl){
+            n_non_matrix_el += m_bkg_prompt.n_weighted;
+          }
+        }
+
+        if(this_samplename==this_signal) continue;
         n_bkg_prompt += m_bkg_prompt.n_weighted;
         
         if(systtypes.at(i)=="Central"){
@@ -107,6 +135,15 @@ void MCNormalizationSF(){
       syst_error_fake.push_back( n_bkg_fake-yields_fake.at(0) );
       syst_error_signal.push_back( n_signal-yields_signal.at(0) );
       syst_error_data.push_back( n_data-yields_data.at(0) );
+
+      //==== make matrix
+      if(i==0){
+        for(unsigned int j=0; j<NormCalcOrder.size(); j++){
+          if(this_signal==NormCalcOrder.at(j)){
+            matrixC(it_region, 0) = n_data - n_bkg_fake - n_non_matrix_el;
+          }
+        }
+      }
       
       if( yields_prompt.at(0) != 0) rel_syst_error_prompt.push_back( syst_error_prompt.at(i)/yields_prompt.at(0) );
       else rel_syst_error_prompt.push_back( 0. );
@@ -157,12 +194,6 @@ void MCNormalizationSF(){
     double signal_syst = sqrt(squared_syst_signal);
     double signal_err = sqrt(signal_stat*signal_stat+signal_syst*signal_syst);
 
-    cout << endl;
-    cout << "data = " << data << endl;
-    cout << "total bkg = " << total << " +- " << total_err << endl;
-    cout << "==> data - total bkg = " << data-total << " +- " << total_err << endl;
-    cout << "signal = " << signal << " +- " << signal_err <<  endl;
-
     double total_err_ratio = total_err/(data-total);
     double signal_err_ratio = signal_err/signal;
     double SF_err_ratio = total_err_ratio+signal_err_ratio;
@@ -170,13 +201,48 @@ void MCNormalizationSF(){
     double SF = (data-total)/signal;
     double SF_err = SF*SF_err_ratio;
 
-    cout << "==> SF = " << SF << " +- " << SF_err << endl;
+    if(UpdateSF){
+      cout << endl;
+      cout << "data = " << data << endl;
+      cout << "total bkg = " << total << " +- " << total_err << endl;
+      cout << "==> data - total bkg = " << data-total << " +- " << total_err << endl;
+      cout << "signal = " << signal << " +- " << signal_err << " ( " << 100.*signal/data << " % )" << endl;
+      cout << "==> SF = " << SF << " +- " << SF_err << endl;
 
-    MCNormSF[this_signal] = SF;
-    MCNormSF_uncert[this_signal] = SF_err;
+      MCNormSF[this_signal] = SF;
+      MCNormSF_uncert[this_signal] = SF_err;
+    }
     
   }
+
+  if(UpdateSF) return;
+
+  cout << endl;
+  cout << "#######################" << endl;
+  cout << "#### Matrix method ####" << endl;
+  cout << "#######################" << endl;
+
+  //matrixA.Print();
+
+  TMatrix inverse(TMatrix::kInverted, matrixA);
+
+  //inverse.Print();
+
+  //matrixC.Print();
+
+  TMatrix Cs(n_signal, 1);
+  for(unsigned int i=0; i<n_signal; i++){
+    Cs(i,0) = 0.;;
+  }
+  for(unsigned int i=0; i<n_signal; i++){
+    for(unsigned int j=0; j<n_signal; j++){
+      Cs(i,0) += inverse(i,j)*matrixC(j,0);
+    }
+  }
+
+  Cs.Print();
   
+
 }
 
 
