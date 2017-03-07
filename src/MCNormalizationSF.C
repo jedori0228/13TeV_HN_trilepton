@@ -17,21 +17,21 @@ void MCNormalizationSF(bool UpdateSF=true){
   vector<TString> bkg_prompt_list = {
     "WZTo3LNu_powheg",
     "ZZTo4L_powheg",
-    "Vgamma",
+    "ZGto2LG",
     "top",
     "VVV"
   };
   vector<TString> NormCalcOrder_region = {
-    "ZZ",
-    "WZ",
-    "ZGamma"
+    "ZZ_4mu0el",
+    "WZ_3mu0el",
+    "ZGamma_3mu0el"
     //"ZZ_4mu0el",
     //"WZ_3mu0el",
   };
   vector<TString> NormCalcOrder = {
     "ZZTo4L_powheg",
     "WZTo3LNu_powheg",
-    "Vgamma"
+    "ZGto2LG"
   };
   
   //==== Initialise
@@ -213,6 +213,13 @@ void MCNormalizationSF(bool UpdateSF=true){
       MCNormSF_uncert[this_signal] = SF_err;
     }
     
+  }
+
+  ofstream outputFile;
+  cout << WORKING_DIR+"/data/"+dataset+"/MCSF.txt" << endl;
+  outputFile.open(WORKING_DIR+"/data/"+dataset+"/MCSF.txt");
+  for(unsigned int i=0; i<NormCalcOrder.size(); i++){
+    outputFile<<NormCalcOrder.at(i)<<"\t"<<MCNormSF[NormCalcOrder.at(i)]<<"\t"<<MCNormSF_uncert[NormCalcOrder.at(i)]<<endl;
   }
 
   if(UpdateSF) return;

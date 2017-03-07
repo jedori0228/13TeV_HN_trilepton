@@ -23,7 +23,8 @@ void syst_FR_make_matrix(){
     << "###################################################" << endl
     << endl;
   }
-  
+  gSystem->mkdir(plotpath+"/AllFRs/", kTRUE);
+
   vector<double> dXYMins = {3.0, 4.0, 5.0};
   double bins_dXYMins[] =  {3.0, 4.0, 5.0, 6.0};
   vector<double> RelIsoMaxs = {0.2, 0.3, 0.4, 0.6, 0.8, 1.0};
@@ -112,6 +113,12 @@ void syst_FR_make_matrix(){
       TH2D *hist_FR_QCD_0bjet = (TH2D*)file_FR_QCD_0bjet->Get("FR_Small_dXYSig")->Clone();
       TH2D *hist_FR_QCD_withbjet = (TH2D*)file_FR_QCD_withbjet->Get("FR_Small_dXYSig")->Clone();
 
+      hist_FR_QCD->SetTitle("");
+      hist_FR_QCD_0jet->SetTitle("");
+      hist_FR_QCD_withjet->SetTitle("");
+      hist_FR_QCD_0bjet->SetTitle("");
+      hist_FR_QCD_withbjet->SetTitle("");
+
       TH2D *hist_FRSF_QCD = (TH2D*)file_FR_QCD->Get("FRSF")->Clone();
       TH2D *hist_FRSF_QCD_0jet = (TH2D*)file_FR_QCD_0jet->Get("FRSF")->Clone();
       TH2D *hist_FRSF_QCD_withjet = (TH2D*)file_FR_QCD_withjet->Get("FRSF")->Clone();
@@ -158,6 +165,31 @@ void syst_FR_make_matrix(){
       hist_FRSF_QCD_0bjet->Write();
       hist_FRSF_QCD_withbjet->Write();
 
+      //==== multiply SF
+      TH2D *hist_FR_sfed = (TH2D*)hist_FR->Clone();
+      TH2D *hist_FR_0jet_sfed = (TH2D*)hist_FR_0jet->Clone();
+      TH2D *hist_FR_withjet_sfed = (TH2D*)hist_FR_withjet->Clone();
+      TH2D *hist_FR_0bjet_sfed = (TH2D*)hist_FR_0bjet->Clone();
+      TH2D *hist_FR_withbjet_sfed = (TH2D*)hist_FR_withbjet->Clone();
+
+      hist_FR_sfed->SetName(str_dXYCut+"_FR_alljet_sfed");
+      hist_FR_0jet_sfed->SetName(str_dXYCut+"_FR_0jet_sfed");
+      hist_FR_withjet_sfed->SetName(str_dXYCut+"_FR_withjet_sfed");
+      hist_FR_0bjet_sfed->SetName(str_dXYCut+"_FR_0bjet_sfed");
+      hist_FR_withbjet_sfed->SetName(str_dXYCut+"_FR_withbjet_sfed");
+
+      hist_FR_sfed->Multiply(hist_FRSF_QCD);
+      hist_FR_0jet_sfed->Multiply(hist_FRSF_QCD_0jet);
+      hist_FR_withjet_sfed->Multiply(hist_FRSF_QCD_withjet);
+      hist_FR_0bjet_sfed->Multiply(hist_FRSF_QCD_0bjet);
+      hist_FR_withbjet_sfed->Multiply(hist_FRSF_QCD_withbjet);
+
+      hist_FR_sfed->Write();
+      hist_FR_0jet_sfed->Write();
+      hist_FR_withjet_sfed->Write();
+      hist_FR_0bjet_sfed->Write();
+      hist_FR_withbjet_sfed->Write();
+
       //==== Get TagZ FR/FRSF
       TFile *file_TagZ_tmp = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_DiMuonTrigger_TagZ.root");
       TH1D *hist_TagZ_tmp = (TH1D*)file_TagZ_tmp->Get("hist_FR_TagZ");
@@ -174,8 +206,6 @@ void syst_FR_make_matrix(){
   hist_FR_dijet->SetName("FR_Dijet");
   file_FRs->cd();
   hist_FR_dijet->Write();
-
-  file_FRs->Close();
 
   //==== n_muons
   TCanvas *c_n_muons = new TCanvas("c_n_muons", "", 800, 800);
@@ -262,7 +292,34 @@ void syst_FR_make_matrix(){
   hist_axis(hist_TagZ_FRSF);
   c_TagZ_FRSF->SaveAs(plotpath+"/TagZ_FRSF.pdf");
 
- 
+
+
+
+  TList *thislist = file_FRs->GetListOfKeys();
+  cout << thislist->Capacity() << endl;
+  for(int i=0; i<thislist->Capacity(); i++){
+    TString thisname = thislist->At(i)->GetName();
+    if(!thisname.Contains("dXY")) continue;
+    TH2D *hist = (TH2D*)file_FRs->Get(thisname)->Clone();
+
+    TCanvas *c_thisfr = new TCanvas("c_thisfr", "", 1600, 1100);
+    c_thisfr->SetLeftMargin(0.07);
+    c_thisfr->SetRightMargin( 0.1 );
+    gStyle->SetPaintTextFormat("0.4f");
+    hist->Draw("colztexte1");
+    hist->GetXaxis()->SetRangeUser(10, 60);
+    hist->SetXTitle("p_{T} [GeV/c]");
+    hist->SetYTitle("|#eta|");
+    hist->SetTitle("");
+    hist->SetMarkerSize(1.3); 
+    c_thisfr->SaveAs(plotpath+"/AllFRs/"+thisname+".pdf");
+    c_thisfr->Close();
+    delete c_thisfr;
+
+  }
+
+  file_FRs->Close();
+
 
 }
 

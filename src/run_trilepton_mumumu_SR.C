@@ -67,8 +67,8 @@ void run_trilepton_mumumu_SR(int XXX){
     m.data_class = m.data_class+"/before_prompt_matching";
     m.samples_to_use = {"DY_MCatNLO", "WJets_MCatNLO", "VV_excl_MCatNLO", "t", "ttV", "VVV_MCatNLO"};
   }
-  if(XXX==1) m.samples_to_use = {"fake_HighdXY", "VV_excl", "Vgamma", "ttV", "VVV"};
-  if(XXX==2) m.samples_to_use = {"fake_sfed_HighdXY", "VV_excl", "Vgamma", "ttV", "VVV"};
+  if(XXX==1) m.samples_to_use = {"fake_HighdXY", "VV_excl", "Zgamma", "ttV", "VVV"};
+  if(XXX==2) m.samples_to_use = {"fake_sfed_HighdXY", "VV_excl", "Zgamma", "ttV", "VVV"};
 
   m.make_bkglist();
 

@@ -9,33 +9,81 @@ double GetMeanUncert(double a, double b, bool square=false);
 NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bool inclusive=false, bool fillNlimit=false){
 
   TH1::SetDefaultSumw2(true);
+
+  bool DoBVeto = true;
   
-  double uncert_lumi = 0.026;
-  double uncert_fake = 0.28;
+  TString catversion = getenv("CATVERSION");
+  TString dataset = getenv("CATANVERSION");
+  TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
+
+  //=====================================
+  //==== Setting calculated systematics
+  //=====================================
+
+  map<TString, double> CalculatedSysts;
+
+  string elline_syst;
+  ifstream in_syst(WORKING_DIR+"/data/"+dataset+"/Syst.txt");
+  //cout << "#### Setting calculated systematics ####" << endl;
+  while(getline(in_syst,elline_syst)){
+    std::istringstream is( elline_syst );
+    TString source;
+    double value;
+    is >> source;
+    is >> value;
+    //cout << source << " : " << value << endl;
+    CalculatedSysts[source] = value;
+  }
+
+  double uncert_lumi = CalculatedSysts["Luminosity"];
+  double uncert_fake = CalculatedSysts["FakeLooseID"];
+
+  //=====================
+  //==== Prompt MC list
+  //=====================
 
   vector<TString> bkg_prompt_list = {
     "WZTo3LNu_powheg",
-    //"ZZTo4L_powheg",
-    //"Vgamma",
-    //"top",
-    //"VVV"
+    "ZZTo4L_powheg",
+    "ZGto2LG",
+    "top",
+    "VVV"
   };
+
+  //============================================
+  //==== Setting MC Normalization Scale Factor
+  //============================================
+
   map<TString, double> MCNormSF, MCNormSF_uncert;
   for(unsigned int i=0; i<bkg_prompt_list.size(); i++){
     MCNormSF[bkg_prompt_list.at(i)] = 1.;
     MCNormSF_uncert[bkg_prompt_list.at(i)] = 0.;
   }
-  MCNormSF["ZZTo4L_powheg"] = 1.20803;
-  MCNormSF_uncert["ZZTo4L_powheg"] = 0.0869206;
-  MCNormSF["WZTo3LNu_powheg"] = 0.945281;
-  MCNormSF_uncert["WZTo3LNu_powheg"] = 0.153901;
+
+  string elline_MCSF;
+  ifstream in_MCSF(WORKING_DIR+"/data/"+dataset+"/MCSF.txt");
+  //cout << "#### Setting MCSF ####" << endl;
+  while(getline(in_MCSF,elline_MCSF)){
+    std::istringstream is( elline_MCSF );
+    TString sample;
+    double MCSF, MCSF_err;
+    is >> sample;
+    is >> MCSF;
+    is >> MCSF_err;
+
+    //cout << sample << " : " << "MCSF = " << MCSF << ", MCSF_err = " << MCSF_err << endl;
+
+    MCNormSF[sample] = MCSF;
+    MCNormSF_uncert[sample] = MCSF_err;
+
+  }
 
   double N_MC = 100000.;
   if(sig_mass==200) N_MC = 96193.;
   if(sig_mass==400) N_MC = 99070.;
 
-  //TString region = "Preselection";
-  TString region = "WZ";
+  TString region = "Preselection";
+  //TString region = "WZ";
   //TString region = "ZJets";
   //TString region = "ZZ";
   
@@ -44,10 +92,6 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
   else if(sig_mass <= 80) SignalClass = 2;
   else if(sig_mass <= 1000) SignalClass = 3;
   else SignalClass = 4;
-
-  TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
-  TString catversion = getenv("CATVERSION");
-  TString dataset = getenv("CATANVERSION");
 
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/UpDownSyst/";
 
@@ -128,6 +172,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       if(systtypes.at(i) == "MCxsec_up") MCNormDir = 1.;
       else if(systtypes.at(i) == "MCxsec_down") MCNormDir = -1.;
       m_bkg_prompt.MCNormSF_uncert = MCNormDir*MCNormSF_uncert[this_samplename];
+      m_bkg_prompt.BVeto = DoBVeto;
       m_bkg_prompt.Loop();
 
       n_bkg_prompt += m_bkg_prompt.n_weighted;
@@ -147,6 +192,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     m_bkg_fake.cut_W_pri_mass = cut_W_pri_mass;
     m_bkg_fake.cut_PFMET = cut_PFMET;
     m_bkg_fake.signalclass = SignalClass;
+    m_bkg_fake.BVeto = DoBVeto;
     m_bkg_fake.Loop();
     n_bkg_fake = m_bkg_fake.n_weighted;
 
@@ -158,6 +204,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     m_sig.cut_W_pri_mass = cut_W_pri_mass;
     m_sig.cut_PFMET = cut_PFMET;
     m_sig.signalclass = SignalClass;
+    m_sig.BVeto = DoBVeto;
     m_sig.Loop();
     n_signal = m_sig.n_unweighted;
     n_signal_weighted = m_sig.n_weighted;
@@ -170,6 +217,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     m_data.cut_W_pri_mass = cut_W_pri_mass;
     m_data.cut_PFMET = cut_PFMET;
     m_data.signalclass = SignalClass;
+    m_data.BVeto = DoBVeto;
     m_data.Loop();
     n_data = m_data.n_weighted;
 

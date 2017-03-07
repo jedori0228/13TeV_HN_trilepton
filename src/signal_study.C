@@ -12,6 +12,7 @@ void signal_study(){
   TH1::AddDirectory(kFALSE);
 
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
+  TString catversion = getenv("CATVERSION");
   TString dataset = getenv("CATANVERSION");
 
   TString plotpath = WORKING_DIR+"/plots/"+dataset+"/signal_study";
@@ -53,8 +54,7 @@ void signal_study(){
     
     //cout << x_all[i] << endl;
     
-    //TFile* file = new TFile(WORKING_DIR+"/rootfiles/"+dataset+"/SR/trilepton_mumumu_SKHN"+TString::Itoa(x_all[i], 10)+"_mumumu_VmuN_0p1_cat_v8-0-2.root");
-    TFile* file = new TFile(WORKING_DIR+"/rootfiles/"+dataset+"/SR/trilepton_mumumu_SKHN_MuMuMu_"+TString::Itoa(x_all[i], 10)+"_cat_v8-0-2.root");
+    TFile* file = new TFile(WORKING_DIR+"/rootfiles/"+dataset+"/SR/trilepton_mumumu_SKHN_MuMuMu_"+TString::Itoa(x_all[i], 10)+"_cat_"+catversion+".root");
     
     //==== Gen All Found?
     TH1D *hist_GEN_all_found = (TH1D*)file->Get("GenFound");

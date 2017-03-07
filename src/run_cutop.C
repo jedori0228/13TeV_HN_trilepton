@@ -10,22 +10,47 @@ void run_cutop(int sig_mass){
 
   TH1::SetDefaultSumw2(true);
 
+  bool DoBVeto = true;
+
+  TString catversion = getenv("CATVERSION");
+  TString dataset = getenv("CATANVERSION");
+  TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
+
   vector<TString> bkg_prompt_list = {
     "WZTo3LNu_powheg",
     "ZZTo4L_powheg",
-    "Vgamma",
+    "ZGto2LG",
     "top",
     "VVV"
   };
+
+  //============================================
+  //==== Setting MC Normalization Scale Factor
+  //============================================
+
   map<TString, double> MCNormSF, MCNormSF_uncert;
   for(unsigned int i=0; i<bkg_prompt_list.size(); i++){
     MCNormSF[bkg_prompt_list.at(i)] = 1.;
     MCNormSF_uncert[bkg_prompt_list.at(i)] = 0.;
   }
-  MCNormSF["ZZTo4L_powheg"] = 1.20803;
-  MCNormSF_uncert["ZZTo4L_powheg"] = 0.0869206;
-  MCNormSF["WZTo3LNu_powheg"] = 0.945281;
-  MCNormSF_uncert["WZTo3LNu_powheg"] = 0.153901;
+
+  string elline_MCSF;
+  ifstream in_MCSF(WORKING_DIR+"/data/"+dataset+"/MCSF.txt");
+  //cout << "#### Setting MCSF ####" << endl;
+  while(getline(in_MCSF,elline_MCSF)){
+    std::istringstream is( elline_MCSF );
+    TString sample;
+    double MCSF, MCSF_err;
+    is >> sample;
+    is >> MCSF;
+    is >> MCSF_err;
+
+    //cout << sample << " : " << "MCSF = " << MCSF << ", MCSF_err = " << MCSF_err << endl;
+
+    MCNormSF[sample] = MCSF;
+    MCNormSF_uncert[sample] = MCSF_err;
+
+  }
 
   int SignalClass;
   if(sig_mass <= 50) SignalClass = 1;
@@ -33,10 +58,6 @@ void run_cutop(int sig_mass){
   else if(sig_mass <= 1000) SignalClass = 3;
   else SignalClass = 4;
 
-  TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
-  TString catversion = getenv("CATVERSION");
-  TString dataset = getenv("CATANVERSION");
-  
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/UpDownSyst/";
   
   vector<double> cuts_first_pt, cuts_second_pt, cuts_third_pt, cuts_W_pri_mass, cuts_PFMET;
@@ -176,6 +197,19 @@ void run_cutop(int sig_mass){
             double n_bkg_prompt(0.), n_bkg_fake(0.), n_signal(0.), n_data(0.);
             double prompt_syst(0.);
 
+            cutop m_data(filepath+"trilepton_mumumu_ntp_data_DoubleMuon_cat_"+catversion+".root", "Ntp_Central");
+            m_data.cut_first_pt = cuts_first_pt.at(i_first_pt);
+            m_data.cut_second_pt = cuts_second_pt.at(i_second_pt);
+            m_data.cut_third_pt = cuts_third_pt.at(i_third_pt);
+            m_data.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
+            m_data.cut_PFMET = cuts_PFMET.at(i_PFMET);
+            m_data.signalclass = SignalClass;
+            m_data.BVeto = DoBVeto;
+            m_data.Loop();
+            n_data = m_data.n_weighted;
+
+            if(n_data<1) continue;
+
             TH1D *hist_bkg_for_err = new TH1D("hist_bkg_for_err", "", 1, 0., 1.); 
             for(unsigned int k=0; k<bkg_prompt_list.size(); k++){
               TString this_samplename = bkg_prompt_list.at(k);
@@ -188,6 +222,7 @@ void run_cutop(int sig_mass){
               m_bkg_prompt.signalclass = SignalClass;
               m_bkg_prompt.MCNormSF = 1.;
               m_bkg_prompt.MCNormSF_uncert = 0.;
+              m_bkg_prompt.BVeto = DoBVeto;
               m_bkg_prompt.Loop();
 
               //==== for convenience, we keep "SF==1 n_bkg",
@@ -209,6 +244,7 @@ void run_cutop(int sig_mass){
             m_sig.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
             m_sig.cut_PFMET = cuts_PFMET.at(i_PFMET);
             m_sig.signalclass = SignalClass;
+            m_sig.BVeto = DoBVeto;
             m_sig.Loop();
             double n_generated = 100000.;
             if(sig_mass==200) n_generated = 96193.;
@@ -222,22 +258,13 @@ void run_cutop(int sig_mass){
             m_bkg_fake.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
             m_bkg_fake.cut_PFMET = cuts_PFMET.at(i_PFMET);
             m_bkg_fake.signalclass = SignalClass;
+            m_bkg_fake.BVeto = DoBVeto;
             m_bkg_fake.Loop();
             n_bkg_fake = m_bkg_fake.n_weighted;
 
-            cutop m_data(filepath+"trilepton_mumumu_ntp_data_DoubleMuon_cat_"+catversion+".root", "Ntp_Central");
-            m_data.cut_first_pt = cuts_first_pt.at(i_first_pt);
-            m_data.cut_second_pt = cuts_second_pt.at(i_second_pt);
-            m_data.cut_third_pt = cuts_third_pt.at(i_third_pt);
-            m_data.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
-            m_data.cut_PFMET = cuts_PFMET.at(i_PFMET);
-            m_data.signalclass = SignalClass;
-            m_data.Loop();
-            n_data = m_data.n_weighted;
-            
-            
             double this_punzi = PunziFunction(n_signal/n_generated, n_bkg_prompt+n_bkg_fake, n_bkg_fake, prompt_syst);
-            
+
+            //==== update punzi, if larger
             if( this_punzi > max_punzi ){
               cut_first_pt_SEL = cuts_first_pt.at(i_first_pt);
               cut_second_pt_SEL = cuts_second_pt.at(i_second_pt);
@@ -442,7 +469,7 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
   else if(mass == 1000){
     if(var == "W_pri"){
       cutvar_min = 800;
-      cutvar_max = 1500;
+      cutvar_max = 1100;
     }
     else if(var == "first_pt"){
       cutvar_min = 150;
@@ -450,7 +477,7 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
     }
     else if(var == "second_pt"){
       cutvar_min = 100;
-      cutvar_max = 250;
+      cutvar_max = 200;
     }
   }
   else{

@@ -2,6 +2,9 @@
 
 void draw_xsec(){
 
+  TString dataset = getenv("CATANVERSION");
+  TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
+
   gStyle->SetOptStat(0);
   
   double mass_dimu_8TeV[] = {
@@ -181,13 +184,13 @@ void draw_xsec(){
   latex_mixing.SetNDC();
   latex_mixing.SetTextSize(0.05);
   latex_mixing.DrawLatex(0.65, 0.3, "#splitline{|V_{#muN}|^{2} = 1.0}{|V_{eN}|^{2} = 0}");
-  
+
   //===============
   //==== k-factor
   //===============
   
   cout << "===========================================" << endl;
-  cout << "==== (13TeV dimu NLO)/(13TeV dimu NLO) ====" << endl;
+  cout << "==== (13TeV dimu NLO)/(13TeV dimu LO) ====" << endl;
   cout << "===========================================" << endl;
   
   double mass_kfactor[] = {
@@ -218,8 +221,16 @@ void draw_xsec(){
     kfactor[i] = this_NLO/this_LO;
     cout << mass_kfactor[i] << "\t" << kfactor[i] << endl;
   }
-  
-  c1->SaveAs("./13_8_xsec.pdf");
+
+  TGraph *gr_kfactor = new TGraph(12, mass_kfactor, kfactor);
+  gr_kfactor->SetName("gr_kfcator");
+  gr_kfactor->SetMarkerStyle(22);
+  TFile *file_kfactor = new TFile(WORKING_DIR+"/data/"+dataset+"/kfactor.root", "RECREATE");
+  file_kfactor->cd();
+  gr_kfactor->Write();
+  file_kfactor->Close();
+
+  c1->SaveAs(WORKING_DIR+""./13_8_xsec.pdf");
   
   
 }

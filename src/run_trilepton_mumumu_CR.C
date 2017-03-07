@@ -1,7 +1,7 @@
 #include "trilepton_mumumu.cc"
 #include <fstream>
 
-void run_trilepton_mumumu_CR(int XXX){
+void run_trilepton_mumumu_CR(int XXX, TString thisfilepath="NOTSET", bool ScaleMC=false){
   
   //==============
   //==== get env
@@ -21,7 +21,10 @@ void run_trilepton_mumumu_CR(int XXX){
   //==== set data class
   //=====================
   
-  m.data_class =  dataset+"/CR";
+  m.data_class = dataset+"/CR_NoBVeto/FR_nbjet/";
+  if(thisfilepath!="NOTSET"){
+    m.data_class = dataset+thisfilepath;
+  }
   
   //================================
   //==== set prefixes and suffixes
@@ -83,41 +86,41 @@ void run_trilepton_mumumu_CR(int XXX){
       "_ZJets", "_ZJets_3mu0el", "_ZJets_2mu1el",
       "_ZLep",
       "_ZGamma", "_ZGamma_3mu0el", "_ZGamma_2mu1el",
-      "_ZZ"
+      "_ZZ", "_ZZ_4mu0el"
     };
     m.drawdata = {
       true, true, true,
       true, true, true,
       true,
       true, true, true,
-      true
+      true, true
     };
 
-/*
-    m.ApplyMCNormSF = {
-      false, false, false,
-      false, false, false,
-      false,
-      false, false, false,
-      false
-    };
-*/
+    if(ScaleMC){
+      m.ApplyMCNormSF = {
+        true, true, true,
+        true, true, true,
+        true,
+        true, true, true,
+        true, true
+      };
+    }
+    else{
+      m.ApplyMCNormSF = {
+        false, false, false,
+        false, false, false,
+        false,
+        false, false, false,
+        false, false
+      };
+    }
 
-    m.ApplyMCNormSF = {
-      true, true, true,
-      true, true, true,
-      true,
-      true, true, true,
-      true
-    };
-
-
-    m.samples_to_use = {"fake_sfed_HighdXY", "WZ_excl", "ZZ_excl", "Vgamma", "VVV", "ttV"};
+    m.samples_to_use = {"fake_sfed_HighdXY", "WZ_excl", "ZZ_excl", "Zgamma", "VVV", "ttV"};
   }
   else if(XXX==1){
     m.histname_suffix = {"_WZ", "_ZJets"};
     m.drawdata = {true, true};
-    m.samples_to_use = {"fake_Dijet", "WZ_excl", "ZZ_excl", "Vgamma", "VVV", "ttV"};
+    m.samples_to_use = {"fake_Dijet", "WZ_excl", "ZZ_excl", "Zgamma", "VVV", "ttV"};
     //m.samples_to_use = {"fake_sfed_HighdXY", "VV_incl", "VVV", "top"};
   }
   
@@ -130,6 +133,8 @@ void run_trilepton_mumumu_CR(int XXX){
     "n_vertices",
     "n_jets",
     "n_bjets",
+    "n_jets_nearby",
+    "n_bjets_nearby",
     "PFMET", "PFMET_phi",
     "osllmass",
     "m_Z_candidate",
@@ -139,6 +144,8 @@ void run_trilepton_mumumu_CR(int XXX){
     "W_candidate_Pt",
     "dRZLeptonWLepton",
     "dRMETWLepton",
+    "dRNearByJetWLepton",
+    "dRNearByBJetWLepton",
     "leadingLepton_Pt", "leadingLepton_Eta", "leadingLepton_RelIso", "leadingLepton_dXY", "leadingLepton_dXYSig", "leadingLepton_dZ",
     "secondLepton_Pt", "secondLepton_Eta", "secondLepton_RelIso", "secondLepton_dXY", "secondLepton_dXYSig", "secondLepton_dZ",
     "thirdLepton_Pt", "thirdLepton_Eta", "thirdLepton_RelIso", "thirdLepton_dXY", "thirdLepton_dXYSig", "thirdLepton_dZ",
@@ -161,6 +168,8 @@ void run_trilepton_mumumu_CR(int XXX){
     "# of verticies",
     "# of jets",
     "# of b-tagged jets",
+    "# of lepton-nearby jets",
+    "# of lepton-naerby b-tagged jets",
     "#slash{E}_{T}^{miss} [GeV]", "#phi of #slash{E}_{T}^{miss}",
     "m(OS) [GeV]",
     "m(Z) [GeV]",
@@ -168,8 +177,10 @@ void run_trilepton_mumumu_CR(int XXX){
     "m(lll) [GeV]",
     "p_{T}^{Z} [GeV]",
     "p_{T}^{W} [GeV]",
-    "#DeltaR(#mu^{W Lepton}#mu^{Z Leptons})",
+    "#DeltaR(#mu^{W Lepton},#mu^{Z Leptons})",
     "#DeltaR(#slash{E}_{T}^{miss},#mu^{W Lepton})",
+    "#DeltaR(#mu^{W Lepton},Jet)",
+    "#DeltaR(#mu^{W Lepton},BJet)",
     "p_{T} [GeV]", "|#eta|", "LeptonRelIso", "|dXY| [cm]", "|Sig(dXY)|", "|dZ| [cm]",
     "p_{T} [GeV]", "|#eta|", "LeptonRelIso", "|dXY| [cm]", "|Sig(dXY)|", "|dZ| [cm]",
     "p_{T} [GeV]", "|#eta|", "LeptonRelIso", "|dXY| [cm]", "|Sig(dXY)|", "|dZ| [cm]",
@@ -220,6 +231,7 @@ void run_trilepton_mumumu_CR(int XXX){
        this_var.Contains("ZLepton") ||
        this_var.Contains("WLepton")){
       m.CutVarSkips.push_back( make_pair("_ZZ", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZZ_4mu0el", this_var) );
     }
     
     
@@ -243,6 +255,7 @@ void run_trilepton_mumumu_CR(int XXX){
       m.CutVarSkips.push_back( make_pair("_ZGamma_3mu0el", this_var) );
       m.CutVarSkips.push_back( make_pair("_ZGamma_2mu1el", this_var) );
       m.CutVarSkips.push_back( make_pair("_ZZ", this_var) );
+      m.CutVarSkips.push_back( make_pair("_ZZ_4mu0el", this_var) );
     }
   }
 
@@ -256,7 +269,7 @@ void run_trilepton_mumumu_CR(int XXX){
     m.histname_suffix = {"_OSDiMuon", "_OSDiMuon_Z_10GeV"};
     m.drawdata = {true, true};
     m.samples_to_use = {"DY", "fake_sfed_HighdXY"};
-    //m.samples_to_use = {"top", "VVV", "Vgamma", "ZZ_excl", "WZ_excl", "fake_sfed_HighdXY", "DY"};
+    //m.samples_to_use = {"top", "VVV", "Zgamma", "ZZ_excl", "WZ_excl", "fake_sfed_HighdXY", "DY"};
     
     m.histname = {
       "leadingLepton_Pt", "leadingLepton_Eta", "leadingLepton_RelIso", "leadingLepton_Chi2",
@@ -296,7 +309,7 @@ void run_trilepton_mumumu_CR(int XXX){
     m.MCNormSF[m.bkglist.at(i)] = 1.;
     m.MCNormSF_uncert[m.bkglist.at(i)] = 0.;
   }
-  m.SetMCSF(WORKING_DIR+"/txts/"+dataset+"/MCSF.txt");
+  m.SetMCSF(WORKING_DIR+"/data/"+dataset+"/MCSF.txt");
 
   /*
   //=============================
@@ -349,7 +362,7 @@ void run_trilepton_mumumu_CR(int XXX){
   return;
 */
 
-  m.SetRebins(WORKING_DIR+"/txts/"+dataset+"/CR_rebins.txt");
+  m.SetRebins(WORKING_DIR+"/data/"+dataset+"/CR_rebins.txt");
 
   m.rebins[make_pair("_OSDiMuon", "leadingLepton_Pt")] = 5;
   m.rebins[make_pair("_OSDiMuon", "leadingLepton_Eta")] = 5;
@@ -367,7 +380,7 @@ void run_trilepton_mumumu_CR(int XXX){
   
 /*
   //==== script to generate rebins
-  ofstream skeleton_y_maxs("./txts/CR_skeleton_y_maxs.txt", ios::trunc);
+  ofstream skeleton_y_maxs("./data/CR_skeleton_y_maxs.txt", ios::trunc);
   for(unsigned int i=0; i<m.histname_suffix.size(); i++){
     for(unsigned int j=0; j<m.histname.size(); j++){
       skeleton_y_maxs
@@ -380,12 +393,12 @@ void run_trilepton_mumumu_CR(int XXX){
 */
 
   //==== default max
-  m.default_y_max = 150.;
+  m.default_y_max = 2000.;
   m.default_y_min = 0.;
   //==== log y?
   m.UseSetLogy = false;
 
-  m.SetYAxis(WORKING_DIR+"/txts/"+dataset+"/CR_yaxis.txt"); 
+  m.SetYAxis(WORKING_DIR+"/data/"+dataset+"/CR_yaxis.txt"); 
 
   if( std::find(m.histname_suffix.begin(), m.histname_suffix.end(), "_OSDiMuon") != m.histname_suffix.end() || 
       std::find(m.histname_suffix.begin(), m.histname_suffix.end(), "_OSDiMuon_Z_10GeV") != m.histname_suffix.end()    ){
@@ -411,7 +424,7 @@ void run_trilepton_mumumu_CR(int XXX){
   
 /*
   //==== script to generate rebins
-  ofstream skeleton_x_mins("./txts/CR_skeleton_xaxis.txt", ios::trunc);
+  ofstream skeleton_x_mins("./data/CR_skeleton_xaxis.txt", ios::trunc);
   for(unsigned int i=0; i<m.histname_suffix.size(); i++){
   for(unsigned int j=0; j<m.histname.size(); j++){
       skeleton_x_mins
@@ -424,7 +437,7 @@ void run_trilepton_mumumu_CR(int XXX){
 */
 
 
-  m.SetXAxis(WORKING_DIR+"/txts/"+dataset+"/CR_xaxis.txt");
+  m.SetXAxis(WORKING_DIR+"/data/"+dataset+"/CR_xaxis.txt");
 
   m.x_mins[make_pair("_OSDiMuon_Z_10GeV", "mll")] = 75.;
   m.x_maxs[make_pair("_OSDiMuon_Z_10GeV", "mll")] = 110.;

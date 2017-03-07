@@ -43,6 +43,7 @@ class cutop {
   Double_t        isZZ;
   Double_t        ThreeLeptonConfig;
   Double_t        FourLeptonConfig;
+  Double_t        nbjets;
   
   // List of branches
   TBranch        *b_first_pt;   //!
@@ -66,6 +67,7 @@ class cutop {
   TBranch        *b_isZZ;
   TBranch        *b_ThreeLeptonConfig;
   TBranch        *b_FourLeptonConfig;
+  TBranch        *b_nbjets;
   
   double TotalEvent;
   double n_weighted;
@@ -82,6 +84,7 @@ class cutop {
   double cut_HN_mass;
   double cut_PFMET;
   TString SearchRegion;
+  bool BVeto;
   
   cutop(TString sample, TString whichSyst);
   virtual ~cutop();
@@ -110,7 +113,8 @@ signalclass(1),
 cut_HN_mass(0.),
 cut_W_sec_mass(9999.),
 cut_PFMET(0.),
-SearchRegion("Preselection")
+SearchRegion("Preselection"),
+BVeto(false)
 {
 
   gErrorIgnoreLevel = kError;
@@ -189,6 +193,7 @@ void cutop::Init(TTree *tree)
   fChain->SetBranchAddress("isZZ", &isZZ, &b_isZZ);
   fChain->SetBranchAddress("ThreeLeptonConfig", &ThreeLeptonConfig, &b_ThreeLeptonConfig);
   fChain->SetBranchAddress("FourLeptonConfig", &FourLeptonConfig, &b_FourLeptonConfig);
+  fChain->SetBranchAddress("nbjets", &nbjets, &b_nbjets);
 
   Notify();
 }

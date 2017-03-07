@@ -97,11 +97,23 @@ bool cutop::isSearchRegion(){
 
   //==== ZGamma
   else if(SearchRegion=="ZGamma"){
-    if(isZGamma) pass = true;
+    if(isZGamma==1) pass = true;
+  }
+  else if(SearchRegion=="ZGamma_3mu0el"){
+    if(isZGamma==1 && ThreeLeptonConfig==0) pass = true;
+  }
+  else if(SearchRegion=="ZGamma_2mu1el"){
+    if(isZGamma==1 && ThreeLeptonConfig==1) pass = true;
   }
 
+  //==== ?
   else{
+    cout << "[cutop::isSearchRegion] ?" << endl;
+  }
 
+  //==== finally, do b-jet beto
+  if(BVeto){
+    pass &= (nbjets==0); 
   }
 
   return pass;

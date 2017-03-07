@@ -286,8 +286,8 @@ void trilepton_mumumu::SetMCSF(TString filepath){
     is >> MCSF;
     is >> MCSF_err;
 
-    //cout << "sample : " << sample << endl;
-    //cout << "  MCSF = " << MCSF << ", MCSF_err = " << MCSF_err << endl;
+    cout << "[trilepton_mumumu::SetMCSF] sample : " << sample << endl;
+    cout << "[trilepton_mumumu::SetMCSF] => MCSF = " << MCSF << ", MCSF_err = " << MCSF_err << endl;
 
     MCNormSF[sample] = MCSF;
     MCNormSF_uncert[sample] = MCSF_err;
@@ -449,7 +449,9 @@ void trilepton_mumumu::draw_legend(TLegend* lg, signal_class sc, bool DrawData){
 }
 
 void trilepton_mumumu::draw_canvas(THStack* mc_stack, TH1D* mc_error, TH1D* hist_data, vector<TH1D*> hist_signal, TLegend* legend, bool DrawData){
-  
+
+  if(!hist_data) return;
+
   //==== signal_class
   signal_class this_sc = no_class;
   //==== cutdR_cutW is only applied for low mass yet
@@ -484,6 +486,8 @@ void trilepton_mumumu::draw_canvas(THStack* mc_stack, TH1D* mc_error, TH1D* hist
 
     canvas_margin(c1, c1_up, c1_down);
     
+    c1_up->SetGridx();
+    c1_up->SetGridy();
     c1_down->SetGridx();
     c1_down->SetGridy();
     
@@ -493,6 +497,8 @@ void trilepton_mumumu::draw_canvas(THStack* mc_stack, TH1D* mc_error, TH1D* hist
   }
   else{
     canvas_margin(c1);
+    c1->SetGridx();
+    c1->SetGridy();
     c1->cd();
   }
 
