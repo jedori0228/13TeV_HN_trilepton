@@ -81,7 +81,8 @@ void run_cutop(int sig_mass){
     GetCutVar(sig_mass, "second_pt", min_tmp, max_tmp);
     fillarray( cuts_second_pt, min_tmp, max_tmp, dx_tmp );
 
-    fillarray( cuts_third_pt, 15, 80, 5 );
+    GetCutVar(sig_mass, "third_pt", min_tmp, max_tmp);
+    fillarray( cuts_third_pt, min_tmp, max_tmp, dx_tmp );
     
     double a, b;
     GetCutVar(sig_mass, "W_pri", a, b);
@@ -367,6 +368,10 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
       cutvar_min = 15;
       cutvar_max = 60;
     }
+    else if(var == "third_pt"){
+      cutvar_min = 15;
+      cutvar_max = 40;
+    }
   }
   else if(mass == 100){
     if(var == "W_pri"){
@@ -380,6 +385,10 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
     else if(var == "second_pt"){
       cutvar_min = 15;
       cutvar_max = 60;
+    }
+    else if(var == "third_pt"){
+      cutvar_min = 15;
+      cutvar_max = 40;
     }
   }
   else if(mass == 150){
@@ -395,11 +404,15 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
       cutvar_min = 15;
       cutvar_max = 60;
     }
+    else if(var == "third_pt"){
+      cutvar_min = 15;
+      cutvar_max = 40;
+    }
   }
   else if(mass == 200){
     if(var == "W_pri"){
       cutvar_min = 200;
-      cutvar_max = 350;
+      cutvar_max = 300;
     }
     else if(var == "first_pt"){
       cutvar_min = 25;
@@ -408,6 +421,10 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
     else if(var == "second_pt"){
       cutvar_min = 15;
       cutvar_max = 70;
+    }
+    else if(var == "third_pt"){
+      cutvar_min = 15;
+      cutvar_max = 40;
     }
   }
   else if(mass == 300){
@@ -423,6 +440,10 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
       cutvar_min = 15;
       cutvar_max = 100;
     }
+    else if(var == "third_pt"){
+      cutvar_min = 15;
+      cutvar_max = 50;
+    }
   }
   else if(mass == 400){
     if(var == "W_pri"){
@@ -436,6 +457,10 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
     else if(var == "second_pt"){
       cutvar_min = 15;
       cutvar_max = 140;
+    }
+    else if(var == "third_pt"){
+      cutvar_min = 30;
+      cutvar_max = 60;
     }
   }
   else if(mass == 500){
@@ -451,6 +476,10 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
       cutvar_min = 100;
       cutvar_max = 180;
     }
+    else if(var == "third_pt"){
+      cutvar_min = 30;
+      cutvar_max = 60;
+    }
   }
   else if(mass == 700){
     if(var == "W_pri"){
@@ -465,6 +494,10 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
       cutvar_min = 100;
       cutvar_max = 250;
     }
+    else if(var == "third_pt"){
+      cutvar_min = 35;
+      cutvar_max = 70;
+    }
   }
   else if(mass == 1000){
     if(var == "W_pri"){
@@ -478,6 +511,10 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
     else if(var == "second_pt"){
       cutvar_min = 100;
       cutvar_max = 200;
+    }
+    else if(var == "third_pt"){
+      cutvar_min = 50;
+      cutvar_max = 85;
     }
   }
   else{
