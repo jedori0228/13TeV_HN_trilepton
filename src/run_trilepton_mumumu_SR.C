@@ -12,7 +12,7 @@ void run_trilepton_mumumu_SR(int XXX){
   trilepton_mumumu m;
   
   //==== set data class
-  m.data_class = dataset+"/SR";
+  m.data_class = dataset+"/SR_BVeto/";
   
   //==== set prefixes and suffixes
   m.filename_prefix = "trilepton_mumumu";
@@ -20,10 +20,8 @@ void run_trilepton_mumumu_SR(int XXX){
   m.histname_suffix = {"_cut0", "_cutWlow", "_cutWhigh"};
   m.drawdata = {false, false, false};
 
-  m.ApplyMCNormSF = {true, true, true}; // default
+  m.ApplyMCNormSF = {true, true, true};
   //m.ApplyMCNormSF = {false, false, false};
-
-  m.DrawPU = true;
 
   //==== set sample mapping
   m.map_sample_string_to_list["DY"] = {"DYJets_10to50", "DYJets"};
@@ -80,10 +78,8 @@ void run_trilepton_mumumu_SR(int XXX){
     m.MCNormSF[m.bkglist.at(i)] = 1.;
     m.MCNormSF_uncert[m.bkglist.at(i)] = 0.;
   }
-  m.MCNormSF["ZZTo4L_powheg"] = 1.22;
-  m.MCNormSF_uncert["ZZTo4L_powheg"] = 0.08;
-  m.MCNormSF["WZTo3LNu_powheg"] = 0.96;
-  m.MCNormSF_uncert["WZTo3LNu_powheg"] = 0.10;
+  m.SetMCSF(WORKING_DIR+"/data/"+dataset+"/MCSF.txt");
+
  
   //==== set variables to draw
   m.histname = {
@@ -202,50 +198,25 @@ void run_trilepton_mumumu_SR(int XXX){
   //m.map_class_to_signal_mass[trilepton_mumumu::class4] = {40, 60, 150, 700};
   //m.map_class_to_signal_mass[trilepton_mumumu::highmass] = {40, 60, 150, 700};
   
+  //=============
   //==== rebins
-  //ofstream skeleton_rebins("./txt/skeleton_rebins.txt", ios::trunc);
-  //for(unsigned int i=0; i<m.histname_suffix.size(); i++){
-  //  for(unsigned int j=0; j<m.histname.size(); j++){
-  //    skeleton_rebins
-  //    << "  m.rebins[make_pair(\""+m.histname_suffix.at(i)+"\", \""+m.histname.at(j)+"\")] = 1;" << endl;
-  //  }
-  //}
-  //skeleton_rebins.close();
-  //return;
-  m.rebins[make_pair("_cut0", "gamma_star_mass")] = 5;
-  m.rebins[make_pair("_cut0", "h_leadingLepton_Eta")] = 5;
-  m.rebins[make_pair("_cut0", "h_secondLepton_Eta")] = 5;
-  m.rebins[make_pair("_cut0", "h_thirdLepton_Eta")] = 5;
-  m.rebins[make_pair("_cut0", "h_PFMET_phi")] = 5;
-  m.rebins[make_pair("_cut0", "HN_mass_class1")] = 10;
-  m.rebins[make_pair("_cut0", "HN_mass_class2")] = 10;
-  m.rebins[make_pair("_cut0", "HN_mass_class3")] = 10;
-  m.rebins[make_pair("_cut0", "HN_mass_class4")] = 10;
-  m.rebins[make_pair("_cut0", "W_pri_highmass_mass")] = 10;
-  m.rebins[make_pair("_cut0", "W_pri_lowmass_mass")] = 10;
-  m.rebins[make_pair("_cut0", "W_sec_highmass_mass")] = 10;
-  m.rebins[make_pair("_cut0", "z_candidate_mass")] = 5;
-  m.rebins[make_pair("_cutWlow", "gamma_star_mass")] = 5;
-  m.rebins[make_pair("_cutWlow", "h_leadingLepton_Eta")] = 5;
-  m.rebins[make_pair("_cutWlow", "h_secondLepton_Eta")] = 5;
-  m.rebins[make_pair("_cutWlow", "h_thirdLepton_Eta")] = 5;
-  m.rebins[make_pair("_cutWlow", "h_PFMET_phi")] = 5;
-  m.rebins[make_pair("_cutWlow", "HN_mass_class1")] = 10;
-  m.rebins[make_pair("_cutWlow", "HN_mass_class2")] = 10;
-  m.rebins[make_pair("_cutWlow", "W_pri_highmass_mass")] = 10;
-  m.rebins[make_pair("_cutWlow", "W_pri_lowmass_mass")] = 10;
-  m.rebins[make_pair("_cutWlow", "z_candidate_mass")] = 5;
-  m.rebins[make_pair("_cutWhigh", "gamma_star_mass")] = 5;
-  m.rebins[make_pair("_cutWhigh", "h_leadingLepton_Eta")] = 5;
-  m.rebins[make_pair("_cutWhigh", "h_secondLepton_Eta")] = 5;
-  m.rebins[make_pair("_cutWhigh", "h_thirdLepton_Eta")] = 5;
-  m.rebins[make_pair("_cutWhigh", "h_PFMET_phi")] = 5;
-  m.rebins[make_pair("_cutWhigh", "HN_mass_class3")] = 10;
-  m.rebins[make_pair("_cutWhigh", "HN_mass_class4")] = 10;
-  m.rebins[make_pair("_cutWhigh", "W_pri_highmass_mass")] = 10;
-  m.rebins[make_pair("_cutWhigh", "W_pri_lowmass_mass")] = 10;
-  m.rebins[make_pair("_cutWhigh", "W_sec_highmass_mass")] = 10;
-  m.rebins[make_pair("_cutWhigh", "z_candidate_mass")] = 5;
+  //=============
+
+/*
+  //==== script to generate rebins
+  ofstream skeleton_rebins("./data/SR_skeleton_rebins.txt", ios::trunc);
+  for(unsigned int i=0; i<m.histname_suffix.size(); i++){
+    for(unsigned int j=0; j<m.histname.size(); j++){
+      skeleton_rebins
+      //<< "m.rebins[make_pair(\""+m.histname_suffix.at(i)+"\", \""+m.histname.at(j)+"\")] = 1;" << endl;
+      <<m.histname_suffix.at(i)<<"\t"<<m.histname.at(j)<<"\t"<<-999<<endl;
+    }
+  }
+  skeleton_rebins.close();
+  return;
+*/
+
+  m.SetRebins(WORKING_DIR+"/data/"+dataset+"/SR_rebins.txt");
 
   //==== y_maxs
   //ofstream skeleton_y_maxs("./txt/skeleton_y_maxs.txt", ios::trunc);

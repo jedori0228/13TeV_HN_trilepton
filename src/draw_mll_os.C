@@ -7,6 +7,7 @@ void draw_mll_os(){
   TH1::AddDirectory(kFALSE);
 
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
+  TString catversion = getenv("CATVERSION");
   TString dataset = getenv("CATANVERSION");
 
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/SR/";
@@ -20,7 +21,7 @@ void draw_mll_os(){
     << endl;
   }
 
-  vector<TString> samples = {"WGtoLNuMM", "ZGto2LG", "WZTo3LNu_powheg", "ZZTo4L_powheg"};
+  vector<TString> samples = {"WGtoLNuG", "ZGto2LG", "WZTo3LNu_powheg", "ZZTo4L_powheg"};
   vector<TString> alias_samples = {"W#gamma", "Z#gamma", "WZ", "ZZ"};
   vector<Color_t> color_samples = {kViolet, kSpring+7, kBlue, kRed-7};
   vector<int> sig_masses = {10, 30, 50, 70};
@@ -32,21 +33,23 @@ void draw_mll_os(){
   lg->SetBorderSize(0);
   lg->SetFillStyle(0);
   for(unsigned int i=0; i<samples.size(); i++){
-    TFile *file = new TFile(filepath+"/trilepton_mumumu_SK"+samples.at(i)+"_dilep_cat_v8-0-2.root");
+    TFile *file = new TFile(filepath+"/trilepton_mumumu_SK"+samples.at(i)+"_dilep_cat_"+catversion+".root");
     TH1D *hist = (TH1D*)file->Get("lowosllmass");
     hist->SetLineColor(color_samples.at(i));
     hist->SetLineWidth(2);
     hist->Rebin(5);
     lg->AddEntry(hist, alias_samples.at(i), "l");
+    hist->Scale(1./hist->Integral());
     hist->Draw("histsame");
     if(i==0){
       hist->SetXTitle("m(OS) [GeV]");
-      hist->SetYTitle("Events");
+      hist->SetYTitle("A.U.");
       hist_axis(hist);
+      hist->GetYaxis()->SetRangeUser(0, 0.3);
     }
   }
   for(unsigned int i=0; i<sig_masses.size(); i++){
-    TFile *file = new TFile(filepath+"/trilepton_mumumu_SKHN_MuMuMu_"+TString::Itoa(sig_masses.at(i),10)+"_cat_v8-0-2.root");
+    TFile *file = new TFile(filepath+"/trilepton_mumumu_SKHN_MuMuMu_"+TString::Itoa(sig_masses.at(i),10)+"_cat_"+catversion+".root");
     TH1D *hist = (TH1D*)file->Get("lowosllmass");
     hist->SetLineColor(color_samples.at(i));
     hist->SetLineWidth(3);
@@ -54,6 +57,7 @@ void draw_mll_os(){
     hist->SetLineStyle(i+1);
     hist->Rebin(5);
     lg->AddEntry(hist, "HN"+TString::Itoa(sig_masses.at(i),10), "l");
+    hist->Scale(1./hist->Integral());
     hist->Draw("histsame");
     if(i==0){
       hist->SetXTitle("m(OS) [GeV]");

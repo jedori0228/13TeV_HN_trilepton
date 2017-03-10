@@ -188,75 +188,159 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
   //======================================================
 
   cout << "######################## dXYSig cut optimization study ########################" << endl;
+  vector<TString> dXYs = {"dXY", "dXYSig"};
   vector<TString> MuonId = {"Loose", "Tight"};
+
   for(unsigned int i=0; i<MuonId.size(); i++){
+    for(unsigned int j=0; j<dXYs.size(); j++){
       
-    TH1D* hist_DY = (TH1D*)map_string_to_file["DY"]->Get(str_dXYCut+"_prompt_"+MuonId.at(i)+"_dXYSig");
-    TH1D* hist_signal = (TH1D*)map_string_to_file["HN_MuMuMu_40"]->Get(str_dXYCut+"_prompt_"+MuonId.at(i)+"_dXYSig");
-    TH1D* hist_ttbar = (TH1D*)map_string_to_file["TTJets_aMC"]->Get(str_dXYCut+"_fake_"+MuonId.at(i)+"_dXYSig");
-    TH1D* hist_QCD_mumu = (TH1D*)map_string_to_file["QCD_mu"]->Get(str_dXYCut+"_fake_"+MuonId.at(i)+"_dXYSig");
-    
-    hist_DY->SetLineColor(kBlue);
-    hist_signal->SetLineColor(kBlack);
-    hist_ttbar->SetLineColor(kRed);
-    hist_QCD_mumu->SetLineColor(kOrange-5);
-    
-    hist_DY->SetLineWidth(2);
-    hist_signal->SetLineWidth(2);
-    hist_ttbar->SetLineWidth(2);
-    hist_QCD_mumu->SetLineWidth(2);
-
-    int n_xbin = hist_DY->GetXaxis()->GetNbins();
-    cout
-    << "["<<MuonId.at(i)<<"]" << endl
-    << "DY :" << endl
-    << "  Sig(dXY) < 3.0 : " << hist_DY->Integral(0, 30) / hist_DY->Integral(0, n_xbin+1) << " = 1 - " << 1.-hist_DY->Integral(0, 30) / hist_DY->Integral(0, n_xbin+1) << endl
-    << "  Sig(dXY) > 4.0 : " << hist_DY->Integral(41, n_xbin+1) / hist_DY->Integral(0, n_xbin+1) << " = 1 - " << 1.-hist_DY->Integral(41, n_xbin+1) / hist_DY->Integral(0, n_xbin+1) << endl
-    << "HN40 :" << endl
-    << "  Sig(dXY) < 3.0 : " << hist_signal->Integral(0, 30) / hist_signal->Integral(0, n_xbin+1) << " = 1 - " << 1.-hist_signal->Integral(0, 30) / hist_signal->Integral(0, n_xbin+1) << endl
-    << "  Sig(dXY) > 4.0 : " << hist_signal->Integral(41, n_xbin+1) / hist_signal->Integral(0, n_xbin+1) << " = 1 - " << 1.-hist_signal->Integral(41, n_xbin+1) / hist_signal->Integral(0, n_xbin+1) << endl
-    << "ttbar :" << endl
-    << "  Sig(dXY) < 3.0 : " << hist_ttbar->Integral(0, 30) / hist_ttbar->Integral(0, n_xbin+1) << " = 1 - " << 1.-hist_ttbar->Integral(0, 30) / hist_ttbar->Integral(0, n_xbin+1) << endl
-    << "  Sig(dXY) > 4.0 : " << hist_ttbar->Integral(41, n_xbin+1) / hist_ttbar->Integral(0, n_xbin+1) << " = 1 - " << 1.-hist_ttbar->Integral(41, n_xbin+1) / hist_ttbar->Integral(0, n_xbin+1) << endl
-    << "QCD :" << endl
-    << "  Sig(dXY) < 3.0 : " << hist_QCD_mumu->Integral(0, 30) / hist_QCD_mumu->Integral(0, n_xbin+1) << " = 1 - " << 1.-hist_QCD_mumu->Integral(0, 30) / hist_QCD_mumu->Integral(0, n_xbin+1) << endl
-    << "  Sig(dXY) > 4.0 : " << hist_QCD_mumu->Integral(41, n_xbin+1) / hist_QCD_mumu->Integral(0, n_xbin+1) << " = 1 - " << 1.-hist_QCD_mumu->Integral(41, n_xbin+1) / hist_QCD_mumu->Integral(0, n_xbin+1) << endl;
-
-    
-    hist_DY->Scale(1./hist_DY->Integral());
-    hist_signal->Scale(1./hist_signal->Integral());
-    hist_ttbar->Scale(1./hist_ttbar->Integral());
-    hist_QCD_mumu->Scale(1./hist_QCD_mumu->Integral());
-    
-    TLegend* lg_dXY = new TLegend(0.6, 0.7, 0.9, 0.95);
-    lg_dXY->SetFillStyle(0);
-    lg_dXY->SetBorderSize(0);
-    lg_dXY->AddEntry(hist_DY, "Drell-Yan (prompt)", "l");
-    lg_dXY->AddEntry(hist_signal, "m(HN) = 40 GeV/c^{2} (prompt)", "l");
-    lg_dXY->AddEntry(hist_ttbar, "ttbar (fake)", "l");
-    lg_dXY->AddEntry(hist_QCD_mumu, "QCD (fake)", "l");
-    
-    TCanvas* c_dXY = new TCanvas("c_dXY", "", 800, 800);
-    canvas_margin(c_dXY);
-    c_dXY->cd();
-    c_dXY->SetLogy(kTRUE);
-    
-    hist_DY->Draw("histsame");
-    hist_DY->SetTitle("");
-    hist_DY->SetYTitle("AU");
-    hist_DY->SetXTitle("|Sig(d_{xy})|"); 
-    hist_axis(hist_DY);
-    hist_signal->Draw("histsame");
-    hist_ttbar->Draw("histsame");
-    hist_QCD_mumu->Draw("histsame");
-    lg_dXY->Draw();
-    c_dXY->SaveAs(plotpath+"/dXYSig_Study_"+MuonId.at(i)+"IsoMuon.pdf");
-    
-    c_dXY->Close();
-    delete c_dXY;
-    delete lg_dXY;
-
+      TH1D* hist_DY = (TH1D*)map_string_to_file["DY"]->Get(str_dXYCut+"_prompt_"+MuonId.at(i)+"_"+dXYs.at(j));
+      TH1D* hist_signal = (TH1D*)map_string_to_file["HN_MuMuMu_40"]->Get(str_dXYCut+"_prompt_"+MuonId.at(i)+"_"+dXYs.at(j));
+      TH1D* hist_ttbar = (TH1D*)map_string_to_file["TTJets_aMC"]->Get(str_dXYCut+"_fake_"+MuonId.at(i)+"_"+dXYs.at(j));
+      TH1D* hist_QCD_mumu = (TH1D*)map_string_to_file["QCD_mu"]->Get(str_dXYCut+"_fake_"+MuonId.at(i)+"_"+dXYs.at(j));
       
+      hist_DY->SetLineColor(kBlue);
+      hist_signal->SetLineColor(kBlack);
+      hist_ttbar->SetLineColor(kRed);
+      hist_QCD_mumu->SetLineColor(kOrange-5);
+      
+      hist_DY->SetLineWidth(2);
+      hist_signal->SetLineWidth(2);
+      hist_ttbar->SetLineWidth(2);
+      hist_QCD_mumu->SetLineWidth(2);
+
+			int n_xbin = hist_DY->GetXaxis()->GetNbins();
+
+			TCanvas *c_dXY_eff = new TCanvas("c_dXY_eff", "", 800, 800);
+			canvas_margin(c_dXY_eff);
+			c_dXY_eff->cd();
+			double xbins[n_xbin];
+			double eff_DY_small[n_xbin], eff_signal_small[n_xbin], eff_ttbar_small[n_xbin], eff_QCD_mumu_small[n_xbin];
+			double eff_DY_large[n_xbin], eff_signal_large[n_xbin], eff_ttbar_large[n_xbin], eff_QCD_mumu_large[n_xbin];
+
+			cout << "dXYSig" << "\t" << "DY_small" << "\t" << "DY_large" << "\t" << "signal_small" << "\t" << "signal_large" << "\t" << "ttbar_small" << "\t" << "ttbra_large" << "\t" << "QCD_small" << "\t" << "QCD_large" << endl;
+			for(unsigned int k=1; k<=n_xbin; k++){
+
+				xbins[k-1] = hist_DY->GetXaxis()->GetBinUpEdge(k);
+
+				eff_DY_small[k-1] = hist_DY->Integral(0, k) / hist_DY->Integral(0, n_xbin+1);
+				eff_signal_small[k-1] = hist_signal->Integral(0, k) / hist_signal->Integral(0, n_xbin+1);
+				eff_ttbar_small[k-1] = hist_ttbar->Integral(0, k) / hist_ttbar->Integral(0, n_xbin+1);
+				eff_QCD_mumu_small[k-1] = hist_QCD_mumu->Integral(0, k) / hist_QCD_mumu->Integral(0, n_xbin+1);
+
+				eff_DY_large[k-1] = hist_DY->Integral(k+1, n_xbin+1) / hist_DY->Integral(0, n_xbin+1);
+				eff_signal_large[k-1] = hist_signal->Integral(k+1, n_xbin+1) / hist_signal->Integral(0, n_xbin+1);
+				eff_ttbar_large[k-1] = hist_ttbar->Integral(k+1, n_xbin+1) / hist_ttbar->Integral(0, n_xbin+1);
+				eff_QCD_mumu_large[k-1] = hist_QCD_mumu->Integral(k+1, n_xbin+1) / hist_QCD_mumu->Integral(0, n_xbin+1);
+
+				cout << hist_DY->GetXaxis()->GetBinUpEdge(k) << "\t"
+						 << eff_DY_small[k-1] << "\t" << eff_DY_large[k-1] << "\t"
+						 << eff_signal_small[k-1] << "\t" << eff_signal_large[k-1] << "\t"
+						 << eff_ttbar_small[k-1] << "\t" << eff_ttbar_large[k-1] << "\t"
+						 << eff_QCD_mumu_small[k-1] << "\t" << eff_QCD_mumu_large[k-1] << "\t" << endl;
+			}
+
+			TGraph *gr_eff_DY_small = new TGraph(n_xbin, xbins, eff_DY_small);
+			TGraph *gr_eff_DY_large = new TGraph(n_xbin, xbins, eff_DY_large);
+			gr_eff_DY_small->SetLineColor(kBlue);
+			gr_eff_DY_large->SetLineColor(kBlue);
+			gr_eff_DY_small->SetLineWidth(2);
+			gr_eff_DY_large->SetLineWidth(2);
+			gr_eff_DY_large->SetLineStyle(3);
+
+			TGraph *gr_eff_signal_small = new TGraph(n_xbin, xbins, eff_signal_small);
+			TGraph *gr_eff_signal_large = new TGraph(n_xbin, xbins, eff_signal_large);
+			gr_eff_signal_small->SetLineColor(kBlack);
+			gr_eff_signal_large->SetLineColor(kBlack);
+			gr_eff_signal_small->SetLineWidth(2);
+			gr_eff_signal_large->SetLineWidth(2);
+			gr_eff_signal_large->SetLineStyle(3);
+
+			TGraph *gr_eff_ttbar_small = new TGraph(n_xbin, xbins, eff_ttbar_small);
+			TGraph *gr_eff_ttbar_large = new TGraph(n_xbin, xbins, eff_ttbar_large);
+			gr_eff_ttbar_small->SetLineColor(kRed);
+			gr_eff_ttbar_large->SetLineColor(kRed);
+			gr_eff_ttbar_small->SetLineWidth(2);
+			gr_eff_ttbar_large->SetLineWidth(2);
+			gr_eff_ttbar_large->SetLineStyle(3);
+
+			TGraph *gr_eff_QCD_mumu_small = new TGraph(n_xbin, xbins, eff_QCD_mumu_small);
+			TGraph *gr_eff_QCD_mumu_large = new TGraph(n_xbin, xbins, eff_QCD_mumu_large);
+			gr_eff_QCD_mumu_small->SetLineColor(kOrange-5);
+			gr_eff_QCD_mumu_large->SetLineColor(kOrange-5);
+			gr_eff_QCD_mumu_small->SetLineWidth(2);
+			gr_eff_QCD_mumu_large->SetLineWidth(2);
+			gr_eff_QCD_mumu_large->SetLineStyle(3);
+
+      TLegend* lg_eff_dXY = new TLegend(0.4, 0.3, 0.9, 0.7);
+      lg_eff_dXY->SetFillStyle(0);
+      lg_eff_dXY->SetBorderSize(0);
+      lg_eff_dXY->AddEntry(gr_eff_DY_small, "Small, Drell-Yan (prompt)", "l");
+      lg_eff_dXY->AddEntry(gr_eff_signal_small, "Small, m(HN) = 40 GeV (prompt)", "l");
+      lg_eff_dXY->AddEntry(gr_eff_ttbar_small, "Small, ttbar (fake)", "l");
+      lg_eff_dXY->AddEntry(gr_eff_QCD_mumu_small, "Small, QCD (fake)", "l");
+      lg_eff_dXY->AddEntry(gr_eff_DY_large, "Large, Drell-Yan (prompt)", "l");
+      lg_eff_dXY->AddEntry(gr_eff_signal_large, "Large, m(HN) = 40 GeV (prompt)", "l");
+      lg_eff_dXY->AddEntry(gr_eff_ttbar_large, "Large, ttbar (fake)", "l");
+      lg_eff_dXY->AddEntry(gr_eff_QCD_mumu_large, "Large, QCD (fake)", "l");
+
+			gr_eff_DY_small->SetTitle("");
+			gr_eff_DY_small->Draw("al");
+			gr_eff_DY_small->GetYaxis()->SetTitle("Efficiency");
+			gr_eff_DY_small->GetYaxis()->SetRangeUser(0.00001, 2.);
+			if(dXYs.at(j)=="dXYSig") gr_eff_DY_small->GetXaxis()->SetTitle("|Sig(d_{xy})|");
+      if(dXYs.at(j)=="dXY") gr_eff_DY_small->GetXaxis()->SetTitle("|d_{xy}| [cm]");
+			hist_axis(gr_eff_DY_small);
+			gr_eff_DY_large->Draw("lsame");
+			gr_eff_signal_small->Draw("lsame");
+			gr_eff_signal_large->Draw("lsame");
+			gr_eff_ttbar_small->Draw("lsame");
+			gr_eff_ttbar_large->Draw("lsame");
+			gr_eff_QCD_mumu_small->Draw("lsame");
+			gr_eff_QCD_mumu_large->Draw("lsame");
+      lg_eff_dXY->Draw();
+
+			c_dXY_eff->SetLogy();
+			c_dXY_eff->SaveAs(plotpath+"/dXYSig_Study_Eff_"+dXYs.at(j)+"_"+MuonId.at(i)+"IsoMuon.pdf");
+			c_dXY_eff->Close();
+			delete c_dXY_eff;
+
+
+      hist_DY->Scale(1./hist_DY->Integral());
+      hist_signal->Scale(1./hist_signal->Integral());
+      hist_ttbar->Scale(1./hist_ttbar->Integral());
+      hist_QCD_mumu->Scale(1./hist_QCD_mumu->Integral());
+      
+      TLegend* lg_dXY = new TLegend(0.6, 0.7, 0.9, 0.95);
+      lg_dXY->SetFillStyle(0);
+      lg_dXY->SetBorderSize(0);
+      lg_dXY->AddEntry(hist_DY, "Drell-Yan (prompt)", "l");
+      lg_dXY->AddEntry(hist_signal, "m(HN) = 40 GeV (prompt)", "l");
+      lg_dXY->AddEntry(hist_ttbar, "ttbar (fake)", "l");
+      lg_dXY->AddEntry(hist_QCD_mumu, "QCD (fake)", "l");
+      
+      TCanvas* c_dXY = new TCanvas("c_dXY", "", 800, 800);
+      canvas_margin(c_dXY);
+      c_dXY->cd();
+      c_dXY->SetLogy(kTRUE);
+      
+      hist_DY->Draw("histsame");
+      hist_DY->SetTitle("");
+      hist_DY->SetYTitle("AU");
+      if(dXYs.at(j)=="dXYSig") hist_DY->SetXTitle("|Sig(d_{xy})|"); 
+      if(dXYs.at(j)=="dXY") hist_DY->SetXTitle("|d_{xy}| [cm]");
+      hist_axis(hist_DY);
+      hist_signal->Draw("histsame");
+      hist_ttbar->Draw("histsame");
+      hist_QCD_mumu->Draw("histsame");
+      lg_dXY->Draw();
+      c_dXY->SaveAs(plotpath+"/dXYSig_Study_"+dXYs.at(j)+"_"+MuonId.at(i)+"IsoMuon.pdf");
+      
+      c_dXY->Close();
+      delete c_dXY;
+      delete lg_dXY;
+
+    }
   }
 
   //=============================================

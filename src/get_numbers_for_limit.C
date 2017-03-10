@@ -7,7 +7,7 @@ void get_numbers_for_limit(){
   TString dataset = getenv("CATANVERSION");
 
   TString SearchRegion = "SR";
-  TString cut = "_cut0";
+  TString cut = "_cutWhigh";
 
   vector<TString> bkgs = {"DYJets_10to50", "DYJets", "WJets", "TTJets_aMC", "WW", "WZ", "ZZ"};
   vector<double> n_events;

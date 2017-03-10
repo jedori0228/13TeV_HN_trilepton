@@ -100,19 +100,34 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
 
   if(inclusive){
 
+    //==== Low Mass
     if(sig_mass < 80){
+      cout << "#### Low Mass ####" << endl;
       cut_first_pt = 99999999.;
       cut_second_pt = 99999999.;
       cut_third_pt = 99999999.;
       cut_W_pri_mass = 150;
       cut_PFMET = 0.;
     }
+    //==== High Mass
     else{
+      cout << "#### High Mass ####" << endl;
       cut_first_pt = 20.;
       cut_second_pt = 10.;
       cut_third_pt = 10.;
       cut_W_pri_mass = 0.;
       cut_PFMET = 20.;
+    }
+
+    //==== Preselection
+    if(sig_mass < 0){
+      cout << "#### Preselection ####" << endl;
+      cut_first_pt = 99999999.;
+      cut_second_pt = 99999999.;
+      cut_third_pt = 99999999.;
+      cut_W_pri_mass = 99999999;
+      cut_PFMET = 0.;
+      sig_mass = 40;
     }
 
   }
@@ -141,7 +156,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     }
   }
 
-  vector<TString> systtypes = {"Central", "MuonEn_up", "MuonEn_down", "JetEn_up", "JetEn_down", "JetRes_up", "JetRes_down", "Unclustered_up", "Unclustered_down", "MCxsec_up", "MCxsec_down", "MuonIDSF_up", "MuonIDSF_down"};
+  vector<TString> systtypes = {"Central", "MuonEn_up", "MuonEn_down", "JetEn_up", "JetEn_down", "JetRes_up", "JetRes_down", "Unclustered_up", "Unclustered_down", "MCxsec_up", "MCxsec_down", "MuonIDSF_up", "MuonIDSF_down", "PU_up", "PU_down"};
   vector<double> yields_prompt, yields_fake, yields_data, yields_signal, yields_signal_weighted;
   vector<double> syst_error_prompt, syst_error_fake, syst_error_data, syst_error_signal;
   vector<double> rel_syst_error_prompt, rel_syst_error_fake, rel_syst_error_data, rel_syst_error_signal;
@@ -180,6 +195,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       if(systtypes.at(i)=="Central"){
         hist_bkg_for_error->Add(m_bkg_prompt.hist_for_error);
         if(printnumber && !forlatex) cout << this_samplename << " : " << m_bkg_prompt.n_weighted << ", error = " << m_bkg_prompt.hist_for_error->GetBinError(1) << endl;
+        //if(printnumber && !forlatex) cout << this_samplename << " : " << m_bkg_prompt.n_unweighted << endl;
       }
 
     }
@@ -235,7 +251,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     //==== So, in this case, we calculate the difference with WEIGHTED numbers,
     //==== then obtain relative difference.
     //==== Then, multiply this to # of event (UNweighted) to get systematics..
-    if( systtypes.at(i).Contains("MuonIDSF_") ){
+    if( systtypes.at(i).Contains("MuonIDSF_") || systtypes.at(i).Contains("PU_") ){
       double weighted_diff = n_signal_weighted-yields_signal_weighted.at(0);
       double weighted_diff_rel =  weighted_diff/yields_signal_weighted.at(0);
       syst_error_signal.push_back( yields_signal.at(0) * weighted_diff_rel );
@@ -354,7 +370,11 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       << "ID SF" << endl
       << "  Up   = " << yields_prompt.at(11) << " ==> Diff = " << syst_error_prompt.at(11) << " ("<<100.*rel_syst_error_prompt.at(11)<<" %)" << endl
       << "  Down = " << yields_prompt.at(12) << " ==> Diff = " << syst_error_prompt.at(12) << " ("<<100.*rel_syst_error_prompt.at(12)<<" %)" << endl
-      << "  Mean = " << GetMeanUncert(syst_error_prompt.at(11), syst_error_prompt.at(12)) << " ("<<100.*GetMeanUncert(rel_syst_error_prompt.at(11), rel_syst_error_prompt.at(12)) << " %)" << endl;
+      << "  Mean = " << GetMeanUncert(syst_error_prompt.at(11), syst_error_prompt.at(12)) << " ("<<100.*GetMeanUncert(rel_syst_error_prompt.at(11), rel_syst_error_prompt.at(12)) << " %)" << endl
+      << "Pileup" << endl
+      << "  Up   = " << yields_prompt.at(13) << " ==> Diff = " << syst_error_prompt.at(13) << " ("<<100.*rel_syst_error_prompt.at(13)<<" %)" << endl
+      << "  Down = " << yields_prompt.at(14) << " ==> Diff = " << syst_error_prompt.at(14) << " ("<<100.*rel_syst_error_prompt.at(14)<<" %)" << endl
+      << "  Mean = " << GetMeanUncert(syst_error_prompt.at(13), syst_error_prompt.at(14)) << " ("<<100.*GetMeanUncert(rel_syst_error_prompt.at(13), rel_syst_error_prompt.at(14)) << " %)" << endl;
       cout << "=====================> total # = " << sqrt(squared_syst_prompt) << endl;
       cout << "=====================> total % = " << 100.*sqrt(squared_syst_prompt)/yields_prompt.at(0) << endl;
       
@@ -404,7 +424,11 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       << "ID SF" << endl
       << "  Up   = " << yields_signal.at(11) << " ==> Diff = " << syst_error_signal.at(11) << " ("<<100.*rel_syst_error_signal.at(11)<<" %)" << endl
       << "  Down = " << yields_signal.at(12) << " ==> Diff = " << syst_error_signal.at(12) << " ("<<100.*rel_syst_error_signal.at(12)<<" %)" << endl
-      << "  Mean = " << GetMeanUncert(syst_error_signal.at(11), syst_error_signal.at(12)) << " ("<<100.*GetMeanUncert(rel_syst_error_signal.at(11), rel_syst_error_signal.at(12)) << " %)" << endl;
+      << "  Mean = " << GetMeanUncert(syst_error_signal.at(11), syst_error_signal.at(12)) << " ("<<100.*GetMeanUncert(rel_syst_error_signal.at(11), rel_syst_error_signal.at(12)) << " %)" << endl
+      << "Pileup" << endl
+      << "  Up   = " << yields_signal.at(13) << " ==> Diff = " << syst_error_signal.at(13) << " ("<<100.*rel_syst_error_signal.at(13)<<" %)" << endl
+      << "  Down = " << yields_signal.at(14) << " ==> Diff = " << syst_error_signal.at(14) << " ("<<100.*rel_syst_error_signal.at(14)<<" %)" << endl
+      << "  Mean = " << GetMeanUncert(syst_error_signal.at(13), syst_error_signal.at(14)) << " ("<<100.*GetMeanUncert(rel_syst_error_signal.at(13), rel_syst_error_signal.at(14)) << " %)" << endl;
       cout << "=====================> total # = " << sqrt(squared_syst_signal) << endl;
       cout << "=====================> total % = " << 100.*sqrt(squared_syst_signal)/yields_signal.at(0) << endl;
     }
@@ -452,6 +476,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     n_limit.prompt_systs[NLimit::Uncl] = GetMeanUncert(syst_error_prompt.at(7), syst_error_prompt.at(8));
     n_limit.prompt_systs[NLimit::Norm] = GetMeanUncert(syst_error_prompt.at(9), syst_error_prompt.at(10));
     n_limit.prompt_systs[NLimit::MuonID] = GetMeanUncert(syst_error_prompt.at(11), syst_error_prompt.at(12));
+    n_limit.prompt_systs[NLimit::PU] = GetMeanUncert(syst_error_prompt.at(13), syst_error_prompt.at(14));
 
     n_limit.n_signal = yields_signal.at(0);
     n_limit.n_stat_signal = stat_error_signal;
@@ -461,6 +486,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     n_limit.signal_systs[NLimit::JER] = GetMeanUncert(syst_error_signal.at(5), syst_error_signal.at(6));
     n_limit.signal_systs[NLimit::Uncl] = GetMeanUncert(syst_error_signal.at(7), syst_error_signal.at(8));
     n_limit.signal_systs[NLimit::MuonID] = GetMeanUncert(syst_error_signal.at(11), syst_error_signal.at(12));
+    n_limit.signal_systs[NLimit::PU] = GetMeanUncert(syst_error_signal.at(13), syst_error_signal.at(14));
 
     n_limit.n_data = yields_data.at(0);
   }  

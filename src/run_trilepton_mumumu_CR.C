@@ -1,7 +1,7 @@
 #include "trilepton_mumumu.cc"
 #include <fstream>
 
-void run_trilepton_mumumu_CR(int XXX, TString thisfilepath="NOTSET", bool ScaleMC=false){
+void run_trilepton_mumumu_CR(int XXX, TString thisfilepath="", bool ScaleMC=false){
   
   //==============
   //==== get env
@@ -21,8 +21,8 @@ void run_trilepton_mumumu_CR(int XXX, TString thisfilepath="NOTSET", bool ScaleM
   //==== set data class
   //=====================
   
-  m.data_class = dataset+"/CR_NoBVeto/FR_nbjet/";
-  if(thisfilepath!="NOTSET"){
+  m.data_class = dataset+"/CR_BVeto/FR_alljet/";
+  if(thisfilepath!=""){
     m.data_class = dataset+thisfilepath;
   }
   

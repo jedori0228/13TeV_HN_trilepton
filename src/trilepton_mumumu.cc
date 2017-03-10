@@ -88,9 +88,7 @@ void trilepton_mumumu::draw_hist(){
         }
 
         //==== full histogram name
-        TString fullhistname;
-        if(DrawPU) fullhistname = histname[i_var]+histname_suffix[i_cut];
-        else fullhistname = histname[i_var]+histname_suffix[i_cut];
+        TString fullhistname = histname[i_var]+histname_suffix[i_cut];
         
         //==== get histogram
         TH1D* hist_temp = (TH1D*)file->Get(fullhistname);

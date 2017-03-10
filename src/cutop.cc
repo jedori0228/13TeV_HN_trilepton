@@ -14,6 +14,9 @@ void cutop::Loop()
 
   hist_for_error = new TH1D("hist_for_error", "", 1, 0., 1.);
   hist_for_error_up = new TH1D("hist_for_error_up", "", 1, 0., 1.);
+
+  //if(BVeto) cout << "[cutop::Loop] Using b-jet veto" << endl;
+  //else cout << "[cutop::Loop] NOT using b-jet veto" << endl;
   
   for(Long64_t jentry=0; jentry<nentries;jentry++) {
     GetEntry(jentry);

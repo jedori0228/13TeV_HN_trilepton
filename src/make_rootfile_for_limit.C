@@ -19,8 +19,8 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
   TH1D *hist_prompt = new TH1D("hist_prompt", "", n_mass, 0, n_mass);
   TH1D *hist_signal = new TH1D("hist_signal", "", n_mass, 0, n_mass);
 
-  vector<double> signal_syst_Lumi, signal_syst_MuonPt, signal_syst_JES, signal_syst_Uncl, signal_syst_MuonID;
-  vector<double> prompt_syst_Lumi, prompt_syst_MuonPt, prompt_syst_JES, prompt_syst_Uncl, prompt_syst_MuonID, prompt_syst_Norm;
+  vector<double> signal_syst_Lumi, signal_syst_MuonPt, signal_syst_JES, signal_syst_Uncl, signal_syst_MuonID, signal_syst_PU;
+  vector<double> prompt_syst_Lumi, prompt_syst_MuonPt, prompt_syst_JES, prompt_syst_Uncl, prompt_syst_MuonID, prompt_syst_Norm, prompt_syst_PU;
   vector<double> fake_syst_MuonPt, fake_syst_JES, fake_syst_Uncl;
   
   for(unsigned int i=0; i<masses.size(); i++){
@@ -57,6 +57,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     signal_syst_JES.push_back( 100.*n_limit.signal_systs[NLimit::JES]/n_limit.n_signal );
     signal_syst_Uncl.push_back( 100.*n_limit.signal_systs[NLimit::Uncl]/n_limit.n_signal );
     signal_syst_MuonID.push_back( 100.*n_limit.signal_systs[NLimit::MuonID]/n_limit.n_signal );
+    signal_syst_PU.push_back( 100.*n_limit.signal_systs[NLimit::PU]/n_limit.n_signal );
 
     prompt_syst_Lumi.push_back( 6.2 );
     prompt_syst_MuonPt.push_back( 100.*n_limit.prompt_systs[NLimit::MuonPt]/n_limit.n_prompt );
@@ -64,6 +65,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     prompt_syst_Uncl.push_back( 100.*n_limit.prompt_systs[NLimit::Uncl]/n_limit.n_prompt );
     prompt_syst_MuonID.push_back( 100.*n_limit.prompt_systs[NLimit::MuonID]/n_limit.n_prompt );
     prompt_syst_Norm.push_back( 100.*n_limit.prompt_systs[NLimit::Norm]/n_limit.n_prompt );
+    prompt_syst_PU.push_back( 100.*n_limit.prompt_systs[NLimit::PU]/n_limit.n_prompt );
     
     fake_syst_MuonPt.push_back( 100.*n_limit.fake_systs[NLimit::MuonPt]/n_limit.n_fake );
     fake_syst_JES.push_back( 100.*n_limit.fake_systs[NLimit::JES]/n_limit.n_fake );
@@ -121,9 +123,15 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     }
     cout << " \\\\" << endl;
 
-    cout << "~~~Unclustered energy"<<"\t";
+    cout << "~~~Unclustered Energy"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
       cout << "& "<<std::fixed<<std::setprecision(2)<<signal_syst_Uncl.at(i)<<"\\% ";
+    }
+    cout << " \\\\" << endl;
+
+    cout << "~~~Pile Up Model"<<"\t";
+    for(unsigned int i=0; i<masses.size(); i++){
+      cout << "& "<<std::fixed<<std::setprecision(2)<<signal_syst_PU.at(i)<<"\\% ";
     }
     cout << " \\\\" << endl;
 
@@ -159,9 +167,15 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     }
     cout << endl;
 
-    cout << "Unclustered energy"<<"\t";
+    cout << "Unclustered Energy"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
       cout <<std::fixed<<std::setprecision(2)<<signal_syst_Uncl.at(i)<<"\t";
+    }
+    cout << endl << endl;
+
+    cout << "Pile Up Model"<<"\t";
+    for(unsigned int i=0; i<masses.size(); i++){
+      cout <<std::fixed<<std::setprecision(2)<<signal_syst_PU.at(i)<<"\t";
     }
     cout << endl << endl;
 
@@ -199,7 +213,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     }
     cout << " \\\\" << endl;
     
-    cout << "~~~Unclustered energy"<<"\t";
+    cout << "~~~Unclustered Energy"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
       cout << "& "<<std::fixed<<std::setprecision(2)<<prompt_syst_Uncl.at(i)<<"\\% ";
     }
@@ -208,6 +222,12 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     cout << "~~~Normalization"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
       cout << "& "<<std::fixed<<std::setprecision(2)<<prompt_syst_Norm.at(i)<<"\\% ";
+    }
+    cout << " \\\\" << endl;
+
+    cout << "~~~Pile Up Model"<<"\t";
+    for(unsigned int i=0; i<masses.size(); i++){
+      cout << "& "<<std::fixed<<std::setprecision(2)<<prompt_syst_PU.at(i)<<"\\% ";
     }
     cout << " \\\\" << endl;
     
@@ -243,7 +263,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     }
     cout << endl;
     
-    cout << "Unclustered energy"<<"\t";
+    cout << "Unclustered Energy"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
       cout <<std::fixed<<std::setprecision(2)<<prompt_syst_Uncl.at(i)<<"\t";
     }
@@ -252,6 +272,12 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     cout << "Normalization"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
       cout <<std::fixed<<std::setprecision(2)<<prompt_syst_Norm.at(i)<<"\t";
+    }
+    cout << endl << endl;
+
+    cout << "Pile Up Model"<<"\t";
+    for(unsigned int i=0; i<masses.size(); i++){
+      cout <<std::fixed<<std::setprecision(2)<<prompt_syst_PU.at(i)<<"\t";
     }
     cout << endl << endl;
 

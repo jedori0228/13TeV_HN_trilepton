@@ -4,6 +4,8 @@
 void MCNormalizationSF(bool UpdateSF=true){
   
   TH1::SetDefaultSumw2(true);
+
+  bool DoBVeto = true;
   
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
   TString catversion = getenv("CATVERSION");
@@ -84,6 +86,7 @@ void MCNormalizationSF(bool UpdateSF=true){
         if(systtypes.at(i) == "MCxsec_up") MCNormDir = 1.;
         else if(systtypes.at(i) == "MCxsec_down") MCNormDir = -1.;
         m_bkg_prompt.MCNormSF_uncert = MCNormDir*MCNormSF_uncert[this_samplename];
+        m_bkg_prompt.BVeto = DoBVeto;
         m_bkg_prompt.Loop();
 
         //==== make matrix
@@ -112,17 +115,20 @@ void MCNormalizationSF(bool UpdateSF=true){
       
       cutop m_bkg_fake(filepath+"trilepton_mumumu_ntp_SKfake_sfed_HighdXY_dilep_cat_"+catversion+".root", "Ntp_"+this_syst);
       m_bkg_fake.SearchRegion = region;
+      m_bkg_fake.BVeto = DoBVeto;
       m_bkg_fake.Loop();
       n_bkg_fake = m_bkg_fake.n_weighted;
       
       cutop m_data(filepath+"trilepton_mumumu_ntp_data_DoubleMuon_cat_"+catversion+".root", "Ntp_"+this_syst);
       m_data.SearchRegion = region;
+      m_data.BVeto = DoBVeto;
       m_data.Loop();
       n_data = m_data.n_weighted;
 
       cutop m_sig(filepath+"trilepton_mumumu_ntp_SK"+this_signal+"_dilep_cat_"+catversion+".root", "Ntp_"+this_syst);
       m_sig.SearchRegion = region;
       m_sig.MCNormSF = MCNormSF[this_signal];
+      m_sig.BVeto = DoBVeto;
       m_sig.Loop();
       n_signal = m_sig.n_weighted;
       
