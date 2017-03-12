@@ -21,7 +21,7 @@ void run_trilepton_mumumu_CR(int XXX, TString thisfilepath="", bool ScaleMC=fals
   //==== set data class
   //=====================
   
-  m.data_class = dataset+"/CR_BVeto/FR_alljet/";
+  m.data_class = dataset+"/CR/";
   if(thisfilepath!=""){
     m.data_class = dataset+thisfilepath;
   }

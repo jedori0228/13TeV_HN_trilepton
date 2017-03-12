@@ -213,7 +213,7 @@ void trilepton_mumumu::make_bkglist(){
 
 void trilepton_mumumu::SetRebins(TString filepath){
 
-  cout << "[SetRebins] Get rebins from " << filepath << endl;
+  cout << "[trilepton_mumumu::SetRebins] Get rebins from " << filepath << endl;
 
   string elline;
   ifstream in(filepath);
@@ -234,6 +234,9 @@ void trilepton_mumumu::SetRebins(TString filepath){
 
 
 void trilepton_mumumu::SetYAxis(TString filepath){
+
+  cout << "[trilepton_mumumu::SetYAxis] Get Yaxis from " << filepath << endl;
+
   string elline;
   ifstream in(filepath);
   while(getline(in,elline)){
@@ -252,6 +255,9 @@ void trilepton_mumumu::SetYAxis(TString filepath){
 }
 
 void trilepton_mumumu::SetXAxis(TString filepath){
+
+  cout << "[trilepton_mumumu::SetXAxis] Get Xaxis from " << filepath << endl;
+
   string elline;
   ifstream in(filepath);
   while(getline(in,elline)){
@@ -274,6 +280,9 @@ void trilepton_mumumu::SetXAxis(TString filepath){
 }
 
 void trilepton_mumumu::SetMCSF(TString filepath){
+
+  cout << "[trilepton_mumumu::SetMCSF] Get MC SF from " << filepath << endl;
+
   string elline;
   ifstream in(filepath);
   while(getline(in,elline)){
