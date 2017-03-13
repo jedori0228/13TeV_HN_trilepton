@@ -43,6 +43,17 @@ void MCNormalizationSF(bool UpdateSF=true){
     MCNormSF_uncert[bkg_prompt_list.at(i)] = 0.;
   }
 
+  //==== MCSF from EXO-17-006
+  vector<TString> VVVandttV = {
+    "VVV", "WWW", "WWZ", "WZZ", "ZZZ",
+    "ttV", "ttW", "ttZ", "ttH_nonbb",
+    "top"
+  };
+  for(unsigned int i=0; i<VVVandttV.size(); i++){
+    MCNormSF[VVVandttV.at(i)] = 1.;
+    MCNormSF_uncert[VVVandttV.at(i)] = 0.50;
+  }
+
   int n_signal = NormCalcOrder_region.size();
   TMatrix matrixA(n_signal, n_signal);
   TMatrix matrixC(n_signal, 1);
@@ -227,6 +238,10 @@ void MCNormalizationSF(bool UpdateSF=true){
   for(unsigned int i=0; i<NormCalcOrder.size(); i++){
     outputFile<<NormCalcOrder.at(i)<<"\t"<<MCNormSF[NormCalcOrder.at(i)]<<"\t"<<MCNormSF_uncert[NormCalcOrder.at(i)]<<endl;
   }
+  for(unsigned int i=0; i<VVVandttV.size(); i++){
+    outputFile<<VVVandttV.at(i)<<"\t"<<MCNormSF[VVVandttV.at(i)]<<"\t"<<MCNormSF_uncert[VVVandttV.at(i)]<<endl;
+  }
+
 
   if(UpdateSF) return;
 
