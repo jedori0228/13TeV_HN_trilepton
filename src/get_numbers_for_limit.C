@@ -7,15 +7,16 @@ void get_numbers_for_limit(){
   TString dataset = getenv("CATANVERSION");
 
   TString SearchRegion = "SR";
-  TString cut = "_cutWhigh";
+  //TString cut = "_cutWhigh";
+  TString cut = "_cut0";
 
   vector<TString> bkgs = {"DYJets_10to50", "DYJets", "WJets", "TTJets_aMC", "WW", "WZ", "ZZ"};
   vector<double> n_events;
   double n_total;
   for(unsigned int i=0; i<bkgs.size(); i++){
-    TFile* file_sig = new TFile(WORKING_DIR+"/rootfiles/"+dataset+"/"+SearchRegion+"/non_prompt_MC/trilepton_mumumu_SK"+bkgs.at(i)+"_dilep_cat_"+catversion+".root");
-    //TH1D* hist_sig = (TH1D*)file_sig->Get("n_events"+cut);
-    TH1D* hist_sig = (TH1D*)file_sig->Get("h_Nbjets"+cut);
+    TFile* file_sig = new TFile(WORKING_DIR+"/rootfiles/"+dataset+"/"+SearchRegion+"/non_prompt/trilepton_mumumu_SK"+bkgs.at(i)+"_dilep_cat_"+catversion+".root");
+    TH1D* hist_sig = (TH1D*)file_sig->Get("n_events"+cut);
+    //TH1D* hist_sig = (TH1D*)file_sig->Get("h_Nbjets"+cut);
 
     if(!hist_sig){
       n_events.push_back(0.);

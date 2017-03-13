@@ -19,7 +19,8 @@ void draw_MC_Closure(){
   }
   
   vector<TString> samples = {"TTJets_aMC", "DYJets", "WJets", "QCD"};
-  vector<TString> channels = {"DiMuon", "SSDiMuon", "DiMuon", "DiMuon"};
+  //vector<TString> channels = {"DiMuon", "SSDiMuon", "DiMuon", "DiMuon"};
+  vector<TString> channels = {"SSDiMuon", "SSDiMuon", "SSDiMuon", "SSDiMuon"};
   vector<double> ymaxs = {500, 50, 30, 100};
 
   for(unsigned int i=0; i<samples.size(); i++){

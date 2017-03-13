@@ -1,7 +1,7 @@
 #include "trilepton_mumumu.cc"
 #include <fstream>
 
-void run_trilepton_mumumu_CR(int XXX, TString thisfilepath="", bool ScaleMC=false){
+void run_trilepton_mumumu_CR(int XXX, bool ScaleMC=true){
   
   //==============
   //==== get env
@@ -22,9 +22,6 @@ void run_trilepton_mumumu_CR(int XXX, TString thisfilepath="", bool ScaleMC=fals
   //=====================
   
   m.data_class = dataset+"/CR/";
-  if(thisfilepath!=""){
-    m.data_class = dataset+thisfilepath;
-  }
   
   //================================
   //==== set prefixes and suffixes
@@ -310,6 +307,12 @@ void run_trilepton_mumumu_CR(int XXX, TString thisfilepath="", bool ScaleMC=fals
     m.MCNormSF_uncert[m.bkglist.at(i)] = 0.;
   }
   m.SetMCSF(WORKING_DIR+"/data/"+dataset+"/MCSF.txt");
+
+  //======================
+  //==== Get Systematics
+  //======================
+
+  m.SetCalculatedSysts(WORKING_DIR+"/data/"+dataset+"/Syst.txt");
 
   /*
   //=============================

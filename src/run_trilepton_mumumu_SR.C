@@ -3,18 +3,30 @@
 
 void run_trilepton_mumumu_SR(int XXX){
  
+  //==============
   //==== get env
+  //==============
+
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
   TString catversion = getenv("CATVERSION");
   TString dataset = getenv("CATANVERSION");
- 
+
+  //====================
   //==== decalre class
+  //====================
+
   trilepton_mumumu m;
-  
+
+  //=====================
   //==== set data class
-  m.data_class = dataset+"/SR_BVeto/";
-  
+  //=====================
+
+  m.data_class = dataset+"/SR/";
+
+  //================================
   //==== set prefixes and suffixes
+  //================================
+
   m.filename_prefix = "trilepton_mumumu";
   m.filename_suffix = "_cat_"+catversion+".root";
   m.histname_suffix = {"_cut0", "_cutWlow", "_cutWhigh"};
@@ -23,7 +35,10 @@ void run_trilepton_mumumu_SR(int XXX){
   m.ApplyMCNormSF = {true, true, true};
   //m.ApplyMCNormSF = {false, false, false};
 
+  //=========================
   //==== set sample mapping
+  //=========================
+
   m.map_sample_string_to_list["DY"] = {"DYJets_10to50", "DYJets"};
   m.map_sample_string_to_list["WJets"] = {"WJets"};
   m.map_sample_string_to_list["VV_excl"] = {"WZTo3LNu_powheg", "ZZTo4L_powheg"};
@@ -59,8 +74,11 @@ void run_trilepton_mumumu_SR(int XXX){
   m.map_sample_string_to_legendinfo["fake_HighdXY"] = make_pair("Misd", kAzure+10);
   m.map_sample_string_to_legendinfo["fake_sfed_HighdXY"] = make_pair("Misd", kAzure+10);
   m.map_sample_string_to_legendinfo["fake_DiMuon_HighdXY"] = make_pair("Misd", kAzure+10);
-  
+
+  //===============================  
   //==== set and make sample list
+  //===============================
+
   if(XXX==0){
     m.data_class = m.data_class+"/before_prompt_matching";
     m.samples_to_use = {"DY_MCatNLO", "WJets_MCatNLO", "VV_excl_MCatNLO", "t", "ttV", "VVV_MCatNLO"};
@@ -80,8 +98,17 @@ void run_trilepton_mumumu_SR(int XXX){
   }
   m.SetMCSF(WORKING_DIR+"/data/"+dataset+"/MCSF.txt");
 
- 
+  //======================
+  //==== Get Systematics
+  //======================
+
+  m.SetCalculatedSysts(WORKING_DIR+"/data/"+dataset+"/Syst.txt");
+
+
+  //============================
   //==== set variables to draw
+  //============================
+
   m.histname = {
     "HN_mass_class1", "HN_mass_class2", "HN_mass_class3", "HN_mass_class4",
     "W_pri_lowmass_mass", "W_pri_highmass_mass",
@@ -145,14 +172,20 @@ void run_trilepton_mumumu_SR(int XXX){
     "#sigma(dXY)",
   };
 
+  //====================
   //==== cut-var skips
+  //====================
+
   for(unsigned int i=0; i<m.histname.size(); i++){
     TString this_var = m.histname.at(i);
     if( this_var.Contains("class3") || this_var.Contains("class4") || this_var.Contains("highmass") ) m.CutVarSkips.push_back( make_pair("_cutWlow", this_var) );
     if( this_var.Contains("class1") || this_var.Contains("class2") || this_var.Contains("lowmass") ) m.CutVarSkips.push_back( make_pair("_cutWhigh", this_var) );
   }
-  
+
+  //============================= 
   //==== set signal mass points
+  //=============================
+
   m.signal_mass = {
     20,
     60,
@@ -167,8 +200,11 @@ void run_trilepton_mumumu_SR(int XXX){
     kMagenta-7, kMagenta-2, kViolet+1,
     kGray+1, kOrange+10, kBlack
   };
-  
+
+  //====================================
   //==== set signal coupling constants
+  //====================================
+
   for(unsigned int i=0; i<m.histname_suffix.size(); i++){
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 5)] = 0.001;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 20)] = 0.001;
@@ -184,7 +220,10 @@ void run_trilepton_mumumu_SR(int XXX){
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 1000)] = 100.;
   }
 
+  //=====================================
   //==== set signal mass for each class
+  //=====================================
+
   m.map_class_to_signal_mass[trilepton_mumumu::class1] = {5, 10, 20, 30, 40, 50};
   m.map_class_to_signal_mass[trilepton_mumumu::class2] = {60, 70};
   m.map_class_to_signal_mass[trilepton_mumumu::lowmass] = {5, 10, 20, 30, 40, 50, 60, 70};
@@ -218,7 +257,10 @@ void run_trilepton_mumumu_SR(int XXX){
 
   m.SetRebins(WORKING_DIR+"/data/"+dataset+"/SR_rebins.txt");
 
+  //=============
   //==== y_maxs
+  //=============
+
   //ofstream skeleton_y_maxs("./txt/skeleton_y_maxs.txt", ios::trunc);
   //for(unsigned int i=0; i<m.histname_suffix.size(); i++){
   //  for(unsigned int j=0; j<m.histname.size(); j++){
@@ -229,7 +271,7 @@ void run_trilepton_mumumu_SR(int XXX){
   //skeleton_y_maxs.close();
   //return;
   m.default_y_max = 1000;
-  
+
   //==== preselection
   m.y_maxs[make_pair("_cut0", "deltaR_OS_min")] = 120;
   m.y_maxs[make_pair("_cut0", "gamma_star_mass")] = 300;
@@ -341,7 +383,10 @@ void run_trilepton_mumumu_SR(int XXX){
   m.y_maxs[make_pair("_cutWhigh", "W_sec_highmass_mass")] = 1000;
   m.y_maxs[make_pair("_cutWhigh", "z_candidate_mass")] = 200;
   
+  //=============
   //==== x_mins
+  //=============
+
   //ofstream skeleton_x_mins("./txt/skeleton_x_mins.txt", ios::trunc);
   //for(unsigned int i=0; i<m.histname_suffix.size(); i++){
   //  for(unsigned int j=0; j<m.histname.size(); j++){
@@ -351,6 +396,7 @@ void run_trilepton_mumumu_SR(int XXX){
   //}
   //skeleton_x_mins.close();
   //return;
+
   m.x_maxs[make_pair("_cut0", "h_leadingLepton_dXY")] = 0.01;
   m.x_maxs[make_pair("_cut0", "h_secondLepton_dXY")] = 0.01;
   m.x_maxs[make_pair("_cut0", "h_thirdLepton_dXY")] = 0.01;
@@ -409,19 +455,34 @@ void run_trilepton_mumumu_SR(int XXX){
   m.x_maxs[make_pair("_cutWhigh", "HN_mass_class4")] = 1000;
   m.x_maxs[make_pair("_cutWhigh", "W_sec_highmass_mass")] = 200;
 
+  //===============
   //==== k-factor
+  //===============
+
   m.k_factor = 1.;
-  
+
+  //=================================
   //==== mixing at generation level
+  //=================================
+
   m.log_of_generation_mixing = -2.;
-  
+
+  //===============================
   //==== prepare plot directories
+  //===============================
+
   m.make_plot_directory();
-  
+
+  //===============================
   //==== declare output rootfiles
+  //===============================
+
   m.outputfile = new TFile(m.plotpath+"/hists.root", "RECREATE");
-  
+
+  //==========================
   //==== finally, draw plots
+  //==========================
+
   m.draw_hist();
 
 }

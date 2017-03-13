@@ -599,7 +599,7 @@ _ZGamma_3mu0el	n_bjets	-999	-999
 _ZGamma_3mu0el	PFMET	-999	100
 _ZGamma_3mu0el	PFMET_phi	-999	-999
 _ZGamma_3mu0el	osllmass	0	105
-_ZGamma_3mu0el	m_Z_candidate	0	105
+_ZGamma_3mu0el	m_Z_candidate	0	120
 _ZGamma_3mu0el	mt_W_candidate	-999	100
 _ZGamma_3mu0el	m_lll	75	105
 _ZGamma_3mu0el	Z_candidate_Pt	-999	150

@@ -111,6 +111,11 @@ void trilepton_mumumu::draw_hist(){
             double error_propagated = hist_temp_up->GetBinContent(i)-hist_temp->GetBinContent(i); // FIXME central-down should be same as up-central
             double error_sumw2 = hist_temp->GetBinError(i);
             double error_combined = sqrt( error_propagated*error_propagated + error_sumw2*error_sumw2 );
+
+            double error_syst = CalculatedSysts["FakeLooseID"]*(hist_temp->GetBinContent(i));
+
+            error_combined = sqrt(error_combined*error_combined + error_syst*error_syst);
+
             hist_temp->SetBinError(i, error_combined);
           }
         }
@@ -140,7 +145,17 @@ void trilepton_mumumu::draw_hist(){
           hist_final->SetLineColor(map_sample_string_to_legendinfo[current_MCsector].second);
 
           //==== MC Norm Scaling
-          if(ApplyMCNormSF.at(i_cut)) hist_final->Scale(MCNormSF[current_sample]);
+          if(ApplyMCNormSF.at(i_cut)){
+            hist_final->Scale(MCNormSF[current_sample]);
+            //==== Set MC Norm uncertainty
+            for(int i=1; i<=n_bins; i++){
+              double error_syst = MCNormSF_uncert[current_sample]*(hist_final->GetBinContent(i));
+              double error_sumw2 = hist_final->GetBinError(i);
+              double error_combined = sqrt( error_syst*error_syst + error_sumw2*error_sumw2 );
+
+              hist_final->SetBinError(i, error_combined);
+            }
+          }
 
           MC_stacked->Add(hist_final);
           MC_stacked_err->Add(hist_final);
@@ -300,6 +315,28 @@ void trilepton_mumumu::SetMCSF(TString filepath){
     MCNormSF_uncert[sample] = MCSF_err;
 
   }
+}
+
+void trilepton_mumumu::SetCalculatedSysts(TString filepath){
+
+  string elline_syst;
+  ifstream in_syst(filepath);
+
+  cout << "[trilepton_mumumu::SetCalculatedSysts] Get Systematics from " << filepath << endl;
+
+  while(getline(in_syst,elline_syst)){
+    std::istringstream is( elline_syst );
+    TString source;
+    double value;
+    is >> source;
+    is >> value;
+    //cout << source << " : " << value << endl;
+    CalculatedSysts[source] = value;
+  }
+
+  double uncert_lumi = CalculatedSysts["Luminosity"];
+  double uncert_fake = CalculatedSysts["FakeLooseID"];
+
 }
 
 TString trilepton_mumumu::find_MCsector(){
@@ -607,7 +644,7 @@ void trilepton_mumumu::draw_canvas(THStack* mc_stack, TH1D* mc_error, TH1D* hist
   mc_error->SetFillColor(kBlue);
   mc_error->Draw("sameE2");
   //==== legend
-  legend->AddEntry(mc_error, "Stat. Uncert.", "f");
+  legend->AddEntry(mc_error, "Stat.+Syst. Uncert.", "f");
   draw_legend(legend, this_sc, DrawData);
   
   //==== MC-DATA

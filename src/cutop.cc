@@ -86,6 +86,9 @@ bool cutop::isSearchRegion(){
   else if(SearchRegion=="ZJets"){
     if(isZJets==1) pass = true;
   }
+  else if(SearchRegion=="ZJets_3mu0el"){
+    if(isZJets==1 && ThreeLeptonConfig==0) pass = true;
+  }
 
   //==== ZZ
   else if(SearchRegion=="ZZ"){

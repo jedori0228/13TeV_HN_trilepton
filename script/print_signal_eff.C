@@ -5,8 +5,7 @@ void print_signal_eff(){
 
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
 
-  //TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/SR_NoBVeto/";
-  TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/SR_BVeto/";
+  TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/SR/";
 
 
   vector<int> masses = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
