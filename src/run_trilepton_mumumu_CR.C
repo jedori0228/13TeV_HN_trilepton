@@ -195,6 +195,41 @@ void run_trilepton_mumumu_CR(int XXX, bool ScaleMC=true){
     "|m(ll)-m(Z)| [GeV]", "m(lll) [GeV]", "# of bjets", "#slash{E}_{T}^{miss} [GeV]",
   };
 
+  m.units = {
+    "int",
+    "int",
+    "int",
+    "int",
+    "int",
+    "int",
+    "GeV", "Radian",
+    "GeV",
+    "GeV",
+    "GeV",
+    "GeV",
+    "GeV",
+    "GeV",
+    "",
+    "",
+    "",
+    "",
+    "GeV", "", "", "cm", "", "cm",
+    "GeV", "", "", "cm", "", "cm",
+    "GeV", "", "", "cm", "", "cm",
+
+    //==== only for ZZ
+    "GeV", "", "", "cm", "", "cm",
+    "GeV",
+
+    "GeV", "", "", "cm", "", "cm",
+    "GeV", "", "", "cm", "", "cm",
+    "GeV", "", "", "cm", "", "cm",
+
+    //==== only for WZ
+    "GeV", "GeV", "GeV", "int", "int",
+    "GeV", "GeV", "int", "GeV",
+  };
+
   //====================
   //==== cut-var skips
   //====================

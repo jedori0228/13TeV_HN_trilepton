@@ -36,6 +36,7 @@ _cut0	W_sec_highmass_mass	10
 _cut0	h_leadingLepton_dXYSig	-999
 _cut0	h_secondLepton_dXYSig	-999
 _cut0	h_thirdLepton_dXYSig	-999
+_cut0	h_mlll	1
 _cutWlow	HN_mass_class1	5
 _cutWlow	HN_mass_class2	5
 _cutWlow	HN_mass_class3	-999
@@ -74,6 +75,7 @@ _cutWlow	W_sec_highmass_mass	-999
 _cutWlow	h_leadingLepton_dXYSig	-999
 _cutWlow	h_secondLepton_dXYSig	-999
 _cutWlow	h_thirdLepton_dXYSig	-999
+_cutWlow h_mlll  5
 _cutWhigh	HN_mass_class1	-999
 _cutWhigh	HN_mass_class2	-999
 _cutWhigh	HN_mass_class3	5
@@ -112,3 +114,4 @@ _cutWhigh	W_sec_highmass_mass	10
 _cutWhigh	h_leadingLepton_dXYSig	-999
 _cutWhigh	h_secondLepton_dXYSig	-999
 _cutWhigh	h_thirdLepton_dXYSig	-999
+_cutWhigh h_mlll  5

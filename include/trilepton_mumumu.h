@@ -56,6 +56,7 @@ public:
   void SetXaxisRange(THStack* mc_stack);
   void SetXaxisRangeBoth(THStack* mc_stack, TH1D* hist);
   TH1D* MakeOverflowBin(TH1D* hist);
+  TString DoubleToString(double dx);
 
   void mkdir(TString path);
   void make_plot_directory();
@@ -65,7 +66,7 @@ public:
   unsigned int i_cut, i_var, i_file;
   bool UseSetLogy=false;
   TString filename_prefix, filename_suffix, data_class, plotpath;
-  vector<TString> histname_suffix, bkglist, samples_to_use, histname, x_title;
+  vector<TString> histname_suffix, bkglist, samples_to_use, histname, x_title, units;
   vector<bool> drawdata, ApplyMCNormSF;
   map<TString, double> MCNormSF, MCNormSF_uncert, CalculatedSysts;
   vector< pair<TString, TString> > CutVarSkips;

@@ -173,6 +173,38 @@ void run_trilepton_mumumu_SR(int XXX){
     "#sigma(dXY)",
     "m(#mu#mu#mu) [GeV]"
   };
+  m.units = {
+    "GeV", "GeV", "GeV", "GeV",
+    "GeV", "GeV",
+    "", "GeV", "int", "GeV", "GeV", "radian",
+    "GeV",
+    "GeV",
+    "GeV",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "cm",
+    "cm",
+    "cm",
+    "cm",
+    "cm",
+    "cm",
+    "",
+    "",
+    "",
+    "int",
+    "int",
+    "GeV",
+    "int",
+    "GeV",
+    "",
+    "",
+    "",
+    "GeV"
+  };
 
   //====================
   //==== cut-var skips

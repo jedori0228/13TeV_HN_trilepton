@@ -9,10 +9,8 @@ if [ $whichRun = "CR" ]; then
   if [ -z "$2" ]; then
     root -l -b -q "src/run_trilepton_mumumu_CR.C(0)"
   else
-    whichCR=$2
-    if [ $whichCR = "dilep" ]; then
-      root -l -b -q "src/run_trilepton_mumumu_CR.C(2)"
-    fi
+    applySF=$2
+    root -l -b -q "src/run_trilepton_mumumu_CR.C(0, $applySF)"
   fi
 fi
 

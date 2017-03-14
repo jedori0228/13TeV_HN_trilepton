@@ -551,7 +551,11 @@ void trilepton_mumumu::draw_canvas(THStack* mc_stack, TH1D* mc_error, TH1D* hist
   //==== empty histogram for axis
   TH1D *hist_empty = (TH1D*)mc_stack->GetHists()->At(0)->Clone();
   hist_empty->GetYaxis()->SetRangeUser( default_y_min, y_max() );
-  hist_empty->GetYaxis()->SetTitle("Events"); //FIXME
+  //=== get dX
+  double dx = (hist_empty->GetXaxis()->GetXmax() - hist_empty->GetXaxis()->GetXmin())/hist_empty->GetXaxis()->GetNbins();
+  TString YTitle = DoubleToString(dx);
+
+  hist_empty->GetYaxis()->SetTitle(YTitle); //FIXME
   hist_empty->SetLineWidth(0);
   hist_empty->SetLineColor(0);
   hist_empty->SetMarkerSize(0);
@@ -809,6 +813,40 @@ TH1D* trilepton_mumumu::MakeOverflowBin(TH1D* hist){
   
   return hist_out;
   
+}
+
+TString trilepton_mumumu::DoubleToString(double dx){
+
+  //cout << "[trilepton_mumumu::DoubleToString] var = " << histname[i_var] << endl;
+  //cout << "[trilepton_mumumu::DoubleToString] unit = " << units[i_var] << endl;
+  //cout << "[trilepton_mumumu::DoubleToString] dx = " << dx << endl;
+
+  //==== onebin
+  if(units[i_var]=="int"){
+    return "Events";
+  }
+  else{
+
+    int dx_int = int(dx);
+    int dx_first_two_digits = int((dx-dx_int)*100);
+    int dx_first_three_digits = int((dx-dx_int)*1000);
+
+    //==== has integer
+    if(dx_int!=0){
+      //==== but no digits
+      if(dx_first_two_digits==0){
+        return "Events / "+TString::Itoa(dx_int,10)+" "+units[i_var];
+      }
+      //=== also has digits
+      else{
+        return "Events / "+TString::Itoa(dx_int,10)+"."+TString::Itoa(dx_first_two_digits,10)+" "+units[i_var];
+      }
+    }
+
+  }
+
+  return "Events";
+
 }
 
 
