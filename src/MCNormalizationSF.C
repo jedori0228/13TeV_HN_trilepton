@@ -87,7 +87,7 @@ void MCNormalizationSF(bool UpdateSF=true){
       cout << "#### Calculating " << this_signal << " MC Normalisation Scale Factor ####" << endl << endl;
     }
     
-    vector<TString> systtypes = {"Central", "MuonEn_up", "MuonEn_down", "JetEn_up", "JetEn_down", "JetRes_up", "JetRes_down", "Unclustered_up", "Unclustered_down", "MCxsec_up", "MCxsec_down", "MuonIDSF_up", "MuonIDSF_down"};
+    vector<TString> systtypes = {"Central", "MuonEn_up", "MuonEn_down", "JetEn_up", "JetEn_down", "JetRes_up", "JetRes_down", "Unclustered_up", "Unclustered_down", "MCxsec_up", "MCxsec_down", "MuonIDSF_up", "MuonIDSF_down", "PU_up", "PU_down"};
     vector<double> yields_prompt, yields_fake, yields_data, yields_signal, yields_signal_weighted;
     vector<double> syst_error_prompt, syst_error_fake, syst_error_data, syst_error_signal;
     vector<double> rel_syst_error_prompt, rel_syst_error_fake, rel_syst_error_data, rel_syst_error_signal;
