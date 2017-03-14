@@ -13,9 +13,28 @@ void MCNormalizationSF(bool UpdateSF=true){
   
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/UpDownSyst/";
   
-  double uncert_lumi = 0.026;
-  double uncert_fake = 0.28;
-  
+  //=====================================
+  //==== Setting calculated systematics
+  //=====================================
+
+  map<TString, double> CalculatedSysts;
+
+  string elline_syst;
+  ifstream in_syst(WORKING_DIR+"/data/"+dataset+"/Syst.txt");
+  //cout << "#### Setting calculated systematics ####" << endl;
+  while(getline(in_syst,elline_syst)){
+    std::istringstream is( elline_syst );
+    TString source;
+    double value;
+    is >> source;
+    is >> value;
+    //cout << source << " : " << value << endl;
+    CalculatedSysts[source] = value;
+  }
+
+  double uncert_lumi = CalculatedSysts["Luminosity"];
+  double uncert_fake = CalculatedSysts["FakeLooseID"];
+
   vector<TString> bkg_prompt_list = {
     "WZTo3LNu_powheg",
     "ZZTo4L_powheg",
