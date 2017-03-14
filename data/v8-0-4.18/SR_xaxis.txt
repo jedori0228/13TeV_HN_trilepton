@@ -32,7 +32,7 @@ _cut0	n_events	-999	-999
 _cut0	h_nVertices	-999	-999
 _cut0	h_osllmass	-999	150
 _cut0	h_Nbjets	-999	-999
-_cut0	W_sec_highmass_mass	-999	-999
+_cut0	W_sec_highmass_mass	-999	200
 _cut0	h_leadingLepton_dXYSig	-999	-999
 _cut0	h_secondLepton_dXYSig	-999	-999
 _cut0	h_thirdLepton_dXYSig	-999	-999

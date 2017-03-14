@@ -51,3 +51,8 @@ if [ $whichRun = "MCSF" ]; then
   root -l -b -q "src/MCNormalizationSF.C(false)"
 fi
 
+if [ $whichRun = "cut" ]; then
+  root -l -b -q script/draw_mlll.C
+  root -l -b -q script/draw_mll_os.C
+  root -l -b -q script/draw_mz.C
+fi
