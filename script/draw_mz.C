@@ -1,6 +1,6 @@
 #include "canvas_margin.h"
 
-void draw_mll_os(){
+void draw_mz(){
 
   gStyle->SetOptStat(0);
   TH1::SetDefaultSumw2(true);
@@ -11,7 +11,7 @@ void draw_mll_os(){
   TString dataset = getenv("CATANVERSION");
 
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/SR/";
-  TString plotpath = WORKING_DIR+"/plots/"+dataset+"/SR/mll_os/";
+  TString plotpath = WORKING_DIR+"/plots/"+dataset+"/SR/mz/";
 
   if( !gSystem->mkdir(plotpath, kTRUE) ){
     cout
@@ -21,8 +21,8 @@ void draw_mll_os(){
     << endl;
   }
 
-  vector<TString> samples = {"WGtoLNuG", "ZGto2LG", "WZTo3LNu_powheg", "ZZTo4L_powheg"};
-  vector<TString> alias_samples = {"W#gamma", "Z#gamma", "WZ", "ZZ"};
+  vector<TString> samples = {"ZGto2LG", "WZTo3LNu_powheg", "ZZTo4L_powheg"};
+  vector<TString> alias_samples = {"Z#gamma", "WZ", "ZZ"};
   vector<Color_t> color_samples = {kViolet, kSpring+7, kBlue, kRed-7};
   vector<int> sig_masses = {10, 30, 50, 70};
 
@@ -34,7 +34,7 @@ void draw_mll_os(){
   lg->SetFillStyle(0);
   for(unsigned int i=0; i<samples.size(); i++){
     TFile *file = new TFile(filepath+"/trilepton_mumumu_SK"+samples.at(i)+"_dilep_cat_"+catversion+".root");
-    TH1D *hist = (TH1D*)file->Get("lowosllmass");
+    TH1D *hist = (TH1D*)file->Get("CutStudy_m_Z_candidate");
     hist->SetLineColor(color_samples.at(i));
     hist->SetLineWidth(2);
     hist->Rebin(5);
@@ -42,15 +42,16 @@ void draw_mll_os(){
     hist->Scale(1./hist->Integral());
     hist->Draw("histsame");
     if(i==0){
-      hist->SetXTitle("m(OS) [GeV]");
+      hist->SetXTitle("m(Z-candidate) [GeV]");
       hist->SetYTitle("A.U.");
       hist_axis(hist);
-      hist->GetYaxis()->SetRangeUser(0, 0.3);
+      hist->GetYaxis()->SetRangeUser(0, 0.5);
+      hist->GetXaxis()->SetRangeUser(0., 150.);
     }
   }
   for(unsigned int i=0; i<sig_masses.size(); i++){
     TFile *file = new TFile(filepath+"/trilepton_mumumu_SKHN_MuMuMu_"+TString::Itoa(sig_masses.at(i),10)+"_cat_"+catversion+".root");
-    TH1D *hist = (TH1D*)file->Get("lowosllmass");
+    TH1D *hist = (TH1D*)file->Get("CutStudy_m_Z_candidate");
     hist->SetLineColor(color_samples.at(i));
     hist->SetLineWidth(3);
     hist->SetLineColor(kBlack);
@@ -62,6 +63,6 @@ void draw_mll_os(){
   }
 
   lg->Draw();
-  c1->SaveAs(plotpath+"./mll_os.pdf");
+  c1->SaveAs(plotpath+"./mz.pdf");
   
 }
