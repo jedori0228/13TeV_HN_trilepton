@@ -640,8 +640,9 @@ void trilepton_mumumu::draw_canvas(THStack* mc_stack, TH1D* mc_error, TH1D* hist
   }
   //==== err
   mc_error->SetMarkerColorAlpha(kAzure-9, 0);
-  mc_error->SetFillStyle(3004);
-  mc_error->SetFillColor(kBlue);
+  mc_error->SetFillStyle(3013);
+  mc_error->SetFillColor(kBlack);
+  mc_error->SetLineColor(0);
   mc_error->Draw("sameE2");
   //==== legend
   legend->AddEntry(mc_error, "Stat.+Syst. Uncert.", "f");
