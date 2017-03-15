@@ -1,7 +1,6 @@
 #include "cutop.cc"
-#define uncert_lumi 0.28
 
-double PunziFunction(double eff_sig, double bkg_tot, double bkg_fake, double prompt_syst_error);
+double PunziFunction(double eff_sig, double bkg_tot, double syst_fake, double bkg_fake, double prompt_syst_error);
 void printcurrunttime();
 void fillarray(vector<double>& array, double start, double end, double d);
 void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max);
@@ -24,6 +23,28 @@ void run_cutop(int sig_mass){
     "VVV"
   };
 
+  //=====================================
+  //==== Setting calculated systematics
+  //=====================================
+
+  map<TString, double> CalculatedSysts;
+
+  string elline_syst;
+  ifstream in_syst(WORKING_DIR+"/data/"+dataset+"/Syst.txt");
+  cout << "#### Setting calculated systematics ####" << endl;
+  while(getline(in_syst,elline_syst)){
+    std::istringstream is( elline_syst );
+    TString source;
+    double value;
+    is >> source;
+    is >> value;
+    cout << source << " : " << value << endl;
+    CalculatedSysts[source] = value;
+  }
+
+  double uncert_lumi = CalculatedSysts["Luminosity"];
+  double uncert_fake = CalculatedSysts["FakeLooseID"];
+
   //============================================
   //==== Setting MC Normalization Scale Factor
   //============================================
@@ -36,7 +57,7 @@ void run_cutop(int sig_mass){
 
   string elline_MCSF;
   ifstream in_MCSF(WORKING_DIR+"/data/"+dataset+"/MCSF.txt");
-  //cout << "#### Setting MCSF ####" << endl;
+  cout << "#### Setting MCSF ####" << endl;
   while(getline(in_MCSF,elline_MCSF)){
     std::istringstream is( elline_MCSF );
     TString sample;
@@ -45,7 +66,7 @@ void run_cutop(int sig_mass){
     is >> MCSF;
     is >> MCSF_err;
 
-    //cout << sample << " : " << "MCSF = " << MCSF << ", MCSF_err = " << MCSF_err << endl;
+    cout << sample << " : " << "MCSF = " << MCSF << ", MCSF_err = " << MCSF_err << endl;
 
     MCNormSF[sample] = MCSF;
     MCNormSF_uncert[sample] = MCSF_err;
@@ -263,7 +284,7 @@ void run_cutop(int sig_mass){
             m_bkg_fake.Loop();
             n_bkg_fake = m_bkg_fake.n_weighted;
 
-            double this_punzi = PunziFunction(n_signal/n_generated, n_bkg_prompt+n_bkg_fake, n_bkg_fake, prompt_syst);
+            double this_punzi = PunziFunction(n_signal/n_generated, n_bkg_prompt+n_bkg_fake, uncert_fake, n_bkg_fake, prompt_syst);
 
             //==== update punzi, if larger
             if( this_punzi > max_punzi ){
@@ -326,9 +347,9 @@ void run_cutop(int sig_mass){
 }
 
 
-double PunziFunction(double eff_sig, double bkg_tot, double bkg_fake, double prompt_syst_error){
+double PunziFunction(double eff_sig, double bkg_tot, double syst_fake, double bkg_fake, double prompt_syst_error){
   
-  double den = 1 + sqrt( bkg_tot + (uncert_lumi * bkg_fake)*(uncert_lumi * bkg_fake) + prompt_syst_error*prompt_syst_error );
+  double den = 1 + sqrt( bkg_tot + (syst_fake * bkg_fake)*(syst_fake * bkg_fake) + prompt_syst_error*prompt_syst_error );
   //double den = 1 + sqrt( bkg_tot );
   
   return eff_sig/den;
