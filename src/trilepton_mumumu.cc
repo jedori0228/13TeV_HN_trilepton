@@ -173,7 +173,7 @@ void trilepton_mumumu::draw_hist(){
           int signal_index = i_file-bkglist.size()-1;
           //cout << "signal index = " << signal_index << ", mass = " << signal_mass[signal_index] << endl;
           hist_final->SetLineColor(signal_color[signal_index]);
-          hist_final->SetLineWidth(2);
+          hist_final->SetLineWidth(3);
           TString temp_hist_name(hist_final->GetName());
           hist_final->SetName(temp_hist_name+"_signal_"+TString::Itoa(signal_mass[signal_index], 10));
           //==== scaling signal

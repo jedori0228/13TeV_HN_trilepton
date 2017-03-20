@@ -1,6 +1,6 @@
 #include "canvas_margin.h"
 
-void draw_mlll(){
+void CutStudy_mlll(){
 
   gStyle->SetOptStat(0);
   TH1::SetDefaultSumw2(true);
@@ -11,7 +11,11 @@ void draw_mlll(){
   TString dataset = getenv("CATANVERSION");
 
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/SR/";
-  TString plotpath = WORKING_DIR+"/plots/"+dataset+"/SR/mlll/";
+  TString plotpath = WORKING_DIR+"/plots/"+dataset+"/CutStudy/";
+
+  //==== Select this_cut_left <= <cut var> <= this_cut_right
+  double cut_left = 91.1876-15.;
+  double cut_right = 91.1876+15.;
 
   if( !gSystem->mkdir(plotpath, kTRUE) ){
     cout
@@ -21,9 +25,9 @@ void draw_mlll(){
     << endl;
   }
 
-  vector<TString> samples = {"ZGto2LG", "WZTo3LNu_powheg", "ZZTo4L_powheg"};
-  vector<TString> alias_samples = {"Z#gamma", "WZ", "ZZ"};
-  vector<Color_t> color_samples = {kSpring+7, kBlue, kRed-7};
+  vector<TString> samples = {"ZGto2LG", "WZTo3LNu_powheg", "ZZTo4L_powheg", "fake_sfed_HighdXY"};
+  vector<TString> alias_samples = {"Z#gamma", "WZ", "ZZ", "Misd."};
+  vector<Color_t> color_samples = {kSpring-7, kGreen, kRed-7, kAzure+10};
 
   vector<int> sig_masses = {40, 60, 90, 200, 500};
 
@@ -36,11 +40,19 @@ void draw_mlll(){
   for(unsigned int i=0; i<samples.size(); i++){
     TFile *file = new TFile(filepath+"/trilepton_mumumu_SK"+samples.at(i)+"_dilep_cat_"+catversion+".root");
     TH1D *hist = (TH1D*)file->Get("CutStudy_mlll");
+
+    int bin_cut_left = hist->GetXaxis()->FindBin(cut_left);
+    int bin_cut_right = hist->GetXaxis()->FindBin(cut_right);
+    double TotalIntegral = hist->Integral(-1,hist->GetXaxis()->GetNbins()+1);
+    cout << samples.at(i) << " : (|m(lll)-m(Z)| > 15 GeV) = " << 1.-hist->Integral(bin_cut_left, bin_cut_right)/TotalIntegral << endl;
+
     hist->SetLineColor(color_samples.at(i));
-    hist->SetLineWidth(2);
+    hist->SetFillColor(color_samples.at(i));
+    hist->SetFillStyle(3305);
+    hist->SetLineWidth(1);
     hist->Rebin(5);
-    lg->AddEntry(hist, alias_samples.at(i), "l");
-    hist->Scale(1./hist->Integral());
+    lg->AddEntry(hist, alias_samples.at(i), "f");
+    hist->Scale(1./hist->Integral(-1,hist->GetXaxis()->GetNbins()+1));
     hist->Draw("histsame");
     if(i==0){
       hist->SetXTitle("m(#mu#mu#mu) [GeV]");
@@ -53,12 +65,18 @@ void draw_mlll(){
   for(unsigned int i=0; i<sig_masses.size(); i++){
     TFile *file = new TFile(filepath+"/trilepton_mumumu_SKHN_MuMuMu_"+TString::Itoa(sig_masses.at(i),10)+"_cat_"+catversion+".root");
     TH1D *hist = (TH1D*)file->Get("CutStudy_mlll");
+
+    int bin_cut_left = hist->GetXaxis()->FindBin(cut_left);
+    int bin_cut_right = hist->GetXaxis()->FindBin(cut_right);
+    double TotalIntegral = hist->Integral(-1,hist->GetXaxis()->GetNbins()+1);
+    cout << sig_masses.at(i) << " : (|m(lll)-m(Z)| > 15 GeV) = " << 1.-hist->Integral(bin_cut_left, bin_cut_right)/TotalIntegral << endl;
+
     hist->SetLineWidth(3);
     hist->SetLineColor(kBlack);
     hist->SetLineStyle(i+1);
     hist->Rebin(5);
     lg->AddEntry(hist, "HN"+TString::Itoa(sig_masses.at(i),10), "l");
-    hist->Scale(1./hist->Integral());
+    hist->Scale(1./hist->Integral(-1,hist->GetXaxis()->GetNbins()+1));
     hist->Draw("histsame");
   }
 

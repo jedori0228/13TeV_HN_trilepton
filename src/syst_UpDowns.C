@@ -516,94 +516,94 @@ void printcurrunttime(){
 void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_second_pt, double& cut_third_pt, double& cut_W_pri_mass, double& cut_PFMET){
 
   if(sig_mass == 5){
-    cut_first_pt = 45.;
-    cut_second_pt = 35.;
+    cut_first_pt = 60.;
+    cut_second_pt = 45.;
     cut_third_pt = 25.;
-    cut_W_pri_mass = 110.;
+    cut_W_pri_mass = 125.;
     cut_PFMET = 0.;
   }
   else if(sig_mass == 10){
     cut_first_pt = 55.;
-    cut_second_pt = 30.;
-    cut_third_pt = 30.;
-    cut_W_pri_mass = 100.;
+    cut_second_pt = 45.;
+    cut_third_pt = 35.;
+    cut_W_pri_mass = 125.;
     cut_PFMET = 0.;
   }
   else if(sig_mass == 20){
-    cut_first_pt = 40.;
-    cut_second_pt = 30.;
-    cut_third_pt = 30.;
-    cut_W_pri_mass = 100.;
+    cut_first_pt = 50.;
+    cut_second_pt = 40.;
+    cut_third_pt = 40.;
+    cut_W_pri_mass = 125.;
     cut_PFMET = 0.;
   }
   else if(sig_mass == 30){
     cut_first_pt = 40.;
-    cut_second_pt = 30.;
+    cut_second_pt = 40.;
     cut_third_pt = 30.;
-    cut_W_pri_mass = 100.;
+    cut_W_pri_mass = 125.;
     cut_PFMET = 0.;
   }
   else if(sig_mass == 40){
     cut_first_pt = 35.;
-    cut_second_pt = 30.;
+    cut_second_pt = 35.;
     cut_third_pt = 30.;
-    cut_W_pri_mass = 100.;
+    cut_W_pri_mass = 125.;
     cut_PFMET = 0.;
   }
   else if(sig_mass == 50){
     cut_first_pt = 30.;
     cut_second_pt = 30.;
     cut_third_pt = 30.;
-    cut_W_pri_mass = 95.;
+    cut_W_pri_mass = 125.;
     cut_PFMET = 0.;
   }
   else if(sig_mass == 60){
     cut_first_pt = 30.;
-    cut_second_pt = 30.;
-    cut_third_pt = 30.;
-    cut_W_pri_mass = 95.;
+    cut_second_pt = 25.;
+    cut_third_pt = 25.;
+    cut_W_pri_mass = 125.;
     cut_PFMET = 0.;
   }
   else if(sig_mass == 70){
-    cut_first_pt = 100.;
-    cut_second_pt = 45.;
-    cut_third_pt = 40.;
-    cut_W_pri_mass = 85.;
+    cut_first_pt = 35.;
+    cut_second_pt = 30.;
+    cut_third_pt = 25.;
+    cut_W_pri_mass = 125.;
     cut_PFMET = 0.;
   }
   else if(sig_mass == 90){
     cut_first_pt = 25.;
-    cut_second_pt = 45.;
+    cut_second_pt = 40.;
     cut_third_pt = 15.;
-    cut_W_pri_mass = 150.;
+    cut_W_pri_mass = 80.;
     cut_PFMET = 20.;
   }
   else if(sig_mass == 100){
-    cut_first_pt = 45.;
-    cut_second_pt = 25.;
+    cut_first_pt = 25.;
+    cut_second_pt = 15.;
     cut_third_pt = 15.;
-    cut_W_pri_mass = 140.;
+    cut_W_pri_mass = 110.;
     cut_PFMET = 20.;
   }
   else if(sig_mass == 150){
-    cut_first_pt = 55.;
+    cut_first_pt = 45.;
     cut_second_pt = 40.;
     cut_third_pt = 20.;
-    cut_W_pri_mass = 150.;
+    cut_W_pri_mass = 160.;
     cut_PFMET = 20.;
   }
   else if(sig_mass == 200){
     cut_first_pt = 65.;
     cut_second_pt = 55.;
-    cut_third_pt = 25.;
+    cut_third_pt = 30.;
     cut_W_pri_mass = 240.;
     cut_PFMET = 20.;
   }
   else if(sig_mass == 300){
-    cut_first_pt = 100.;
-    cut_second_pt = 55.;
-    cut_third_pt = 25.;
-    cut_W_pri_mass = 370.;
+    cut_first_pt = 120.;
+    cut_second_pt = 65.;
+    cut_third_pt = 35.;
+    cut_W_pri_mass = 340.;
     cut_PFMET = 20.;
   }
   else if(sig_mass == 400){
@@ -614,11 +614,11 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_PFMET = 20.;
   }
   else if(sig_mass == 500){
-    cut_first_pt = 160.;
-    cut_second_pt = 100.;
-    cut_third_pt = 40.;
-    cut_W_pri_mass = 530.;
-    cut_PFMET = 40.;
+    cut_first_pt = 100.;
+    cut_second_pt = 110.;
+    cut_third_pt = 50.;
+    cut_W_pri_mass = 560.;
+    cut_PFMET = 20.;
   }
   else if(sig_mass == 700){
     cut_first_pt = 200.;

@@ -55,4 +55,5 @@ if [ $whichRun = "cut" ]; then
   root -l -b -q script/draw_mlll.C
   root -l -b -q script/draw_mll_os.C
   root -l -b -q script/draw_mz.C
+  root -l -b -q script/draw_bjet.C
 fi

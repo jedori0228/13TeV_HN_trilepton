@@ -36,10 +36,10 @@ void TnP(int period){
   gSystem->mkdir(plotpath+"PR/fitresult/", kTRUE);
   gSystem->mkdir(plotpath+"PR/fitresult/Data", kTRUE);
 
-  vector<double> abseta = {0.0, 0.8, 1.479, 2.0, 2.5};
-  vector<double> pt = {10., 20., 25., 30., 35., 45., 60., 80., 100., 200.};
+  vector<double> abseta = {0., 0.9, 1.2, 2.1, 2.4};
+  vector<double> pt = {10, 20, 25, 30, 40, 50, 60, 120};
 
-  vector<TString> fitftns = {"vpvPlusExpo", "vpvPlusCheb", "vpvPlusCheb_4th", "gaussPlusExpo"};
+  vector<TString> fitftns = {"vpvPlusExpo", "vpvPlusCheb", "vpvPlusCheb_4th", "gaussPlusExpo", "vpvPlusCMSbeta0p2", "vpvPlusCheb_3rd"};
 
   //============
   //==== ID SF
@@ -48,8 +48,9 @@ void TnP(int period){
   TFile *file_ID_Data = new TFile(filepath+"TnP_Muon_ID_Data_"+DataPeriod+".root");
   TFile *file_ID_MC = new TFile(filepath+"TnP_Muon_ID_MC_"+DataPeriod+".root");
 
-  TString dirname = "tpTree/HN_TRI_TIGHT_pt_eta/";
-  if(DataPeriod=="BCDEF") dirname = "tpTree/HN_muonsel_pt_eta/";
+  //TString dirname = "tpTree/HN_TRI_TIGHT_pt_eta/";
+  //if(DataPeriod=="BCDEF") dirname = "tpTree/HN_muonsel_pt_eta/";
+  TString dirname = "tpTree/HN_muonsel_pt_eta/";
   
   //==== FitResult
   if(DrawFitResult){

@@ -81,7 +81,7 @@ _cutWhigh	HN_mass_class2	-999
 _cutWhigh	HN_mass_class3	80
 _cutWhigh	HN_mass_class4	80
 _cutWhigh	W_pri_lowmass_mass	-999
-_cutWhigh	W_pri_highmass_mass	200
+_cutWhigh	W_pri_highmass_mass	100
 _cutWhigh	deltaR_OS_min	50
 _cutWhigh	gamma_star_mass	120
 _cutWhigh	h_Njets	500

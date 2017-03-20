@@ -13,7 +13,7 @@ void syst_FR_get_unct(){
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");  
   TString dataset = getenv("CATANVERSION");
 
-  vector<TString> channels = {"BVeto", "BVeto_ZVeto", "Preselection", "LowMass", "HighMass"};
+  vector<TString> channels = {"BasicSelection", "ZVeto", "ZVeto_mllloffZ", "Preselection", "LowMass", "HighMass"};
 
   for(unsigned int it_channel=0; it_channel<channels.size(); it_channel++){
 
@@ -98,7 +98,7 @@ void syst_FR_get_unct(){
 		hist_n_TTL->GetXaxis()->SetTitle("Minimum |dXYSig|");
 		hist_axis(hist_n_TTL);
 		//TGaxis::SetMaxDigits(2);
-		c_TTL->SaveAs(plotpath+"/n_TTL.pdf");
+		c_TTL->SaveAs(plotpath+channel+"_n_TTL.pdf");
 		c_TTL->Close();
 
 		//==== TLL
@@ -111,7 +111,7 @@ void syst_FR_get_unct(){
 		hist_n_TLL->GetXaxis()->SetTitle("Minimum |dXYSig|");
 		hist_axis(hist_n_TLL);
 		//TGaxis::SetMaxDigits(2);
-		c_TLL->SaveAs(plotpath+"/n_TLL.pdf");
+		c_TLL->SaveAs(plotpath+channel+"_n_TLL.pdf");
 		c_TLL->Close();
 
 		//==== LLL
@@ -124,7 +124,7 @@ void syst_FR_get_unct(){
 		hist_n_LLL->GetXaxis()->SetTitle("Minimum |dXYSig|");
 		hist_axis(hist_n_LLL);
 		//TGaxis::SetMaxDigits(2);
-		c_LLL->SaveAs(plotpath+"/n_LLL.pdf");
+		c_LLL->SaveAs(plotpath+channel+"_n_LLL.pdf");
 		c_LLL->Close();
 
 		//==== HARD CODED
@@ -178,7 +178,7 @@ void syst_FR_get_unct(){
 		gr_LLL->Draw("lpsame");
 		gr_oneoverFR->Draw("lpsame");
 		lg->Draw();
-		c_n_Loose_curves->SaveAs(plotpath+"/n_Loose_curves.pdf");
+		c_n_Loose_curves->SaveAs(plotpath+channel+"_n_Loose_curves.pdf");
 		c_n_Loose_curves->Close();
 
 
@@ -192,7 +192,7 @@ void syst_FR_get_unct(){
 		hist_yield->GetXaxis()->SetTitle("Minimum |dXYSig|");
 		hist_axis(hist_yield);
 		gStyle->SetPaintTextFormat("0.2f");
-		c_yield->SaveAs(plotpath+"/yield.pdf");
+		c_yield->SaveAs(plotpath+channel+"_yield.pdf");
 		c_yield->Close();
 
 		//==== syst
@@ -214,7 +214,8 @@ void syst_FR_get_unct(){
 		hist_syst->Draw("coltexte1");
 		hist_syst->GetYaxis()->SetTitle("Maximum Loose Isolation");
 		hist_syst->GetXaxis()->SetTitle("Minimum |dXYSig|");
-		c_syst->SaveAs(plotpath+"/syst.pdf");
+		c_syst->SaveAs(plotpath+channel+"_syst.pdf");
+    c_syst->Close();
 
   }
   

@@ -342,7 +342,7 @@ _ZJets_3mu0el	n_jets	400
 _ZJets_3mu0el	n_bjets	500
 _ZJets_3mu0el  n_jets_nearby  400
 _ZJets_3mu0el  n_bjets_nearby 500
-_ZJets_3mu0el	PFMET	300
+_ZJets_3mu0el	PFMET	50
 _ZJets_3mu0el	PFMET_phi	50
 _ZJets_3mu0el	osllmass	350
 _ZJets_3mu0el	m_Z_candidate	120

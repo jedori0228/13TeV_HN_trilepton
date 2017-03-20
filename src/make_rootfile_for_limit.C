@@ -3,7 +3,30 @@
 void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
 
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
-  TString LIMIT_PATH = getenv("LIMIT_PATH");
+  TString dataset = getenv("CATANVERSION");
+  TString LIMIT_PATH = WORKING_DIR+"/plots/"+dataset+"/RootfileForLimit/";
+  //TString LIMIT_PATH = getenv("LIMIT_PATH");
+
+  //=====================================
+  //==== Setting calculated systematics
+  //=====================================
+
+  map<TString, double> CalculatedSysts;
+
+  string elline_syst;
+  ifstream in_syst(WORKING_DIR+"/data/"+dataset+"/Syst.txt");
+  //cout << "#### Setting calculated systematics ####" << endl;
+  while(getline(in_syst,elline_syst)){
+    std::istringstream is( elline_syst );
+    TString source;
+    double value;
+    is >> source;
+    is >> value;
+    //cout << source << " : " << value << endl;
+    CalculatedSysts[source] = value;
+  }
+  double uncert_lumi = CalculatedSysts["Luminosity"];
+  double uncert_fake = CalculatedSysts["FakeLooseID"];
 
   vector<double> masses = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
   vector<double> xsec = {4.046, 3.982, 3.711, 3.241, 2.619, 1.875, 1.07, 0.3828, 0.02333, 0.01082, 0.001488, 0.0004567, 9.52E-05, 3.14E-05, 1.29E-05, 3.21E-06, 6.48E-07};
@@ -25,6 +48,8 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
   
   for(unsigned int i=0; i<masses.size(); i++){
 
+    cout << "Writing m(HN) = " << masses.at(i) << endl;
+
     double mass = masses.at(i);
 
     double N_MC = 100000.;
@@ -33,6 +58,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
 
     // syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bool inclusive=false, bool makeroot=false)
     NLimit n_limit = syst_UpDowns(mass, false, false, false, true);
+    //NLimit n_limit = syst_UpDowns(mass, false, false, true, true); //inclusive
 
     //double mass;
     //double n_fake,   n_stat_fake,   n_syst_fake;
@@ -52,14 +78,14 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     hist_signal->SetBinContent(i+1, n_limit.n_signal/N_MC);
     hist_signal->SetBinError(i+1, n_limit.err_total(NLimit::signal)/N_MC);
 
-    signal_syst_Lumi.push_back( 6.2 );
+    signal_syst_Lumi.push_back( uncert_lumi*100. );
     signal_syst_MuonPt.push_back( 100.*n_limit.signal_systs[NLimit::MuonPt]/n_limit.n_signal );
     signal_syst_JES.push_back( 100.*n_limit.signal_systs[NLimit::JES]/n_limit.n_signal );
     signal_syst_Uncl.push_back( 100.*n_limit.signal_systs[NLimit::Uncl]/n_limit.n_signal );
     signal_syst_MuonID.push_back( 100.*n_limit.signal_systs[NLimit::MuonID]/n_limit.n_signal );
     signal_syst_PU.push_back( 100.*n_limit.signal_systs[NLimit::PU]/n_limit.n_signal );
 
-    prompt_syst_Lumi.push_back( 6.2 );
+    prompt_syst_Lumi.push_back( uncert_lumi*100. );
     prompt_syst_MuonPt.push_back( 100.*n_limit.prompt_systs[NLimit::MuonPt]/n_limit.n_prompt );
     prompt_syst_JES.push_back( 100.*n_limit.prompt_systs[NLimit::JES]/n_limit.n_prompt );
     prompt_syst_Uncl.push_back( 100.*n_limit.prompt_systs[NLimit::Uncl]/n_limit.n_prompt );

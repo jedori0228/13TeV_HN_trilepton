@@ -42,20 +42,34 @@ void print_signal_eff(){
 
     cout
     << str_mass+" \\GeVcc\t& "<<int(N_MC)<<"\t& "
-    <<std::fixed<<std::setprecision(4)<<100.*hist_Preselection->GetEntries()/N_MC<<" $\\pm$ "
-    <<std::fixed<<std::setprecision(4)<<100.*sqrt(hist_Preselection->GetEntries())/N_MC << "\t& ";
+    <<std::fixed<<std::setprecision(2)<<100.*hist_Preselection->GetEntries()/N_MC<<" $\\pm$ "
+    <<std::fixed<<std::setprecision(2)<<100.*sqrt(hist_Preselection->GetEntries())/N_MC << "\t& ";
 
     if(mass < 80){
       cout
-      <<std::fixed<<std::setprecision(4)<<100.*hist_LowMass->GetEntries()/N_MC<<" $\\pm$ "
-      <<std::fixed<<std::setprecision(4)<<100.*sqrt(hist_LowMass->GetEntries())/N_MC << "\t& "
-      <<std::fixed<<std::setprecision(4)<<hist_LowMass->GetBinContent(1)<<" $\\pm$ "
-      <<std::fixed<<std::setprecision(4)<<hist_LowMass->GetBinError(1)<<" \\\\"<<endl;
+      <<std::fixed<<std::setprecision(2)<<100.*hist_LowMass->GetEntries()/N_MC<<" $\\pm$ "
+      <<std::fixed<<std::setprecision(2)<<100.*sqrt(hist_LowMass->GetEntries())/N_MC << "\t& "
+      <<std::fixed<<std::setprecision(2)<<hist_LowMass->GetBinContent(1)<<" $\\pm$ "
+      <<std::fixed<<std::setprecision(2)<<hist_LowMass->GetBinError(1)<<" \\\\"<<endl;
+    }
+    else if(mass < 300){
+      cout
+      <<std::fixed<<std::setprecision(2)<<100.*hist_HighMass->GetEntries()/N_MC<<" $\\pm$ "
+      <<std::fixed<<std::setprecision(2)<<100.*sqrt(hist_HighMass->GetEntries())/N_MC << "\t& "
+      <<std::fixed<<std::setprecision(2)<<hist_HighMass->GetBinContent(1)<<" $\\pm$ "
+      <<std::fixed<<std::setprecision(2)<<hist_HighMass->GetBinError(1)<<" \\\\"<<endl;
+    }
+    else if(mass < 700){
+      cout
+      <<std::fixed<<std::setprecision(2)<<100.*hist_HighMass->GetEntries()/N_MC<<" $\\pm$ "
+      <<std::fixed<<std::setprecision(2)<<100.*sqrt(hist_HighMass->GetEntries())/N_MC << "\t& "
+      <<std::fixed<<std::setprecision(3)<<hist_HighMass->GetBinContent(1)<<" $\\pm$ "
+      <<std::fixed<<std::setprecision(3)<<hist_HighMass->GetBinError(1)<<" \\\\"<<endl;
     }
     else{
       cout
-      <<std::fixed<<std::setprecision(4)<<100.*hist_HighMass->GetEntries()/N_MC<<" $\\pm$ "
-      <<std::fixed<<std::setprecision(4)<<100.*sqrt(hist_HighMass->GetEntries())/N_MC << "\t& "
+      <<std::fixed<<std::setprecision(2)<<100.*hist_HighMass->GetEntries()/N_MC<<" $\\pm$ "
+      <<std::fixed<<std::setprecision(2)<<100.*sqrt(hist_HighMass->GetEntries())/N_MC << "\t& "
       <<std::fixed<<std::setprecision(4)<<hist_HighMass->GetBinContent(1)<<" $\\pm$ "
       <<std::fixed<<std::setprecision(4)<<hist_HighMass->GetBinError(1)<<" \\\\"<<endl;
     }
