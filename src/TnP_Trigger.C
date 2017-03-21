@@ -35,7 +35,7 @@ void TnP_Trigger(int period){
   vector<double> abseta = {0., 0.9, 1.2, 2.1, 2.4};
   vector<double> pt = {10, 20, 25, 30, 40, 50, 60, 120};
   
-  vector<TString> fitftns = {"vpvPlusExpo", "vpvPlusCheb", "vpvPlusCheb_4th", "gaussPlusExpo", "vpvPlusCMSbeta0p2"};
+  vector<TString> fitftns = {"vpvPlusExpo", "vpvPlusCheb", "vpvPlusCheb_4th", "gaussPlusExpo", "vpvPlusCMSbeta0p2", "vpvPlusExpo3"};
   
   vector<TString> triggers = {"DoubleIsoMu17Mu8_IsoMu17leg", "DoubleIsoMu17Mu8_IsoMu8leg", "DoubleIsoMu17TkMu8_IsoMu17leg", "DoubleIsoMu17TkMu8_IsoMu8leg", "Mu8_OR_TkMu8", "test1"};
   
@@ -204,7 +204,8 @@ void TnP_Trigger(int period){
       TLegend *lg = new TLegend(0.5, 0.5, 0.8, 0.8);
       lg->SetFillStyle(0);
       lg->SetBorderSize(0);
-      lg->AddEntry(eff_Data, "Run BCDEF", "lp");
+      if(DataPeriod=="BCDEF") lg->AddEntry(eff_Data, "Run BCDEF", "lp");
+      else if(DataPeriod=="GH") lg->AddEntry(eff_Data, "Run GH", "lp");
       lg->AddEntry(eff_MC, "MC", "lp");
       lg->Draw();
       
