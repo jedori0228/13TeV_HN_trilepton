@@ -83,7 +83,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
   if(sig_mass==400) N_MC = 99070.;
 
   TString region = "Preselection";
-  //TString region = "WZ";
+  //TString region = "WZ_3mu0el";
   //TString region = "ZJets_3mu0el";
   //TString region = "ZZ";
   
@@ -236,6 +236,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     m_data.BVeto = DoBVeto;
     m_data.Loop();
     n_data = m_data.n_weighted;
+    if(region != "Preselection" && systtypes.at(i)=="Central") cout << "n_data = " << n_data << endl;
 
     yields_prompt.push_back(n_bkg_prompt);
     yields_fake.push_back(n_bkg_fake);
