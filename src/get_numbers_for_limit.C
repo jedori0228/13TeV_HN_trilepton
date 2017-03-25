@@ -20,6 +20,7 @@ void get_numbers_for_limit(){
     //TH1D* hist_sig = (TH1D*)file_sig->Get("h_Nbjets"+cut);
 
     if(!hist_sig){
+      cout << bkgs.at(i) << " : no entries" << endl;
       n_events.push_back(0.);
       continue;
     }

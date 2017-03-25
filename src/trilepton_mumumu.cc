@@ -46,7 +46,7 @@ void trilepton_mumumu::draw_hist(){
         //==== without signal (CR)
         else lg = new TLegend(0.69, 0.20, 0.96, 0.92);
       }
-      else lg = new TLegend(0.69, 0.40, 0.93, 0.92);
+      else lg = new TLegend(0.65, 0.40, 0.93, 0.92);
       clear_legend_info();
       
       signal_survive_mass.clear();
@@ -859,10 +859,15 @@ TString trilepton_mumumu::legend_coupling_label(int mass){
   
   //if(log_coupling == 0) return "HN"+TString::Itoa(mass, 10)+", |V_{N#mu}|^{2}=1";
   //else return "HN"+TString::Itoa(mass, 10)+", |V_{N#mu}|^{2}=10^{"+TString::Itoa(log_coupling, 10)+"}";
+
   //if(log_coupling == 0) return "m(HN) = "+TString::Itoa(mass, 10)+" GeV/c^{2}, |V_{N#mu}|^{2}=0.01";
   //return "10^{"+TString::Itoa(log_coupling, 10)+"} #times m(HN) = "+TString::Itoa(mass, 10)+" GeV/c^{2}, |V_{N#mu}|^{2}=0.01";
-  if(log_coupling == 0) return "#splitline{m(N) = "+TString::Itoa(mass, 10)+" GeV/c^{2}}{|V_{N#mu}|^{2}=0.01}";
-  return "#splitline{10^{"+TString::Itoa(log_coupling, 10)+"} #times m(N) = "+TString::Itoa(mass, 10)+" GeV}{|V_{N#mu}|^{2}=0.01}";
+
+  if(log_coupling == 0) return "m(HN) = "+TString::Itoa(mass, 10)+" GeV/c^{2}";
+  return "10^{"+TString::Itoa(log_coupling, 10)+"} #times m(HN) = "+TString::Itoa(mass, 10)+" GeV/c^{2}";
+
+  //if(log_coupling == 0) return "#splitline{m(N) = "+TString::Itoa(mass, 10)+" GeV/c^{2}}{|V_{N#mu}|^{2}=0.01}";
+  //return "#splitline{10^{"+TString::Itoa(log_coupling, 10)+"} #times m(N) = "+TString::Itoa(mass, 10)+" GeV}{|V_{N#mu}|^{2}=0.01}";
   
 }
 

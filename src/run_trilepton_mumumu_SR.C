@@ -229,7 +229,7 @@ void run_trilepton_mumumu_SR(int XXX){
     1000
   };
   m.signal_color = {
-    kRed-10, kRed-2, kRed,
+    kRed-6, kRed-2, kRed,
     kBlue, kSpring+2,
     kMagenta-7, kMagenta-2, kViolet+1,
     kGray+1, kOrange+10, kBlack

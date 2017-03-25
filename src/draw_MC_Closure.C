@@ -18,10 +18,9 @@ void draw_MC_Closure(){
     << endl;
   }
   
-  vector<TString> samples = {"TTJets_aMC", "DYJets", "WJets", "QCD"};
-  //vector<TString> channels = {"DiMuon", "SSDiMuon", "DiMuon", "DiMuon"};
-  vector<TString> channels = {"SSDiMuon", "SSDiMuon", "SSDiMuon", "SSDiMuon"};
-  vector<double> ymaxs = {500, 50, 30, 100};
+  vector<TString> samples = {"TTJets_aMC", "DYJets", "WJets", "WJets_MG", "DYJets_10to50", "DYJets_MG_10to50", "QCD_Pt-300to470_MuEnriched"};
+  vector<TString> channels = {"SSDiMuon", "SSDiMuon", "DiMuon", "DiMuon", "SSDiMuon", "SSDiMuon", "DiMuon"};
+  vector<double> ymaxs = {200, 20, 30, 30, 10, 10, 100};
 
   for(unsigned int i=0; i<samples.size(); i++){
     TString this_sample = samples.at(i);
@@ -77,7 +76,7 @@ void draw_MC_Closure(){
     hist_axis(hist_tt_FR);
     hist_tt_FR->SetTitle("");
     hist_tt_FR->GetYaxis()->SetRangeUser(0,ymaxs.at(i));
-    hist_tt_FR->SetYTitle("Events");
+    hist_tt_FR->SetYTitle("Events / 10 GeV");
     hist_tt->Draw("psame");
     
     c1_down->cd();

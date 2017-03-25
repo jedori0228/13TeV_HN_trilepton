@@ -56,7 +56,7 @@ void CutStudy_mlll(){
     hist->Draw("histsame");
     if(i==0){
       hist->SetXTitle("m(#mu#mu#mu) [GeV]");
-      hist->SetYTitle("A.U.");
+      hist->SetYTitle("A. U.");
       hist_axis(hist);
       hist->GetXaxis()->SetRangeUser(0, 150);
       hist->GetYaxis()->SetRangeUser(0, 0.5);
@@ -75,7 +75,7 @@ void CutStudy_mlll(){
     hist->SetLineColor(kBlack);
     hist->SetLineStyle(i+1);
     hist->Rebin(5);
-    lg->AddEntry(hist, "HN"+TString::Itoa(sig_masses.at(i),10), "l");
+    lg->AddEntry(hist, "HN ("+TString::Itoa(sig_masses.at(i),10)+" GeV)", "l");
     hist->Scale(1./hist->Integral(-1,hist->GetXaxis()->GetNbins()+1));
     hist->Draw("histsame");
   }

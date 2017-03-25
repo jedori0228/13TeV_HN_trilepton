@@ -22,7 +22,8 @@ class NLimit {
     Uncl = 7,
     btag = 8,
     PU = 9,
-    Norm = 10
+    Norm = 10,
+    FRHalfSample = 11,
   };
 
   double mass;

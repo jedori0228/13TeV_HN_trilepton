@@ -52,8 +52,8 @@ if [ $whichRun = "MCSF" ]; then
 fi
 
 if [ $whichRun = "cut" ]; then
-  root -l -b -q script/draw_mlll.C
-  root -l -b -q script/draw_mll_os.C
-  root -l -b -q script/draw_mz.C
-  root -l -b -q script/draw_bjet.C
+  root -l -b -q script/CutStudy_bjet.C
+  root -l -b -q script/CutStudy_mlll.C
+  root -l -b -q script/CutStudy_mll_os.C
+  root -l -b -q script/CutStudy_mz.C
 fi

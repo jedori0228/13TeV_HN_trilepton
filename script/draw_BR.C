@@ -52,7 +52,7 @@ void draw_BR(){
   gr_Wl->Draw("apl");
   gr_Wl->SetTitle("");
   gr_Wl->GetXaxis()->SetTitle("m(N) [GeV]");
-  gr_Wl->GetYaxis()->SetTitle("BR");
+  gr_Wl->GetYaxis()->SetTitle("BR of N Decays");
   gr_Znu->Draw("plsame");
   gr_Hnu->Draw("plsame");
   hist_axis(gr_Wl);

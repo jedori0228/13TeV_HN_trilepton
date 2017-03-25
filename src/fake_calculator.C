@@ -40,7 +40,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
   
   all_MC_list = {"singletop", "TTJets_aMC", "VGamma", "DY", "WJets", "QCD_mu", "HN_MuMuMu_40", "VV"};
   map_string_to_MC_list["SingleMuon"] = {"singletop", "TTJets_aMC", "VGamma", "DY", "WJets"};
-  map_string_to_MC_alias["SingleMuon"] = {"singletop", "ttbar", "V#gamma", "DY", "WJets"};
+  map_string_to_MC_alias["SingleMuon"] = {"singletop", "t#bar{t}", "V#gamma", "DY", "W + Jets"};
   map_string_to_MC_color["SingleMuon"] = {kOrange, kRed, kSpring-7, kYellow, kGreen};
   map_string_to_MC_list["DiMuon"] = {"VGamma", "DY", "VV"};
   map_string_to_MC_alias["DiMuon"] = {"V#gamma", "DY", "VV"};
@@ -76,6 +76,10 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
     << "###################################################" << endl
     << endl;
   }
+
+  TLatex latex_CMSPriliminary, latex_Lumi;
+  latex_CMSPriliminary.SetNDC();
+  latex_Lumi.SetNDC();
   
   
   //==== get all files here
@@ -176,6 +180,12 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       //==== data
       hist_data->Draw("psame");
       lg->Draw();
+
+      latex_CMSPriliminary.SetTextSize(0.035);
+      latex_CMSPriliminary.DrawLatex(0.15, 0.96, "#font[62]{CMS} Simulation");
+      latex_Lumi.SetTextSize(0.035);
+      latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
+
       c_Loose_study->SaveAs(plotpath+"/LooseMuon_Study_"+this_type_Loose_study+"_"+this_var_Loose_study+".pdf");
       c_Loose_study->Close();
       delete c_Loose_study;
@@ -209,114 +219,118 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       hist_ttbar->SetLineWidth(2);
       hist_QCD_mumu->SetLineWidth(2);
 
-			int n_xbin = hist_DY->GetXaxis()->GetNbins();
+      int n_xbin = hist_DY->GetXaxis()->GetNbins();
 
-			TCanvas *c_dXY_eff = new TCanvas("c_dXY_eff", "", 800, 800);
-			canvas_margin(c_dXY_eff);
-			c_dXY_eff->cd();
-			double xbins[n_xbin];
-			double eff_DY_small[n_xbin], eff_signal_small[n_xbin], eff_ttbar_small[n_xbin], eff_QCD_mumu_small[n_xbin];
-			double eff_DY_large[n_xbin], eff_signal_large[n_xbin], eff_ttbar_large[n_xbin], eff_QCD_mumu_large[n_xbin];
+      TCanvas *c_dXY_eff = new TCanvas("c_dXY_eff", "", 800, 800);
+      canvas_margin(c_dXY_eff);
+      c_dXY_eff->cd();
+      double xbins[n_xbin];
+      double eff_DY_small[n_xbin], eff_signal_small[n_xbin], eff_ttbar_small[n_xbin], eff_QCD_mumu_small[n_xbin];
+      double eff_DY_large[n_xbin], eff_signal_large[n_xbin], eff_ttbar_large[n_xbin], eff_QCD_mumu_large[n_xbin];
 
-			cout << "dXYSig" << "\t" << "DY_small" << "\t" << "DY_large" << "\t" << "signal_small" << "\t" << "signal_large" << "\t" << "ttbar_small" << "\t" << "ttbra_large" << "\t" << "QCD_small" << "\t" << "QCD_large" << endl;
-			for(unsigned int k=1; k<=n_xbin; k++){
+      cout << "dXYSig" << "\t" << "DY_small" << "\t" << "DY_large" << "\t" << "signal_small" << "\t" << "signal_large" << "\t" << "ttbar_small" << "\t" << "ttbra_large" << "\t" << "QCD_small" << "\t" << "QCD_large" << endl;
+      for(unsigned int k=1; k<=n_xbin; k++){
 
-				xbins[k-1] = hist_DY->GetXaxis()->GetBinUpEdge(k);
+        xbins[k-1] = hist_DY->GetXaxis()->GetBinUpEdge(k);
 
-				eff_DY_small[k-1] = hist_DY->Integral(0, k) / hist_DY->Integral(0, n_xbin+1);
-				eff_signal_small[k-1] = hist_signal->Integral(0, k) / hist_signal->Integral(0, n_xbin+1);
-				eff_ttbar_small[k-1] = hist_ttbar->Integral(0, k) / hist_ttbar->Integral(0, n_xbin+1);
-				eff_QCD_mumu_small[k-1] = hist_QCD_mumu->Integral(0, k) / hist_QCD_mumu->Integral(0, n_xbin+1);
+        eff_DY_small[k-1] = hist_DY->Integral(0, k) / hist_DY->Integral(0, n_xbin+1);
+        eff_signal_small[k-1] = hist_signal->Integral(0, k) / hist_signal->Integral(0, n_xbin+1);
+        eff_ttbar_small[k-1] = hist_ttbar->Integral(0, k) / hist_ttbar->Integral(0, n_xbin+1);
+        eff_QCD_mumu_small[k-1] = hist_QCD_mumu->Integral(0, k) / hist_QCD_mumu->Integral(0, n_xbin+1);
 
-				eff_DY_large[k-1] = hist_DY->Integral(k+1, n_xbin+1) / hist_DY->Integral(0, n_xbin+1);
-				eff_signal_large[k-1] = hist_signal->Integral(k+1, n_xbin+1) / hist_signal->Integral(0, n_xbin+1);
-				eff_ttbar_large[k-1] = hist_ttbar->Integral(k+1, n_xbin+1) / hist_ttbar->Integral(0, n_xbin+1);
-				eff_QCD_mumu_large[k-1] = hist_QCD_mumu->Integral(k+1, n_xbin+1) / hist_QCD_mumu->Integral(0, n_xbin+1);
+        eff_DY_large[k-1] = hist_DY->Integral(k+1, n_xbin+1) / hist_DY->Integral(0, n_xbin+1);
+        eff_signal_large[k-1] = hist_signal->Integral(k+1, n_xbin+1) / hist_signal->Integral(0, n_xbin+1);
+        eff_ttbar_large[k-1] = hist_ttbar->Integral(k+1, n_xbin+1) / hist_ttbar->Integral(0, n_xbin+1);
+        eff_QCD_mumu_large[k-1] = hist_QCD_mumu->Integral(k+1, n_xbin+1) / hist_QCD_mumu->Integral(0, n_xbin+1);
 
-				cout << hist_DY->GetXaxis()->GetBinUpEdge(k) << "\t"
-						 << eff_DY_small[k-1] << "\t" << eff_DY_large[k-1] << "\t"
-						 << eff_signal_small[k-1] << "\t" << eff_signal_large[k-1] << "\t"
-						 << eff_ttbar_small[k-1] << "\t" << eff_ttbar_large[k-1] << "\t"
-						 << eff_QCD_mumu_small[k-1] << "\t" << eff_QCD_mumu_large[k-1] << "\t" << endl;
-			}
+        cout << hist_DY->GetXaxis()->GetBinUpEdge(k) << "\t"
+             << eff_DY_small[k-1] << "\t" << eff_DY_large[k-1] << "\t"
+             << eff_signal_small[k-1] << "\t" << eff_signal_large[k-1] << "\t"
+             << eff_ttbar_small[k-1] << "\t" << eff_ttbar_large[k-1] << "\t"
+             << eff_QCD_mumu_small[k-1] << "\t" << eff_QCD_mumu_large[k-1] << "\t" << endl;
+      }
 
-			TGraph *gr_eff_DY_small = new TGraph(n_xbin, xbins, eff_DY_small);
-			TGraph *gr_eff_DY_large = new TGraph(n_xbin, xbins, eff_DY_large);
-			gr_eff_DY_small->SetLineColor(kBlue);
-			gr_eff_DY_large->SetLineColor(kBlue);
-			gr_eff_DY_small->SetLineWidth(2);
-			gr_eff_DY_large->SetLineWidth(2);
-			gr_eff_DY_large->SetLineStyle(3);
+      TGraph *gr_eff_DY_small = new TGraph(n_xbin, xbins, eff_DY_small);
+      TGraph *gr_eff_DY_large = new TGraph(n_xbin, xbins, eff_DY_large);
+      gr_eff_DY_small->SetLineColor(kBlue);
+      gr_eff_DY_large->SetLineColor(kBlue);
+      gr_eff_DY_small->SetLineWidth(2);
+      gr_eff_DY_large->SetLineWidth(2);
+      gr_eff_DY_large->SetLineStyle(3);
 
-			TGraph *gr_eff_signal_small = new TGraph(n_xbin, xbins, eff_signal_small);
-			TGraph *gr_eff_signal_large = new TGraph(n_xbin, xbins, eff_signal_large);
-			gr_eff_signal_small->SetLineColor(kBlack);
-			gr_eff_signal_large->SetLineColor(kBlack);
-			gr_eff_signal_small->SetLineWidth(2);
-			gr_eff_signal_large->SetLineWidth(2);
-			gr_eff_signal_large->SetLineStyle(3);
+      TGraph *gr_eff_signal_small = new TGraph(n_xbin, xbins, eff_signal_small);
+      TGraph *gr_eff_signal_large = new TGraph(n_xbin, xbins, eff_signal_large);
+      gr_eff_signal_small->SetLineColor(kBlack);
+      gr_eff_signal_large->SetLineColor(kBlack);
+      gr_eff_signal_small->SetLineWidth(2);
+      gr_eff_signal_large->SetLineWidth(2);
+      gr_eff_signal_large->SetLineStyle(3);
 
-			TGraph *gr_eff_ttbar_small = new TGraph(n_xbin, xbins, eff_ttbar_small);
-			TGraph *gr_eff_ttbar_large = new TGraph(n_xbin, xbins, eff_ttbar_large);
-			gr_eff_ttbar_small->SetLineColor(kRed);
-			gr_eff_ttbar_large->SetLineColor(kRed);
-			gr_eff_ttbar_small->SetLineWidth(2);
-			gr_eff_ttbar_large->SetLineWidth(2);
-			gr_eff_ttbar_large->SetLineStyle(3);
+      TGraph *gr_eff_ttbar_small = new TGraph(n_xbin, xbins, eff_ttbar_small);
+      TGraph *gr_eff_ttbar_large = new TGraph(n_xbin, xbins, eff_ttbar_large);
+      gr_eff_ttbar_small->SetLineColor(kRed);
+      gr_eff_ttbar_large->SetLineColor(kRed);
+      gr_eff_ttbar_small->SetLineWidth(2);
+      gr_eff_ttbar_large->SetLineWidth(2);
+      gr_eff_ttbar_large->SetLineStyle(3);
 
-			TGraph *gr_eff_QCD_mumu_small = new TGraph(n_xbin, xbins, eff_QCD_mumu_small);
-			TGraph *gr_eff_QCD_mumu_large = new TGraph(n_xbin, xbins, eff_QCD_mumu_large);
-			gr_eff_QCD_mumu_small->SetLineColor(kOrange-5);
-			gr_eff_QCD_mumu_large->SetLineColor(kOrange-5);
-			gr_eff_QCD_mumu_small->SetLineWidth(2);
-			gr_eff_QCD_mumu_large->SetLineWidth(2);
-			gr_eff_QCD_mumu_large->SetLineStyle(3);
+      TGraph *gr_eff_QCD_mumu_small = new TGraph(n_xbin, xbins, eff_QCD_mumu_small);
+      TGraph *gr_eff_QCD_mumu_large = new TGraph(n_xbin, xbins, eff_QCD_mumu_large);
+      gr_eff_QCD_mumu_small->SetLineColor(kOrange-5);
+      gr_eff_QCD_mumu_large->SetLineColor(kOrange-5);
+      gr_eff_QCD_mumu_small->SetLineWidth(2);
+      gr_eff_QCD_mumu_large->SetLineWidth(2);
+      gr_eff_QCD_mumu_large->SetLineStyle(3);
 
       TLegend* lg_eff_dXY = new TLegend(0.4, 0.3, 0.9, 0.7);
       lg_eff_dXY->SetFillStyle(0);
       lg_eff_dXY->SetBorderSize(0);
       lg_eff_dXY->AddEntry(gr_eff_DY_small, "Small, Drell-Yan (prompt)", "l");
       lg_eff_dXY->AddEntry(gr_eff_signal_small, "Small, m(HN) = 40 GeV (prompt)", "l");
-      lg_eff_dXY->AddEntry(gr_eff_ttbar_small, "Small, ttbar (fake)", "l");
+      lg_eff_dXY->AddEntry(gr_eff_ttbar_small, "Small, t#bar{t} (fake)", "l");
       lg_eff_dXY->AddEntry(gr_eff_QCD_mumu_small, "Small, QCD (fake)", "l");
       lg_eff_dXY->AddEntry(gr_eff_DY_large, "Large, Drell-Yan (prompt)", "l");
       lg_eff_dXY->AddEntry(gr_eff_signal_large, "Large, m(HN) = 40 GeV (prompt)", "l");
-      lg_eff_dXY->AddEntry(gr_eff_ttbar_large, "Large, ttbar (fake)", "l");
+      lg_eff_dXY->AddEntry(gr_eff_ttbar_large, "Large, t#bar{t} (fake)", "l");
       lg_eff_dXY->AddEntry(gr_eff_QCD_mumu_large, "Large, QCD (fake)", "l");
 
-			gr_eff_DY_small->SetTitle("");
-			gr_eff_DY_small->Draw("al");
-			gr_eff_DY_small->GetYaxis()->SetTitle("Efficiency");
-			gr_eff_DY_small->GetYaxis()->SetRangeUser(0.00001, 2.);
-			if(dXYs.at(j)=="dXYSig") gr_eff_DY_small->GetXaxis()->SetTitle("|Sig(d_{xy})|");
+      gr_eff_DY_small->SetTitle("");
+      gr_eff_DY_small->Draw("al");
+      gr_eff_DY_small->GetYaxis()->SetTitle("Efficiency");
+      gr_eff_DY_small->GetYaxis()->SetRangeUser(0.00001, 2.);
+      if(dXYs.at(j)=="dXYSig") gr_eff_DY_small->GetXaxis()->SetTitle("|SIP|");
       if(dXYs.at(j)=="dXY") gr_eff_DY_small->GetXaxis()->SetTitle("|d_{xy}| [cm]");
-			hist_axis(gr_eff_DY_small);
-			gr_eff_DY_large->Draw("lsame");
-			gr_eff_signal_small->Draw("lsame");
-			gr_eff_signal_large->Draw("lsame");
-			gr_eff_ttbar_small->Draw("lsame");
-			gr_eff_ttbar_large->Draw("lsame");
-			gr_eff_QCD_mumu_small->Draw("lsame");
-			gr_eff_QCD_mumu_large->Draw("lsame");
+      hist_axis(gr_eff_DY_small);
+      gr_eff_DY_large->Draw("lsame");
+      gr_eff_signal_small->Draw("lsame");
+      gr_eff_signal_large->Draw("lsame");
+      gr_eff_ttbar_small->Draw("lsame");
+      gr_eff_ttbar_large->Draw("lsame");
+      gr_eff_QCD_mumu_small->Draw("lsame");
+      gr_eff_QCD_mumu_large->Draw("lsame");
       lg_eff_dXY->Draw();
 
-			c_dXY_eff->SetLogy();
-			c_dXY_eff->SaveAs(plotpath+"/dXYSig_Study_Eff_"+dXYs.at(j)+"_"+MuonId.at(i)+"IsoMuon.pdf");
-			c_dXY_eff->Close();
-			delete c_dXY_eff;
+      latex_CMSPriliminary.SetTextSize(0.035);
+      latex_CMSPriliminary.DrawLatex(0.15, 0.96, "#font[62]{CMS} Simulation");
+      latex_Lumi.SetTextSize(0.035);
+      latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
 
+      c_dXY_eff->SetLogy();
+      c_dXY_eff->SaveAs(plotpath+"/dXYSig_Study_Eff_"+dXYs.at(j)+"_"+MuonId.at(i)+"IsoMuon.pdf");
+      c_dXY_eff->Close();
+      delete c_dXY_eff;
 
       hist_DY->Scale(1./hist_DY->Integral());
       hist_signal->Scale(1./hist_signal->Integral());
       hist_ttbar->Scale(1./hist_ttbar->Integral());
       hist_QCD_mumu->Scale(1./hist_QCD_mumu->Integral());
       
-      TLegend* lg_dXY = new TLegend(0.6, 0.7, 0.9, 0.95);
+      TLegend* lg_dXY = new TLegend(0.55, 0.7, 0.9, 0.95);
       lg_dXY->SetFillStyle(0);
       lg_dXY->SetBorderSize(0);
       lg_dXY->AddEntry(hist_DY, "Drell-Yan (prompt)", "l");
       lg_dXY->AddEntry(hist_signal, "m(HN) = 40 GeV (prompt)", "l");
-      lg_dXY->AddEntry(hist_ttbar, "ttbar (fake)", "l");
+      lg_dXY->AddEntry(hist_ttbar, "t#bar{t} (fake)", "l");
       lg_dXY->AddEntry(hist_QCD_mumu, "QCD (fake)", "l");
       
       TCanvas* c_dXY = new TCanvas("c_dXY", "", 800, 800);
@@ -326,16 +340,22 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       
       hist_DY->Draw("histsame");
       hist_DY->SetTitle("");
-      hist_DY->SetYTitle("AU");
-      if(dXYs.at(j)=="dXYSig") hist_DY->SetXTitle("|Sig(d_{xy})|"); 
+      hist_DY->SetYTitle("A. U.");
+      if(dXYs.at(j)=="dXYSig") hist_DY->SetXTitle("|SIP|"); 
       if(dXYs.at(j)=="dXY") hist_DY->SetXTitle("|d_{xy}| [cm]");
       hist_axis(hist_DY);
       hist_signal->Draw("histsame");
       hist_ttbar->Draw("histsame");
       hist_QCD_mumu->Draw("histsame");
       lg_dXY->Draw();
+
+      latex_CMSPriliminary.SetTextSize(0.035);
+      latex_CMSPriliminary.DrawLatex(0.15, 0.96, "#font[62]{CMS} Simulation");
+      latex_Lumi.SetTextSize(0.035);
+      latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
+
       c_dXY->SaveAs(plotpath+"/dXYSig_Study_"+dXYs.at(j)+"_"+MuonId.at(i)+"IsoMuon.pdf");
-      
+
       c_dXY->Close();
       delete c_dXY;
       delete lg_dXY;
@@ -381,7 +401,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
   };
 
   vector<TString> var_FR = {"eta", "pt", "RelIso", "Chi2", "dXY", "dXYSig"};
-  vector<TString> x_title_FR = {"#eta", "p_{T}", "RelIso", "#chi^{2}", "|dXY|", "|dXY/#sigma(dXY)|"};
+  vector<TString> x_title_FR = {"#eta", "p_{T} [GeV]", "RelIso", "#chi^{2}", "|d_{XY}| [cm]", "|SIP|"};
   
   //==== jet dependency test
   //==== use barrel (0<|eta|<0.8)
@@ -504,10 +524,10 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
           den_MC_stack->SetMinimum(1);
         }
         if(this_var_FR == "eta"){
-          num_MC_stack->SetMaximum(1000000);
-          num_MC_stack->SetMinimum(1);
-          den_MC_stack->SetMaximum(1000000);
-          den_MC_stack->SetMinimum(1);
+          num_MC_stack->SetMaximum(10000000);
+          num_MC_stack->SetMinimum(10);
+          den_MC_stack->SetMaximum(100000000);
+          den_MC_stack->SetMinimum(10);
         }
         if(this_var_FR == "RelIso"){
           num_MC_stack->SetMaximum(1000000);
@@ -625,6 +645,12 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       //==== data
       num_data->Draw("psame");
       lg->Draw();
+
+      latex_CMSPriliminary.SetTextSize(0.035);
+      latex_CMSPriliminary.DrawLatex(0.15, 0.96, "#font[62]{CMS} Simulation");
+      latex_Lumi.SetTextSize(0.035);
+      latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
+
       c_num->SaveAs(plotpath+"/num_"+this_FR_method+"_"+this_var_FR+".pdf");
       c_num->Close();
       delete c_num;
@@ -643,6 +669,12 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       //==== data
       den_data->Draw("psame");
       lg->Draw();
+
+      latex_CMSPriliminary.SetTextSize(0.035);
+      latex_CMSPriliminary.DrawLatex(0.15, 0.96, "#font[62]{CMS} Simulation");
+      latex_Lumi.SetTextSize(0.035);
+      latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
+
       c_den->SaveAs(plotpath+"/den_"+this_FR_method+"_"+this_var_FR+".pdf");
       c_den->Close();
       delete c_den;
@@ -829,6 +861,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       if(j==0){
         gr_FR_curve[j]->Draw("e1al");
         gr_FR_curve[j]->GetYaxis()->SetRangeUser(0, 0.5);
+        hist_axis(gr_FR_curve[j]);
       }
       else gr_FR_curve[j]->Draw("e1lsame");
     }
@@ -838,6 +871,12 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
     lg_FR_curve->AddEntry(gr_FR_curve[3], "2.0 < |#eta| < 2.5", "l");
     grs_FRcurvesBarrel.push_back( (TGraphAsymmErrors*)gr_FR_curve[0]->Clone() );
     lg_FR_curve->Draw();
+
+    latex_CMSPriliminary.SetTextSize(0.035);
+    latex_CMSPriliminary.DrawLatex(0.15, 0.96, "#font[62]{CMS} Simulation");
+    latex_Lumi.SetTextSize(0.035);
+    latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
+
     c_FR_curve->SaveAs(plotpath+"/1D_pt_each_eta_FR_"+this_FR_method+".pdf");
     c_FR_curve->Close();
     delete c_FR_curve;
@@ -861,11 +900,18 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
     if(i==0){
       grs_FRcurvesBarrel.at(i)->Draw("alp");
       grs_FRcurvesBarrel.at(i)->GetYaxis()->SetRangeUser(0, 0.5);
+      hist_axis(grs_FRcurvesBarrel.at(i));
     }
     else grs_FRcurvesBarrel.at(i)->Draw("lpsame");
     lg_FRcurves->AddEntry(grs_FRcurvesBarrel.at(i), FR_method_alias.at(i), "l");
   }
   lg_FRcurves->Draw();
+
+  latex_CMSPriliminary.SetTextSize(0.035);
+  latex_CMSPriliminary.DrawLatex(0.15, 0.96, "#font[62]{CMS} Simulation");
+  latex_Lumi.SetTextSize(0.035);
+  latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
+
   c_FRcurves->SaveAs(plotpath+"/1D_pt_each_eta_FR_Barrels.pdf");
 
   //=============================
@@ -906,7 +952,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
         c_MCTruth->SetRightMargin( 0.1 );
         gStyle->SetPaintTextFormat("0.4f");
         c_MCTruth->cd();
-        hist_num->Draw("coltexte1");
+        hist_num->Draw("colztexte1");
         hist_num->GetXaxis()->SetRangeUser(10, 60);
         hist_num->SetXTitle("p_{T} [GeV/c]");
         hist_num->SetYTitle("|#eta|");
@@ -944,7 +990,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
 
       small_2D->Divide(large_2D);
       small_2D->SetName("FRSF");
-      small_2D->Draw("coltexte1");
+      small_2D->Draw("colztexte1");
       small_2D->GetXaxis()->SetRangeUser(10, 60);
       small_2D->SetXTitle("p_{T} [GeV/c]");
       small_2D->SetYTitle("|#eta|");
@@ -981,6 +1027,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
         if(j==0){
           gr_SF_curve[j]->Draw("e1al");
           gr_SF_curve[j]->GetYaxis()->SetRangeUser(0.8, 2.0);
+          hist_axis(gr_SF_curve[j]);
         }
         else gr_SF_curve[j]->Draw("e1lsame");
       }
@@ -989,6 +1036,12 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       lg_SF_curve->AddEntry(gr_SF_curve[2], "1.479 < |#eta| < 2.0", "l");
       lg_SF_curve->AddEntry(gr_SF_curve[3], "2.0 < |#eta| < 2.5", "l");
       lg_SF_curve->Draw();
+
+      latex_CMSPriliminary.SetTextSize(0.035);
+      latex_CMSPriliminary.DrawLatex(0.15, 0.96, "#font[62]{CMS} Simulation");
+      latex_Lumi.SetTextSize(0.035);
+      latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
+
       c_1D_SF_curve->SaveAs(plotpath+"/1D_pt_each_eta_FRSF_MCTruth_SingleMuonTrigger_"+this_MCTruth_njet+this_MC_sample_MCTruth+".pdf");
       c_1D_SF_curve->Close();
       delete c_1D_SF_curve;
@@ -1049,6 +1102,11 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
   file_FR_QCD->cd();
   hist_FR_QCD->Write();
   file_FR_QCD->Close();
+
+  latex_CMSPriliminary.SetTextSize(0.035);
+  latex_CMSPriliminary.DrawLatex(0.15, 0.96, "#font[62]{CMS} Simulation");
+  latex_Lumi.SetTextSize(0.035);
+  latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
 
   c_QCD_isodist->SaveAs(plotpath+"/QCD_mu_RelIso_dXYSigs.pdf");
   c_QCD_isodist->Close();

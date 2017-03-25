@@ -60,7 +60,7 @@ void CutStudy_bjet(){
     //hist->GetYaxis()->SetRangeUser(0.0001, 3);
     if(i==0){
       hist->SetXTitle("# of b-tagged jets");
-      hist->SetYTitle("A.U.");
+      hist->SetYTitle("A. U.");
       hist_axis(hist);
       hist->GetYaxis()->SetRangeUser(0., 1.2);
       hist->GetXaxis()->SetRangeUser(0, 3);
@@ -78,7 +78,7 @@ void CutStudy_bjet(){
     hist->SetLineWidth(3);
     hist->SetLineColor(kBlack);
     hist->SetLineStyle(i+1);
-    lg->AddEntry(hist, "HN"+TString::Itoa(sig_masses.at(i),10), "l");
+    lg->AddEntry(hist, "HN ("+TString::Itoa(sig_masses.at(i),10)+" GeV)", "l");
     hist->Scale(1./hist->Integral(-1,hist->GetXaxis()->GetNbins()+1));
     hist->Draw("histsame");
     hist->GetYaxis()->SetRangeUser(0.0001, 3);

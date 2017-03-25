@@ -32,7 +32,7 @@ void hist_axis(TH1D *hist){
 
   hist->GetYaxis()->SetLabelSize(0.04);
   hist->GetYaxis()->SetTitleSize(0.07);
-  hist->GetYaxis()->SetTitleOffset(1.10);
+  hist->GetYaxis()->SetTitleOffset(1.05);
 
   hist->GetXaxis()->SetLabelSize(0.03);
   hist->GetXaxis()->SetTitleSize(0.05);
@@ -45,7 +45,7 @@ void hist_axis(THStack *hist){
 
   hist->GetYaxis()->SetLabelSize(0.04);
   hist->GetYaxis()->SetTitleSize(0.07);
-  hist->GetYaxis()->SetTitleOffset(1.10);
+  hist->GetYaxis()->SetTitleOffset(1.05);
 
   hist->GetXaxis()->SetLabelSize(0.03);
   hist->GetXaxis()->SetTitleSize(0.05);
@@ -58,7 +58,7 @@ void hist_axis(TGraph *hist){
 
   hist->GetYaxis()->SetLabelSize(0.04);
   hist->GetYaxis()->SetTitleSize(0.07);
-  hist->GetYaxis()->SetTitleOffset(1.10);
+  hist->GetYaxis()->SetTitleOffset(1.05);
 
   hist->GetXaxis()->SetLabelSize(0.03);
   hist->GetXaxis()->SetTitleSize(0.05);
@@ -70,7 +70,7 @@ void hist_axis(TGraphAsymmErrors *hist){
   hist->SetTitle("");
 
   hist->GetYaxis()->SetLabelSize(0.04);
-  hist->GetYaxis()->SetTitleSize(0.06);
+  hist->GetYaxis()->SetTitleSize(0.07);
   hist->GetYaxis()->SetTitleOffset(1.05);
 
   hist->GetXaxis()->SetLabelSize(0.03);

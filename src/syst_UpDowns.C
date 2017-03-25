@@ -156,7 +156,17 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     }
   }
 
-  vector<TString> systtypes = {"Central", "MuonEn_up", "MuonEn_down", "JetEn_up", "JetEn_down", "JetRes_up", "JetRes_down", "Unclustered_up", "Unclustered_down", "MCxsec_up", "MCxsec_down", "MuonIDSF_up", "MuonIDSF_down", "PU_up", "PU_down"};
+  vector<TString> systtypes = {
+    "Central", // 0
+    "MuonEn_up", "MuonEn_down", // 1, 2
+    "JetEn_up", "JetEn_down", // 3, 4
+    "JetRes_up", "JetRes_down", // 5, 6
+    "Unclustered_up", "Unclustered_down", // 7, 8
+    "MCxsec_up", "MCxsec_down", // 9, 10
+    "MuonIDSF_up", "MuonIDSF_down", // 11, 12
+    "PU_up", "PU_down", // 13, 14
+    "FR_HalfSample_up", "FR_HalfSample_down" // 15, 16
+  };
   vector<double> yields_prompt, yields_fake, yields_data, yields_signal, yields_signal_weighted;
   vector<double> syst_error_prompt, syst_error_fake, syst_error_data, syst_error_signal;
   vector<double> rel_syst_error_prompt, rel_syst_error_fake, rel_syst_error_data, rel_syst_error_signal;
@@ -165,16 +175,32 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
   for(int i=0; i<systtypes.size(); i++){
 
     TString this_syst = systtypes.at(i);
-    if(this_syst.Contains("MCxsec_")) this_syst = "Central";
+
+    TString NtpNameForPrompt = this_syst;
+    TString NtpNameForFake = this_syst;
+    TString NtpNameForSignal = this_syst;
+    TString NtpNameForData = this_syst;
+
+    if(this_syst.Contains("MCxsec_")){
+      NtpNameForPrompt = "Central";
+      NtpNameForFake = "Central";
+      NtpNameForSignal = "Central";
+      NtpNameForData = "Central";
+    }
+    if(this_syst.Contains("FR_HalfSample")){
+      NtpNameForPrompt = "Central";
+      NtpNameForSignal = "Central";
+      NtpNameForData = "Central";
+    }
           
     double n_bkg_prompt(0.), n_bkg_fake(0.), n_data(0.), n_signal(0.), n_signal_weighted(0.);
     
     TH1D *hist_bkg_for_error = NULL;
-    if(systtypes.at(i)=="Central") hist_bkg_for_error = new TH1D("hist_bkg_for_error", "", 1, 0., 1.);
+    if(this_syst == "Central") hist_bkg_for_error = new TH1D("hist_bkg_for_error", "", 1, 0., 1.);
     
     for(unsigned int k=0; k<bkg_prompt_list.size(); k++){
       TString this_samplename = bkg_prompt_list.at(k);
-      cutop m_bkg_prompt(filepath+"trilepton_mumumu_ntp_SK"+this_samplename+"_dilep_cat_"+catversion+".root", "Ntp_"+this_syst);
+      cutop m_bkg_prompt(filepath+"trilepton_mumumu_ntp_SK"+this_samplename+"_dilep_cat_"+catversion+".root", "Ntp_"+NtpNameForPrompt);
       m_bkg_prompt.SearchRegion = region;
       m_bkg_prompt.cut_first_pt = cut_first_pt;
       m_bkg_prompt.cut_second_pt = cut_second_pt;
@@ -184,15 +210,15 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       m_bkg_prompt.signalclass = SignalClass;
       m_bkg_prompt.MCNormSF = MCNormSF[this_samplename];
       double MCNormDir(0.);
-      if(systtypes.at(i) == "MCxsec_up") MCNormDir = 1.;
-      else if(systtypes.at(i) == "MCxsec_down") MCNormDir = -1.;
+      if(this_syst == "MCxsec_up") MCNormDir = 1.;
+      else if(this_syst == "MCxsec_down") MCNormDir = -1.;
       m_bkg_prompt.MCNormSF_uncert = MCNormDir*MCNormSF_uncert[this_samplename];
       m_bkg_prompt.BVeto = DoBVeto;
       m_bkg_prompt.Loop();
 
       n_bkg_prompt += m_bkg_prompt.n_weighted;
       
-      if(systtypes.at(i)=="Central"){
+      if(this_syst == "Central"){
         hist_bkg_for_error->Add(m_bkg_prompt.hist_for_error);
         if(printnumber && !forlatex) cout << this_samplename << " : " << m_bkg_prompt.n_weighted << ", error = " << m_bkg_prompt.hist_for_error->GetBinError(1) << endl;
         //if(printnumber && !forlatex) cout << this_samplename << " : " << m_bkg_prompt.n_unweighted << endl;
@@ -200,7 +226,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
 
     }
 
-    cutop m_bkg_fake(filepath+"trilepton_mumumu_ntp_SKfake_sfed_HighdXY_dilep_cat_"+catversion+".root", "Ntp_"+this_syst);
+    cutop m_bkg_fake(filepath+"trilepton_mumumu_ntp_SKfake_sfed_HighdXY_dilep_cat_"+catversion+".root", "Ntp_"+NtpNameForFake);
     m_bkg_fake.SearchRegion = region;
     m_bkg_fake.cut_first_pt = cut_first_pt;
     m_bkg_fake.cut_second_pt = cut_second_pt;
@@ -212,7 +238,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     m_bkg_fake.Loop();
     n_bkg_fake = m_bkg_fake.n_weighted;
 
-    cutop m_sig(filepath+"trilepton_mumumu_ntp_SKHN_MuMuMu_"+TString::Itoa(sig_mass, 10)+"_cat_"+catversion+".root", "Ntp_"+this_syst);
+    cutop m_sig(filepath+"trilepton_mumumu_ntp_SKHN_MuMuMu_"+TString::Itoa(sig_mass, 10)+"_cat_"+catversion+".root", "Ntp_"+NtpNameForSignal);
     m_sig.SearchRegion = region;
     m_sig.cut_first_pt = cut_first_pt;
     m_sig.cut_second_pt = cut_second_pt;
@@ -225,7 +251,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     n_signal = m_sig.n_unweighted;
     n_signal_weighted = m_sig.n_weighted;
     
-    cutop m_data(filepath+"trilepton_mumumu_ntp_data_DoubleMuon_cat_"+catversion+".root", "Ntp_"+this_syst);
+    cutop m_data(filepath+"trilepton_mumumu_ntp_data_DoubleMuon_cat_"+catversion+".root", "Ntp_"+NtpNameForData);
     m_data.SearchRegion = region;
     m_data.cut_first_pt = cut_first_pt;
     m_data.cut_second_pt = cut_second_pt;
@@ -236,7 +262,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     m_data.BVeto = DoBVeto;
     m_data.Loop();
     n_data = m_data.n_weighted;
-    if(region != "Preselection" && systtypes.at(i)=="Central") cout << "n_data = " << n_data << endl;
+    if(region != "Preselection" && this_syst == "Central") cout << "n_data = " << n_data << endl;
 
     yields_prompt.push_back(n_bkg_prompt);
     yields_fake.push_back(n_bkg_fake);
@@ -252,7 +278,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     //==== So, in this case, we calculate the difference with WEIGHTED numbers,
     //==== then obtain relative difference.
     //==== Then, multiply this to # of event (UNweighted) to get systematics..
-    if( systtypes.at(i).Contains("MuonIDSF_") || systtypes.at(i).Contains("PU_") ){
+    if( this_syst.Contains("MuonIDSF_") || this_syst.Contains("PU_") ){
       double weighted_diff = n_signal_weighted-yields_signal_weighted.at(0);
       double weighted_diff_rel =  weighted_diff/yields_signal_weighted.at(0);
       syst_error_signal.push_back( yields_signal.at(0) * weighted_diff_rel );
@@ -272,7 +298,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     if( yields_data.at(0) != 0) rel_syst_error_data.push_back( syst_error_data.at(i)/yields_data.at(0) );
     else rel_syst_error_data.push_back( 0. );
     
-    if(systtypes.at(i)=="Central"){
+    if(this_syst == "Central"){
       stat_error_prompt = hist_bkg_for_error->GetBinError(1);
       
       double err_fake_sumw2 = m_bkg_fake.hist_for_error->GetBinError(1);
@@ -392,13 +418,17 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       << "  Down = " << yields_fake.at(4) << " ==> Diff = " << syst_error_fake.at(4) << " ("<<100.*rel_syst_error_fake.at(4)<<" %)" << endl
       << "  Mean = " << GetMeanUncert(syst_error_fake.at(3), syst_error_fake.at(4)) << " ("<<100.*GetMeanUncert(rel_syst_error_fake.at(3), rel_syst_error_fake.at(4)) << " %)" << endl
       << "JER" << endl
-      << "  Up   = " << yields_fake.at(5) << " ==> Diff = " << syst_error_fake.at(5) << " ("<<100.*rel_syst_error_fake.at(1)<<" %)" << endl
-      << "  Down = " << yields_fake.at(6) << " ==> Diff = " << syst_error_fake.at(6) << " ("<<100.*rel_syst_error_fake.at(2)<<" %)" << endl
+      << "  Up   = " << yields_fake.at(5) << " ==> Diff = " << syst_error_fake.at(5) << " ("<<100.*rel_syst_error_fake.at(5)<<" %)" << endl
+      << "  Down = " << yields_fake.at(6) << " ==> Diff = " << syst_error_fake.at(6) << " ("<<100.*rel_syst_error_fake.at(6)<<" %)" << endl
       << "  Mean = " << GetMeanUncert(syst_error_fake.at(5), syst_error_fake.at(6)) << " ("<<100.*GetMeanUncert(rel_syst_error_fake.at(5), rel_syst_error_fake.at(6)) << " %)" << endl
       << "Uncluestered" << endl
       << "  Up   = " << yields_fake.at(7) << " ==> Diff = " << syst_error_fake.at(7) << " ("<<100.*rel_syst_error_fake.at(7)<<" %)" << endl
       << "  Down = " << yields_fake.at(8) << " ==> Diff = " << syst_error_fake.at(8) << " ("<<100.*rel_syst_error_fake.at(8)<<" %)" << endl
-      << "  Mean = " << GetMeanUncert(syst_error_fake.at(7), syst_error_fake.at(8)) << " ("<<100.*GetMeanUncert(rel_syst_error_fake.at(7), rel_syst_error_fake.at(8)) << " %)" << endl;
+      << "  Mean = " << GetMeanUncert(syst_error_fake.at(7), syst_error_fake.at(8)) << " ("<<100.*GetMeanUncert(rel_syst_error_fake.at(7), rel_syst_error_fake.at(8)) << " %)" << endl
+      << "FR HalfSample" << endl
+      << "  Up   = " << yields_fake.at(15) << " ==> Diff = " << syst_error_fake.at(15) << " ("<<100.*rel_syst_error_fake.at(15)<<" %)" << endl
+      << "  Down = " << yields_fake.at(16) << " ==> Diff = " << syst_error_fake.at(16) << " ("<<100.*rel_syst_error_fake.at(16)<<" %)" << endl
+      << "  Mean = " << GetMeanUncert(syst_error_fake.at(15), syst_error_fake.at(16)) << " ("<<100.*GetMeanUncert(rel_syst_error_fake.at(15), rel_syst_error_fake.at(16)) << " %)" << endl;
       cout << "=====================> total # = " << sqrt(squared_syst_fake) << endl;
       cout << "=====================> total % = " << 100.*sqrt(squared_syst_fake)/yields_fake.at(0) << endl;
 
@@ -454,7 +484,8 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     Uncl = 7,
     btag = 8,
     PU = 9,
-    Norm = 10
+    Norm = 10,
+    FRHalfSample = 11,
   }
 */
 
@@ -467,6 +498,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     n_limit.fake_systs[NLimit::JES] = GetMeanUncert(syst_error_fake.at(3), syst_error_fake.at(4));
     n_limit.fake_systs[NLimit::JER] = GetMeanUncert(syst_error_fake.at(5), syst_error_fake.at(6));
     n_limit.fake_systs[NLimit::Uncl] = GetMeanUncert(syst_error_fake.at(7), syst_error_fake.at(8));
+    n_limit.fake_systs[NLimit::FRHalfSample] = GetMeanUncert(syst_error_fake.at(15), syst_error_fake.at(16));
 
     n_limit.n_prompt = yields_prompt.at(0);
     n_limit.n_stat_prompt = stat_error_prompt;

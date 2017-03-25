@@ -55,7 +55,7 @@ void CutStudy_mll_os(){
     hist->Draw("histsame");
     if(i==0){
       hist->SetXTitle("m(OS) [GeV]");
-      hist->SetYTitle("A.U.");
+      hist->SetYTitle("A. U.");
       hist_axis(hist);
       hist->GetYaxis()->SetRangeUser(0, 0.3);
     }
@@ -74,7 +74,7 @@ void CutStudy_mll_os(){
     hist->SetLineColor(kBlack);
     hist->SetLineStyle(i+1);
     hist->Rebin(5);
-    lg->AddEntry(hist, "HN"+TString::Itoa(sig_masses.at(i),10), "l");
+    lg->AddEntry(hist, "HN ("+TString::Itoa(sig_masses.at(i),10)+" GeV)", "l");
     hist->Scale(1./hist->Integral(-1,hist->GetXaxis()->GetNbins()+1));
     hist->Draw("histsame");
   }
