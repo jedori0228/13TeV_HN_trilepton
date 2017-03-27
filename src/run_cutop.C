@@ -87,7 +87,7 @@ void run_cutop(int sig_mass){
     fillarray( cuts_first_pt, 25, 100, 5 );
     fillarray( cuts_second_pt, 15, 100, 5 );
     fillarray( cuts_third_pt, 15, 100, 5 );
-    fillarray( cuts_W_pri_mass, 85, 300, 5);
+    fillarray( cuts_W_pri_mass, 85, 200, 5);
     cuts_PFMET.push_back(0.);
   }
   else if(SignalClass==3){
@@ -217,7 +217,24 @@ void run_cutop(int sig_mass){
               << "==> Max Punzi = " << max_punzi << endl
               << "=========================================================================================================" << endl;
             }
-            
+
+            if(sig_mass<80){
+              bool CutsAreOrders = ( cuts_second_pt.at(i_second_pt) <= cuts_first_pt.at(i_first_pt)   ) &&
+                                   ( cuts_third_pt.at(i_third_pt)   <= cuts_second_pt.at(i_second_pt) );
+              if(!CutsAreOrders){
+                //cout << cuts_first_pt.at(i_first_pt) << ", " << cuts_second_pt.at(i_second_pt) << ", " << cuts_third_pt.at(i_third_pt) << " => skip" << endl;
+                continue;
+              }
+            }
+            else{
+              bool CutsAreOrders = ( cuts_third_pt.at(i_third_pt)   <= cuts_second_pt.at(i_second_pt) ) &&
+                                   ( cuts_second_pt.at(i_second_pt) <= cuts_first_pt.at(i_first_pt)   );
+              if(!CutsAreOrders){
+                //cout << cuts_first_pt.at(i_first_pt) << ", " << cuts_second_pt.at(i_second_pt) << ", " << cuts_third_pt.at(i_third_pt) << " => skip" << endl;
+                continue;
+              }
+            }
+
             double n_bkg_prompt(0.), n_bkg_fake(0.), n_signal(0.), n_data(0.);
             double prompt_syst(0.);
 
