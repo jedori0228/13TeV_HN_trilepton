@@ -128,19 +128,21 @@ void run_cutop(int sig_mass){
     return;
   }
 
+/*
   //===============
   //==== FOR TEST
   //===============
-  //cuts_first_pt.clear();
-  //cuts_second_pt.clear();
-  //cuts_third_pt.clear();
-  //cuts_W_pri_mass.clear();
-  //cuts_PFMET.clear();
-  //cuts_first_pt = {40.};
-  //cuts_second_pt = {35.};
-  //cuts_third_pt = {15.};
-  //cuts_W_pri_mass = {80};
-  //fillarray( cuts_PFMET, 0, 100, 5);
+  cuts_first_pt.clear();
+  cuts_second_pt.clear();
+  cuts_third_pt.clear();
+  cuts_W_pri_mass.clear();
+  cuts_PFMET.clear();
+  cuts_first_pt = {25.};
+  cuts_second_pt = {30.};
+  cuts_third_pt = {15.};
+  cuts_W_pri_mass = {130};
+  cuts_PFMET = {20};
+*/
 
   Long64_t TOTAL_it = cuts_first_pt.size()*cuts_second_pt.size()*cuts_third_pt.size()*cuts_W_pri_mass.size()*cuts_PFMET.size();
   cout << "#### Cut Variables ####" << endl;

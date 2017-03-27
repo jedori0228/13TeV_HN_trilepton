@@ -85,6 +85,7 @@ class cutop {
   double cut_PFMET;
   TString SearchRegion;
   bool BVeto;
+  TString fname;
   
   cutop(TString sample, TString whichSyst);
   virtual ~cutop();
@@ -121,7 +122,7 @@ BVeto(false)
 
   TH1::SetDefaultSumw2(true);
 
-  TString fname = sample;
+  fname = sample;
   TTree *tree;
   TFile *f = new TFile(fname);
   TH1D *cutflow = (TH1D*)f->Get("cutflow");
