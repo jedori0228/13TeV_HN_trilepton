@@ -50,7 +50,7 @@ void trilepton_mumumu::draw_hist(){
       clear_legend_info();
       
       signal_survive_mass.clear();
-      
+
       for(i_file = 0; i_file < bkglist.size()+1+signal_mass.size(); i_file++){ // +1 for data
       
         TString filepath, current_sample;
@@ -68,7 +68,19 @@ void trilepton_mumumu::draw_hist(){
         }
         //==== signal starting from i_file = bkglist.size()+1
         else{
+
           int signal_index = i_file-bkglist.size()-1;
+
+          //==== if cut is optimized cut, only draw that signal
+          if(histname_suffix[i_cut].Contains("cutHN")){
+            TString tmpcut = "_cutHN"+TString::Itoa(signal_mass[signal_index],10);
+            if(histname_suffix[i_cut]!=tmpcut) continue;
+          }
+          //==== else, follow signal_draw
+          else{
+            if(!signal_draw[signal_index]) continue;
+          }
+
           //cout << "signal_index = " << signal_index << " => mass = " << signal_mass[signal_index] << endl;
           //TString string_signal_mass = "HN"+TString::Itoa(signal_mass[signal_index],10)+"_mumumu_VmuN_0p1";
           TString string_signal_mass = "HN_MuMuMu_"+TString::Itoa(signal_mass[signal_index],10);

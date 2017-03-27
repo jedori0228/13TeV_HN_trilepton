@@ -31,9 +31,43 @@ void run_trilepton_mumumu_SR(int XXX){
   m.filename_suffix = "_cat_"+catversion+".root";
   m.histname_suffix = {"_cut0", "_cutWlow", "_cutWhigh"};
   m.drawdata = {false, false, false};
-
   m.ApplyMCNormSF = {true, true, true};
   //m.ApplyMCNormSF = {false, false, false};
+
+  //==========================
+  //==== Signal plot setting
+  //==========================
+
+  m.signal_mass = {
+    5, 10, 20,
+    30, 40, 50,
+    60, 70,
+    90, 100, 150,
+    200, 300, 400,
+    500, 700, 1000
+  };
+  for(unsigned int i=0; i<m.signal_mass.size(); i++){
+    TString thiscut = "_cutHN"+TString::Itoa(m.signal_mass.at(i),10);
+    Color_t this_color;
+    if(i<=5) this_color = kAzure+(-9+2*i);
+    else if(i<=10) this_color = kRed+(-10+2*(i-6));
+    else this_color = kGreen+(-15+3*(i-11));
+    cout << thiscut << " : " << this_color << endl;
+
+    m.histname_suffix.push_back(thiscut);
+    m.drawdata.push_back(false);
+    m.ApplyMCNormSF.push_back(true);
+    m.signal_color.push_back(this_color);
+    
+  }
+  m.signal_draw = {
+    false, false, true,
+    false, false, false,
+    true, false,
+    true, false, false,
+    true, false, false,
+    false, true, true
+  };
 
   //=========================
   //==== set sample mapping
@@ -112,7 +146,8 @@ void run_trilepton_mumumu_SR(int XXX){
   m.histname = {
     "HN_mass_class1", "HN_mass_class2", "HN_mass_class3", "HN_mass_class4",
     "W_pri_lowmass_mass", "W_pri_highmass_mass",
-    "deltaR_OS_min", "gamma_star_mass", "h_Njets", "z_candidate_mass", "h_PFMET", "h_PFMET_phi",
+    "deltaR_OS_min", "gamma_star_mass", "h_Njets", "z_candidate_mass",
+    "h_PFMET", "h_PFMET_phi",
     "h_leadingLepton_Pt",
     "h_secondLepton_Pt",
     "h_thirdLepton_Pt",
@@ -144,7 +179,8 @@ void run_trilepton_mumumu_SR(int XXX){
   m.x_title = {
     "m(#mu#mu#nu) [GeV]", "m(#mu#mu#nu) [GeV]", "m(#mu#mu#nu) [GeV]", "m(#mu#mu#nu) [GeV]",
     "m(#mu#mu#mu#nu) [GeV]", "m(#mu#mu#mu#nu) [GeV]",
-    "#DeltaR(OS)_{min}", "m(#mu+#mu-) [GeV]", "# of jets", "m(#mu+#mu-) [GeV]", "#slash{E}_{T}^{miss} [GeV]", "#phi of #slash{E}_{T}^{miss}",
+    "#DeltaR(OS)_{min}", "m(#mu+#mu-) [GeV]", "# of jets", "m(#mu+#mu-) [GeV]",
+    "#slash{E}_{T}^{miss} [GeV]", "#phi of #slash{E}_{T}^{miss}",
     "p_{T} [GeV]",
     "p_{T} [GeV]",
     "p_{T} [GeV]",
@@ -210,30 +246,13 @@ void run_trilepton_mumumu_SR(int XXX){
   //==== cut-var skips
   //====================
 
+/*
   for(unsigned int i=0; i<m.histname.size(); i++){
     TString this_var = m.histname.at(i);
     if( this_var.Contains("class3") || this_var.Contains("class4") || this_var.Contains("highmass") ) m.CutVarSkips.push_back( make_pair("_cutWlow", this_var) );
     if( this_var.Contains("class1") || this_var.Contains("class2") || this_var.Contains("lowmass") ) m.CutVarSkips.push_back( make_pair("_cutWhigh", this_var) );
   }
-
-  //============================= 
-  //==== set signal mass points
-  //=============================
-
-  m.signal_mass = {
-    20,
-    60,
-    90,
-    200,
-    700,
-    1000
-  };
-  m.signal_color = {
-    kRed-6, kRed-2, kRed,
-    kBlue, kSpring+2,
-    kMagenta-7, kMagenta-2, kViolet+1,
-    kGray+1, kOrange+10, kBlack
-  };
+*/
 
   //====================================
   //==== set signal coupling constants

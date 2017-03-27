@@ -189,9 +189,9 @@ void draw_xsec(){
   //==== k-factor
   //===============
   
-  cout << "===========================================" << endl;
-  cout << "==== (13TeV dimu NLO)/(13TeV dimu LO) ====" << endl;
-  cout << "===========================================" << endl;
+  //cout << "===========================================" << endl;
+  //cout << "==== (13TeV dimu NLO)/(13TeV dimu LO) ====" << endl;
+  //cout << "===========================================" << endl;
   
   double mass_kfactor[] = {
     40, 50, 60, 70,
@@ -219,10 +219,25 @@ void draw_xsec(){
     //cout << "  13 TeV = " << this_13TeV << endl;
     //cout << "  8 TeV = " << this_8TeV << endl;
     kfactor[i] = this_NLO/this_LO;
-    cout << mass_kfactor[i] << "\t" << kfactor[i] << endl;
+    //cout << mass_kfactor[i] << "\t" << kfactor[i] << endl;
   }
 
-  TGraph *gr_kfactor = new TGraph(12, mass_kfactor, kfactor);
+  cout << "==================" << endl;
+  cout << "==== k-factor ====" << endl;
+  cout << "==================" << endl;
+  
+  double kfactor_haneol[] = {
+    1.08, 1.08, 1.08, 1.09,
+    1.09, 1.09, 1.09, 1.09,
+    1.11, 1.12, 1.14, 1.15,
+    1.17, 1.18, 1.18, 1.19,
+    1.19
+  };
+  for(int i=0; i<17; i++){
+    cout << mass_trimu_13TeV[i] << "\t" << kfactor_haneol[i] << endl;
+  }
+
+  TGraph *gr_kfactor = new TGraph(17, mass_trimu_13TeV, kfactor_haneol);
   gr_kfactor->SetName("gr_kfcator");
   gr_kfactor->SetMarkerStyle(22);
   TFile *file_kfactor = new TFile(WORKING_DIR+"/data/"+dataset+"/kfactor.root", "RECREATE");
@@ -230,7 +245,7 @@ void draw_xsec(){
   gr_kfactor->Write();
   file_kfactor->Close();
 
-  c1->SaveAs(WORKING_DIR+""./13_8_xsec.pdf");
+  c1->SaveAs(WORKING_DIR+"/13_8_xsec.pdf");
   
   
 }

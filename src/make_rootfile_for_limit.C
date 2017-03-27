@@ -50,7 +50,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
   TH1D *hist_prompt = new TH1D("hist_prompt", "", n_mass, 0, n_mass);
   TH1D *hist_signal = new TH1D("hist_signal", "", n_mass, 0, n_mass);
 
-  vector<double> signal_syst_Lumi, signal_syst_MuonPt, signal_syst_JES, signal_syst_Uncl, signal_syst_MuonID, signal_syst_PU;
+  vector<double> signal_syst_Lumi, signal_syst_MuonPt, signal_syst_JES, signal_syst_Uncl, signal_syst_MuonID, signal_syst_PU, signal_syst_TriggerSF;
   vector<double> prompt_syst_Lumi, prompt_syst_MuonPt, prompt_syst_JES, prompt_syst_Uncl, prompt_syst_MuonID, prompt_syst_Norm, prompt_syst_PU, prompt_syst_TriggerSF;
   vector<double> fake_syst_MuonPt, fake_syst_JES, fake_syst_Uncl, fake_syst_FRHalfSample;
   
@@ -92,6 +92,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     signal_syst_Uncl.push_back( 100.*n_limit.signal_systs[NLimit::Uncl]/n_limit.n_signal );
     signal_syst_MuonID.push_back( 100.*n_limit.signal_systs[NLimit::MuonID]/n_limit.n_signal );
     signal_syst_PU.push_back( 100.*n_limit.signal_systs[NLimit::PU]/n_limit.n_signal );
+    signal_syst_TriggerSF.push_back( 100.*n_limit.signal_systs[NLimit::TriggerSF]/n_limit.n_signal );
 
     prompt_syst_Lumi.push_back( uncert_lumi*100. );
     prompt_syst_MuonPt.push_back( 100.*n_limit.prompt_systs[NLimit::MuonPt]/n_limit.n_prompt );
@@ -171,6 +172,12 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     }
     cout << " \\\\" << endl;
 
+    cout << "~~~Trigger Efficiency"<<"\t";
+    for(unsigned int i=0; i<masses.size(); i++){
+      cout << "& "<<std::fixed<<std::setprecision(2)<<signal_syst_TriggerSF.at(i)<<"\\% ";
+    }
+    cout << " \\\\" << endl;
+
     cout << "###################### FOR SPREADSHEET ######################" << endl;
 
     cout << "Signal Mass"<<"\t";
@@ -212,6 +219,12 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     cout << "Pileup Model"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
       cout <<std::fixed<<std::setprecision(2)<<signal_syst_PU.at(i)<<"\t";
+    }
+    cout << endl << endl;
+
+    cout << "Trigger Efficiency"<<"\t";
+    for(unsigned int i=0; i<masses.size(); i++){
+      cout <<std::fixed<<std::setprecision(2)<<signal_syst_TriggerSF.at(i)<<"\t";
     }
     cout << endl << endl;
 

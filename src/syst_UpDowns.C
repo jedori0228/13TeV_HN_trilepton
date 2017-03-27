@@ -339,17 +339,17 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
         cout
         <<str_mass<<"\t& $< "<<cut_W_pri_mass<<"$\t& $< "<<cut_first_pt<<"$\t& $< "<<cut_second_pt<<"$\t& $< "<<cut_third_pt << "$\t& "
         <<"$"<<std::fixed<<std::setprecision(2)<<yields_prompt.at(0)
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<stat_error_prompt<<"~\\stat"
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_prompt) << "~\\syst$\t& "
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<stat_error_prompt<<"~\\stat."
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_prompt) << "~\\syst.$\t& "
         <<"$"<<std::fixed<<std::setprecision(2)<<yields_fake.at(0)
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<stat_error_fake<<"~\\stat"
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_fake) << "~\\syst$\t& "
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<stat_error_fake<<"~\\stat."
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_fake) << "~\\syst.$\t& "
         <<"$"<<std::fixed<<std::setprecision(2)<<yields_prompt.at(0)+yields_fake.at(0)
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(stat_error_prompt*stat_error_prompt+stat_error_fake*stat_error_fake)<<"~\\stat"
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_prompt+squared_syst_fake) << "~\\syst$\t& "
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(stat_error_prompt*stat_error_prompt+stat_error_fake*stat_error_fake)<<"~\\stat."
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_prompt+squared_syst_fake) << "~\\syst.$\t& "
         <<"$"<<std::fixed<<std::setprecision(2)<<100.*yields_signal.at(0)/N_MC
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<100.*stat_error_signal/N_MC<<"~\\stat"
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<100.*sqrt(squared_syst_signal)/N_MC << "~\\syst$\t& "
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<100.*stat_error_signal/N_MC<<"~\\stat."
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<100.*sqrt(squared_syst_signal)/N_MC << "~\\syst.$\t& "
         <<"$"<<data_yield<<"$ \\\\" << endl;
       }
       //==== high mass
@@ -357,17 +357,17 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
         cout
         <<str_mass<<"\t& $> "<<cut_W_pri_mass<<"$\t& $> "<<cut_PFMET<<"$\t& $> "<<cut_first_pt<<"$\t& $> "<<cut_second_pt<<"$\t& $> "<<cut_third_pt << "$\t& "
         <<"$"<<std::fixed<<std::setprecision(2)<<yields_prompt.at(0)
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<stat_error_prompt<<"~\\stat"
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_prompt) << "~\\syst$\t& "
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<stat_error_prompt<<"~\\stat."
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_prompt) << "~\\syst.$\t& "
         <<"$"<<std::fixed<<std::setprecision(2)<<yields_fake.at(0)
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<stat_error_fake<<"~\\stat"
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_fake) << "~\\syst$\t& "
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<stat_error_fake<<"~\\stat."
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_fake) << "~\\syst.$\t& "
         <<"$"<<std::fixed<<std::setprecision(2)<<yields_prompt.at(0)+yields_fake.at(0)
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(stat_error_prompt*stat_error_prompt+stat_error_fake*stat_error_fake)<<"~\\stat"
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_prompt+squared_syst_fake) << "~\\syst$\t& "
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(stat_error_prompt*stat_error_prompt+stat_error_fake*stat_error_fake)<<"~\\stat."
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_prompt+squared_syst_fake) << "~\\syst.$\t& "
         <<"$"<<std::fixed<<std::setprecision(2)<<100.*yields_signal.at(0)/N_MC
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<100.*stat_error_signal/N_MC<<"~\\stat"
-        <<" \\pm "<<std::fixed<<std::setprecision(2)<<100.*sqrt(squared_syst_signal)/N_MC << "~\\syst$\t& "
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<100.*stat_error_signal/N_MC<<"~\\stat."
+        <<" \\pm "<<std::fixed<<std::setprecision(2)<<100.*sqrt(squared_syst_signal)/N_MC << "~\\syst.$\t& "
         <<"$"<<data_yield<<"$ \\\\" << endl;
       }
 
@@ -531,6 +531,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     n_limit.signal_systs[NLimit::Uncl] = GetMeanUncert(syst_error_signal.at(7), syst_error_signal.at(8));
     n_limit.signal_systs[NLimit::MuonID] = GetMeanUncert(syst_error_signal.at(11), syst_error_signal.at(12));
     n_limit.signal_systs[NLimit::PU] = GetMeanUncert(syst_error_signal.at(13), syst_error_signal.at(14));
+    n_limit.signal_systs[NLimit::TriggerSF] = GetMeanUncert(syst_error_signal.at(17), syst_error_signal.at(18));
 
     n_limit.n_data = yields_data.at(0);
   }  

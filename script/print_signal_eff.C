@@ -41,7 +41,7 @@ void print_signal_eff(){
 
 
     cout
-    << str_mass+" \\GeVcc\t& "<<int(N_MC)<<"\t& "
+    << str_mass+"\t& "<<int(N_MC)<<"\t& "
     <<std::fixed<<std::setprecision(2)<<100.*hist_Preselection->GetEntries()/N_MC<<" $\\pm$ "
     <<std::fixed<<std::setprecision(2)<<100.*sqrt(hist_Preselection->GetEntries())/N_MC << "\t& ";
 

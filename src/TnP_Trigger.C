@@ -33,16 +33,19 @@ void TnP_Trigger(int period){
   }
   
   vector<double> abseta = {0., 0.9, 1.2, 2.1, 2.4};
-  vector<double> pt = {10, 20, 25, 30, 40, 50, 60, 120};
   
   vector<TString> fitftns = {"vpvPlusExpo", "vpvPlusCheb", "vpvPlusCheb_4th", "gaussPlusExpo", "vpvPlusCMSbeta0p2", "vpvPlusExpo3", "vpvPlusCheb_3rd"};
   
-  vector<TString> triggers = {"DoubleIsoMu17Mu8_IsoMu17leg", "DoubleIsoMu17Mu8_IsoMu8leg", "DoubleIsoMu17TkMu8_IsoMu17leg", "DoubleIsoMu17TkMu8_IsoMu8leg", "Mu8_OR_TkMu8", "test1"};
+  //vector<TString> triggers = {"DoubleIsoMu17Mu8_IsoMu17leg", "DoubleIsoMu17Mu8_IsoMu8leg", "DoubleIsoMu17TkMu8_IsoMu17leg", "DoubleIsoMu17TkMu8_IsoMu8leg", "Mu8_OR_TkMu8", "test1"};
+  vector<TString> triggers = {"DoubleIsoMu17Mu8_IsoMu17leg", "Mu8_OR_TkMu8"};
   
   for(unsigned it_trigger=0; it_trigger<triggers.size(); it_trigger++){
     
     TString trigger = triggers.at(it_trigger);
     TString plotpath = base_plotpath+"/"+trigger+"/";
+
+    vector<double> pt = {10, 20, 25, 30, 40, 50, 60, 120};
+    if(trigger=="DoubleIsoMu17Mu8_IsoMu17leg") pt = {10, 15, 16, 17, 18, 19, 20, 25, 30, 40, 50, 60, 120};
 
     gSystem->mkdir(plotpath, kTRUE);
     gSystem->mkdir(plotpath+"fitresult/", kTRUE);
@@ -292,6 +295,8 @@ void TnP_Trigger(int period){
 
     //=== draw MC efficiency 
     TCanvas *c_eff_MC = new TCanvas("c_eff_MC", "", 800, 800);
+    //if(trigger=="DoubleIsoMu17Mu8_IsoMu17leg") c_eff_MC = new TCanvas("c_eff_MC", "", 1500, 3000);
+    //else c_eff_MC = new TCanvas("c_eff_MC", "", 800, 800);
     canvas_margin(c_eff_MC);
     c_eff_MC->cd();
     gStyle->SetPaintTextFormat("0.4f");
@@ -304,6 +309,8 @@ void TnP_Trigger(int period){
 
     //=== draw Data efficiency 
     TCanvas *c_eff_Data = new TCanvas("c_eff_Data", "", 800, 800);
+    //if(trigger=="DoubleIsoMu17Mu8_IsoMu17leg") c_eff_Data = new TCanvas("c_eff_Data", "", 1500, 300);
+    //else c_eff_Data = new TCanvas("c_eff_Data", "", 800, 800);
     canvas_margin(c_eff_Data);
     c_eff_Data->cd();
     gStyle->SetPaintTextFormat("0.4f");

@@ -75,6 +75,7 @@ public:
   vector<int> signal_survive_mass;
   vector<int> MCsector_first_index;
   vector<int> signal_mass;
+  vector<bool > signal_draw;
   map< signal_class, vector<int> > map_class_to_signal_mass;
   vector<Color_t> signal_color;
   map< pair<TString, int>, double > coupling_constants;
