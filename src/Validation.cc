@@ -30,9 +30,10 @@ void Validation(){
   TGraph *g1 = new TGraph(2, x_1, y_1);
   
   vector<TString> ids = {"MUON_HN_TRI_TIGHT", "MUON_POG_TIGHT"};
-  vector<TString> pus = {"PUCATTools", "PUJohn"};
+  vector<TString> pus = {"PUCATTools", "PUJohn", "PUCATTools_TriggerSF"};
   
-  vector<TString> samples = {"DYJets_10to50", "DYJets"};
+  vector<TString> samples = {"DYJets_10to50", "DYJets", "TTJets_aMC"};
+  vector<Color_t> colors = {kYellow+2, kYellow+2, kRed};
   
   vector<TString> cuts = {"OSDiMuon", "OSDiMuon_Z_10GeV"};
   vector<TString> vars = {"mll", "n_vertices", "leadingLepton_Pt", "secondLepton_Pt", "PFMET"};
@@ -92,8 +93,8 @@ void Validation(){
               TString this_sample = samples.at(i_sample);
               TH1D *hist_tmp = (TH1D*)map_str_to_file[this_sample]->Get(this_var+"_"+thid_id+"_"+this_cut+"_"+this_pu);
               if(this_sample=="DYJets") hist_tmp->Scale(5765.40000/6025.20000);
-              hist_tmp->SetFillColor(kYellow+2);
-              hist_tmp->SetLineColor(kYellow+2);
+              hist_tmp->SetFillColor(colors.at(i_sample));
+              hist_tmp->SetLineColor(colors.at(i_sample));
               hist_tmp->Scale(this_ratio);
               MC_stacked->Add(hist_tmp);
               if(i_sample==0) hist_for_errorbar = (TH1D*)hist_tmp->Clone();
@@ -138,8 +139,8 @@ void Validation(){
             
             hist_axis(hist_empty, hist_ratio);
             
-            gSystem->mkdir(plotpath+this_per, kTRUE);
-            c1->SaveAs(plotpath+this_per+"/"+thid_id+"_"+this_cut+"_"+this_pu+"_"+this_var+".pdf");
+            gSystem->mkdir(plotpath+this_per+"/"+thid_id+"/"+this_cut+"/"+this_pu, kTRUE);
+            c1->SaveAs(plotpath+this_per+"/"+thid_id+"/"+this_cut+"/"+this_pu+"/"+this_var+".pdf");
             c1->Close();
             delete c1;
             

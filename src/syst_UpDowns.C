@@ -165,7 +165,8 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     "MCxsec_up", "MCxsec_down", // 9, 10
     "MuonIDSF_up", "MuonIDSF_down", // 11, 12
     "PU_up", "PU_down", // 13, 14
-    "FR_HalfSample_up", "FR_HalfSample_down" // 15, 16
+    "FR_HalfSample_up", "FR_HalfSample_down", // 15, 16
+    "TriggerSF_up", "TriggerSF_down" // 17, 18
   };
   vector<double> yields_prompt, yields_fake, yields_data, yields_signal, yields_signal_weighted;
   vector<double> syst_error_prompt, syst_error_fake, syst_error_data, syst_error_signal;
@@ -191,6 +192,10 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       NtpNameForPrompt = "Central";
       NtpNameForSignal = "Central";
       NtpNameForData = "Central";
+    }
+    if(this_syst.Contains("TriggerSF")){
+      NtpNameForData = "Central";
+      NtpNameForFake = "Central";
     }
           
     double n_bkg_prompt(0.), n_bkg_fake(0.), n_data(0.), n_signal(0.), n_signal_weighted(0.);
@@ -401,7 +406,11 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       << "Pileup" << endl
       << "  Up   = " << yields_prompt.at(13) << " ==> Diff = " << syst_error_prompt.at(13) << " ("<<100.*rel_syst_error_prompt.at(13)<<" %)" << endl
       << "  Down = " << yields_prompt.at(14) << " ==> Diff = " << syst_error_prompt.at(14) << " ("<<100.*rel_syst_error_prompt.at(14)<<" %)" << endl
-      << "  Mean = " << GetMeanUncert(syst_error_prompt.at(13), syst_error_prompt.at(14)) << " ("<<100.*GetMeanUncert(rel_syst_error_prompt.at(13), rel_syst_error_prompt.at(14)) << " %)" << endl;
+      << "  Mean = " << GetMeanUncert(syst_error_prompt.at(13), syst_error_prompt.at(14)) << " ("<<100.*GetMeanUncert(rel_syst_error_prompt.at(13), rel_syst_error_prompt.at(14)) << " %)" << endl
+      << "Trigger SF" << endl
+      << "  Up   = " << yields_prompt.at(17) << " ==> Diff = " << syst_error_prompt.at(17) << " ("<<100.*rel_syst_error_prompt.at(17)<<" %)" << endl
+      << "  Down = " << yields_prompt.at(18) << " ==> Diff = " << syst_error_prompt.at(18) << " ("<<100.*rel_syst_error_prompt.at(18)<<" %)" << endl
+      << "  Mean = " << GetMeanUncert(syst_error_prompt.at(17), syst_error_prompt.at(18)) << " ("<<100.*GetMeanUncert(rel_syst_error_prompt.at(17), rel_syst_error_prompt.at(18)) << " %)" << endl;
       cout << "=====================> total # = " << sqrt(squared_syst_prompt) << endl;
       cout << "=====================> total % = " << 100.*sqrt(squared_syst_prompt)/yields_prompt.at(0) << endl;
       
@@ -486,6 +495,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     PU = 9,
     Norm = 10,
     FRHalfSample = 11,
+    TriggerSF = 12,
   }
 */
 
@@ -510,6 +520,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     n_limit.prompt_systs[NLimit::Norm] = GetMeanUncert(syst_error_prompt.at(9), syst_error_prompt.at(10));
     n_limit.prompt_systs[NLimit::MuonID] = GetMeanUncert(syst_error_prompt.at(11), syst_error_prompt.at(12));
     n_limit.prompt_systs[NLimit::PU] = GetMeanUncert(syst_error_prompt.at(13), syst_error_prompt.at(14));
+    n_limit.prompt_systs[NLimit::TriggerSF] = GetMeanUncert(syst_error_prompt.at(17), syst_error_prompt.at(18));
 
     n_limit.n_signal = yields_signal.at(0);
     n_limit.n_stat_signal = stat_error_signal;
@@ -557,30 +568,30 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
   }
   else if(sig_mass == 10){
     cut_first_pt = 55.;
-    cut_second_pt = 45.;
+    cut_second_pt = 40.;
     cut_third_pt = 35.;
-    cut_W_pri_mass = 125.;
+    cut_W_pri_mass = 130.;
     cut_PFMET = 0.;
   }
   else if(sig_mass == 20){
     cut_first_pt = 50.;
     cut_second_pt = 40.;
     cut_third_pt = 40.;
-    cut_W_pri_mass = 125.;
+    cut_W_pri_mass = 130.;
     cut_PFMET = 0.;
   }
   else if(sig_mass == 30){
-    cut_first_pt = 40.;
+    cut_first_pt = 45.;
     cut_second_pt = 40.;
-    cut_third_pt = 30.;
-    cut_W_pri_mass = 125.;
+    cut_third_pt = 35.;
+    cut_W_pri_mass = 130.;
     cut_PFMET = 0.;
   }
   else if(sig_mass == 40){
     cut_first_pt = 35.;
-    cut_second_pt = 35.;
-    cut_third_pt = 30.;
-    cut_W_pri_mass = 125.;
+    cut_second_pt = 30.;
+    cut_third_pt = 25.;
+    cut_W_pri_mass = 130.;
     cut_PFMET = 0.;
   }
   else if(sig_mass == 50){
@@ -594,7 +605,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_first_pt = 30.;
     cut_second_pt = 25.;
     cut_third_pt = 25.;
-    cut_W_pri_mass = 125.;
+    cut_W_pri_mass = 130.;
     cut_PFMET = 0.;
   }
   else if(sig_mass == 70){
@@ -605,14 +616,14 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_PFMET = 0.;
   }
   else if(sig_mass == 90){
-    cut_first_pt = 25.;
+    cut_first_pt = 45.;
     cut_second_pt = 40.;
     cut_third_pt = 15.;
     cut_W_pri_mass = 80.;
     cut_PFMET = 20.;
   }
   else if(sig_mass == 100){
-    cut_first_pt = 25.;
+    cut_first_pt = 30.;
     cut_second_pt = 15.;
     cut_third_pt = 15.;
     cut_W_pri_mass = 110.;
@@ -621,7 +632,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
   else if(sig_mass == 150){
     cut_first_pt = 45.;
     cut_second_pt = 40.;
-    cut_third_pt = 20.;
+    cut_third_pt = 25.;
     cut_W_pri_mass = 160.;
     cut_PFMET = 20.;
   }
@@ -629,14 +640,14 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_first_pt = 65.;
     cut_second_pt = 55.;
     cut_third_pt = 30.;
-    cut_W_pri_mass = 240.;
+    cut_W_pri_mass = 250.;
     cut_PFMET = 20.;
   }
   else if(sig_mass == 300){
     cut_first_pt = 120.;
-    cut_second_pt = 65.;
-    cut_third_pt = 35.;
-    cut_W_pri_mass = 340.;
+    cut_second_pt = 75.;
+    cut_third_pt = 45.;
+    cut_W_pri_mass = 350.;
     cut_PFMET = 20.;
   }
   else if(sig_mass == 400){
@@ -644,28 +655,28 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_second_pt = 65.;
     cut_third_pt = 50.;
     cut_W_pri_mass = 480.;
-    cut_PFMET = 20.;
+    cut_PFMET = 40.;
   }
   else if(sig_mass == 500){
-    cut_first_pt = 100.;
-    cut_second_pt = 110.;
+    cut_first_pt = 150.;
+    cut_second_pt = 100.;
     cut_third_pt = 50.;
-    cut_W_pri_mass = 560.;
-    cut_PFMET = 20.;
+    cut_W_pri_mass = 530.;
+    cut_PFMET = 50.;
   }
   else if(sig_mass == 700){
     cut_first_pt = 200.;
     cut_second_pt = 100.;
     cut_third_pt = 45.;
-    cut_W_pri_mass = 770.;
-    cut_PFMET = 30.;
+    cut_W_pri_mass = 760.;
+    cut_PFMET = 50.;
   }
   else if(sig_mass == 1000){
     cut_first_pt = 290.;
-    cut_second_pt = 190.;
-    cut_third_pt = 80.;
-    cut_W_pri_mass = 890.;
-    cut_PFMET = 20.;
+    cut_second_pt = 180.;
+    cut_third_pt = 50.;
+    cut_W_pri_mass = 920.;
+    cut_PFMET = 50.;
   }
   else{
     cout << "Wrong Signal Mass" << endl;

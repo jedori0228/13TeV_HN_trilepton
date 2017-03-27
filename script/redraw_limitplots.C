@@ -11,7 +11,7 @@ void redraw_limitplots(){
   TString filepath = WORKING_DIR+"/plots/"+dataset+"/LimitOutput/";
   TString plotpath = WORKING_DIR+"/plots/"+dataset+"/LimitOutput/";
 
-  TString dirname = "170315_v8-0-4.18_punzi";
+  TString dirname = "v8-0-6_noSFPunziResult";
   filepath += dirname+"/";
   plotpath += dirname+"/";
 

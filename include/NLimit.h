@@ -24,6 +24,7 @@ class NLimit {
     PU = 9,
     Norm = 10,
     FRHalfSample = 11,
+    TriggerSF = 12,
   };
 
   double mass;

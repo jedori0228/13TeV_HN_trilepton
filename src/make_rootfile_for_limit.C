@@ -7,6 +7,14 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
   TString LIMIT_PATH = WORKING_DIR+"/plots/"+dataset+"/RootfileForLimit/";
   //TString LIMIT_PATH = getenv("LIMIT_PATH");
 
+  if( !gSystem->mkdir(LIMIT_PATH, kTRUE) ){
+    cout
+    << "###################################################" << endl
+    << "Directoy " << LIMIT_PATH << " is created" << endl
+    << "###################################################" << endl
+    << endl;
+  }
+
   //=====================================
   //==== Setting calculated systematics
   //=====================================
@@ -22,7 +30,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     double value;
     is >> source;
     is >> value;
-    //cout << source << " : " << value << endl;
+    cout << source << " : " << value << endl;
     CalculatedSysts[source] = value;
   }
   double uncert_lumi = CalculatedSysts["Luminosity"];
@@ -43,7 +51,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
   TH1D *hist_signal = new TH1D("hist_signal", "", n_mass, 0, n_mass);
 
   vector<double> signal_syst_Lumi, signal_syst_MuonPt, signal_syst_JES, signal_syst_Uncl, signal_syst_MuonID, signal_syst_PU;
-  vector<double> prompt_syst_Lumi, prompt_syst_MuonPt, prompt_syst_JES, prompt_syst_Uncl, prompt_syst_MuonID, prompt_syst_Norm, prompt_syst_PU;
+  vector<double> prompt_syst_Lumi, prompt_syst_MuonPt, prompt_syst_JES, prompt_syst_Uncl, prompt_syst_MuonID, prompt_syst_Norm, prompt_syst_PU, prompt_syst_TriggerSF;
   vector<double> fake_syst_MuonPt, fake_syst_JES, fake_syst_Uncl, fake_syst_FRHalfSample;
   
   for(unsigned int i=0; i<masses.size(); i++){
@@ -92,6 +100,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     prompt_syst_MuonID.push_back( 100.*n_limit.prompt_systs[NLimit::MuonID]/n_limit.n_prompt );
     prompt_syst_Norm.push_back( 100.*n_limit.prompt_systs[NLimit::Norm]/n_limit.n_prompt );
     prompt_syst_PU.push_back( 100.*n_limit.prompt_systs[NLimit::PU]/n_limit.n_prompt );
+    prompt_syst_TriggerSF.push_back( 100.*n_limit.prompt_systs[NLimit::TriggerSF]/n_limit.n_prompt );
     
     fake_syst_MuonPt.push_back( 100.*n_limit.fake_systs[NLimit::MuonPt]/n_limit.n_fake );
     fake_syst_JES.push_back( 100.*n_limit.fake_systs[NLimit::JES]/n_limit.n_fake );
@@ -257,6 +266,12 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
       cout << "& "<<std::fixed<<std::setprecision(2)<<prompt_syst_PU.at(i)<<"\\% ";
     }
     cout << " \\\\" << endl;
+
+    cout << "~~~Trigger"<<"\t";
+    for(unsigned int i=0; i<masses.size(); i++){
+      cout << "& "<<std::fixed<<std::setprecision(2)<<prompt_syst_TriggerSF.at(i)<<"\\% ";
+    }
+    cout << " \\\\" << endl;
     
     cout << "###################### FOR SPREADSHEET ######################" << endl;
     
@@ -305,6 +320,12 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     cout << "Pileup Model"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
       cout <<std::fixed<<std::setprecision(2)<<prompt_syst_PU.at(i)<<"\t";
+    }
+    cout << endl << endl;
+
+    cout << "Trigger"<<"\t";
+    for(unsigned int i=0; i<masses.size(); i++){
+      cout <<std::fixed<<std::setprecision(2)<<prompt_syst_TriggerSF.at(i)<<"\t";
     }
     cout << endl << endl;
 
@@ -365,6 +386,12 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     cout << "Unclustered energy"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
       cout <<std::fixed<<std::setprecision(2)<<fake_syst_Uncl.at(i)<<"\t";
+    }
+    cout << endl << endl;
+
+    cout << "Fake Rate Half Sample Test"<<"\t";
+    for(unsigned int i=0; i<masses.size(); i++){
+      cout <<std::fixed<<std::setprecision(2)<<fake_syst_FRHalfSample.at(i)<<"\t";
     }
     cout << endl << endl;
 
