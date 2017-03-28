@@ -150,8 +150,8 @@ void TestHalfSample(){
     TLegend *lg = new TLegend(0.65, 0.75, 0.97, 0.95);
     lg->SetBorderSize(0);
     lg->SetFillStyle(0);
-    lg->AddEntry(hist_A_Predicted, "Predicted Fake Rate", "l");
-    lg->AddEntry(hist_B_F, "Measured Fake Rate", "l");
+    lg->AddEntry(hist_A_Predicted, "Predicted Fake Rate (p)", "l");
+    lg->AddEntry(hist_B_F, "Measured Fake Rate (m)", "l");
     lg->Draw();
 
     c_B_FR_down->cd();
@@ -159,6 +159,7 @@ void TestHalfSample(){
     ratio->Divide(hist_B_F);
     ratio->Draw("PE1same");
     ratio->GetYaxis()->SetRangeUser(0.8, 1.2);
+    ratio->GetYaxis()->SetTitle("p/m");
     ratio->SetLineColor(kBlack);
 
     hist_axis(hist_A_Predicted, ratio);
