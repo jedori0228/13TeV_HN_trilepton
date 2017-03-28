@@ -268,26 +268,26 @@ void GetSystematicSimple(int sig_mass){
       cout << "~~$"
       <<std::fixed<<std::setprecision(2)<<this_prompt<<"$\t& $" 
       <<std::fixed<<std::setprecision(2)<<prompt << " \\pm "
-      <<std::fixed<<std::setprecision(2)<<prompt_stat << "~\\stat. \\pm "
-      <<std::fixed<<std::setprecision(2)<<prompt_syst << "~\\syst.$ \\\\"
+      <<std::fixed<<std::setprecision(2)<<prompt_stat << "~\\mathrm{(stat.)}\\pm "
+      <<std::fixed<<std::setprecision(2)<<prompt_syst << "~\\mathrm{(syst.)}$ \\\\"
       << endl;
     }
     else{
       cout << "Total Monte Carlo\t& $"
       <<std::fixed<<std::setprecision(2)<<prompt << " \\pm "
-      <<std::fixed<<std::setprecision(2)<<prompt_stat << "~\\stat. \\pm "
-      <<std::fixed<<std::setprecision(2)<<prompt_syst << "~\\syst.$ \\\\" << endl;
+      <<std::fixed<<std::setprecision(2)<<prompt_stat << "~\\mathrm{(stat.)}\\pm "
+      <<std::fixed<<std::setprecision(2)<<prompt_syst << "~\\mathrm{(syst.)}$ \\\\" << endl;
       cout << "\\hline" << endl;
       cout << "Data-driven background estimate: & \\\\" << endl;
       cout << "Fake muon background\t& $"
       <<std::fixed<<std::setprecision(2)<<fake << " \\pm "
-      <<std::fixed<<std::setprecision(2)<<fake_stat << "~\\stat. \\pm "
-      <<std::fixed<<std::setprecision(2)<<fake_syst << "~\\syst.$ \\\\" << endl;
+      <<std::fixed<<std::setprecision(2)<<fake_stat << "~\\mathrm{(stat.)}\\pm "
+      <<std::fixed<<std::setprecision(2)<<fake_syst << "~\\mathrm{(syst.)}$ \\\\" << endl;
       cout << "\\hline" << endl;
       cout << "Total background\t& $"
       <<std::fixed<<std::setprecision(2)<<total << " \\pm "
-      <<std::fixed<<std::setprecision(2)<<total_stat << "~\\stat. \\pm "
-      <<std::fixed<<std::setprecision(2)<<total_syst << "~\\syst.$ \\\\" << endl;
+      <<std::fixed<<std::setprecision(2)<<total_stat << "~\\mathrm{(stat.)}\\pm "
+      <<std::fixed<<std::setprecision(2)<<total_syst << "~\\mathrm{(syst.)}$ \\\\" << endl;
       cout << "\\hline" << endl;
       cout << "Observed in data (35.9 fb$^{-1}$)\t& $BLIND$ \\\\" << endl;
     }

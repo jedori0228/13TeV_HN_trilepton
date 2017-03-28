@@ -342,7 +342,7 @@ void trilepton_mumumu::SetCalculatedSysts(TString filepath){
     double value;
     is >> source;
     is >> value;
-    //cout << source << " : " << value << endl;
+    cout << source << " : " << value << endl;
     CalculatedSysts[source] = value;
   }
 

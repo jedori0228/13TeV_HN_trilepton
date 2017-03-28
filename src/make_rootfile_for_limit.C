@@ -214,13 +214,13 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     for(unsigned int i=0; i<masses.size(); i++){
       cout <<std::fixed<<std::setprecision(2)<<signal_syst_Uncl.at(i)<<"\t";
     }
-    cout << endl << endl;
+    cout << endl;
 
     cout << "Pileup Model"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
       cout <<std::fixed<<std::setprecision(2)<<signal_syst_PU.at(i)<<"\t";
     }
-    cout << endl << endl;
+    cout << endl;
 
     cout << "Trigger Efficiency"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
@@ -328,13 +328,13 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     for(unsigned int i=0; i<masses.size(); i++){
       cout <<std::fixed<<std::setprecision(2)<<prompt_syst_Norm.at(i)<<"\t";
     }
-    cout << endl << endl;
+    cout << endl;
 
     cout << "Pileup Model"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
       cout <<std::fixed<<std::setprecision(2)<<prompt_syst_PU.at(i)<<"\t";
     }
-    cout << endl << endl;
+    cout << endl;
 
     cout << "Trigger"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
@@ -400,7 +400,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     for(unsigned int i=0; i<masses.size(); i++){
       cout <<std::fixed<<std::setprecision(2)<<fake_syst_Uncl.at(i)<<"\t";
     }
-    cout << endl << endl;
+    cout << endl;
 
     cout << "Fake Rate Half Sample Test"<<"\t";
     for(unsigned int i=0; i<masses.size(); i++){
