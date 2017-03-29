@@ -241,8 +241,10 @@ void draw_xsec(){
   gr_kfactor->SetName("gr_kfcator");
   gr_kfactor->SetMarkerStyle(22);
   TFile *file_kfactor = new TFile(WORKING_DIR+"/data/"+dataset+"/kfactor.root", "RECREATE");
+  TH1D *hist_kfactor = new TH1D("kfactor", "", 17, 0, 17);
+  for(int i=1; i<=17; i++) hist_kfactor->SetBinContent(i, kfactor_haneol[i-1]);
   file_kfactor->cd();
-  gr_kfactor->Write();
+  hist_kfactor->Write();
   file_kfactor->Close();
 
   c1->SaveAs(WORKING_DIR+"/13_8_xsec.pdf");
