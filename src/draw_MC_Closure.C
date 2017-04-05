@@ -17,14 +17,19 @@ void draw_MC_Closure(){
     << "###################################################" << endl
     << endl;
   }
-  
-  vector<TString> samples = {"TTJets_aMC", "DYJets", "WJets", "WJets_MG", "DYJets_10to50", "DYJets_MG_10to50", "QCD_Pt-300to470_MuEnriched"};
-  vector<TString> channels = {"SSDiMuon", "SSDiMuon", "DiMuon", "DiMuon", "SSDiMuon", "SSDiMuon", "DiMuon"};
+
+  TString lepconf = "DiMuon";
+  //TString lepconf = "DiElectron";
+
+  vector<TString> samples = {"TTJets_aMC", "DYJets", "WJets", "WJets_MG", "DYJets_10to50", "DYJets_MG_10to50"};
+  //vector<TString> channels = {"SSDiMuon", "SSDiMuon", "DiMuon", "DiMuon", "SSDiMuon", "SSDiMuon", "DiMuon"};
+  vector<TString> channels = {"SS", "SS", "", "", "SS", "SS"};
   vector<double> ymaxs = {200, 20, 30, 30, 10, 10, 100};
 
   for(unsigned int i=0; i<samples.size(); i++){
     TString this_sample = samples.at(i);
     TString channel = channels.at(i);
+    channel = channel+lepconf;
     
     TCanvas *c1 = new TCanvas("c1", "", 800, 800);
     TPad *c1_up =  new TPad("c1_up", "", 0, 0.25, 1, 1);
@@ -53,7 +58,7 @@ void draw_MC_Closure(){
     cout << "["<<this_sample<<"]"<<endl;
     cout << "FR prediction = " << hist_tt_FR_n->GetBinContent(1) << " +- " <<  hist_tt_FR_n->GetBinError(1) << endl;
     cout << "MC event = " << hist_tt_n->GetBinContent(1) << endl;
-    cout << "==> % difference = " << 100.*fabs(hist_tt_FR_n->GetBinContent(1)-hist_tt_n->GetBinContent(1))/hist_tt_FR_n->GetBinContent(1) << " +- " << 100.*hist_tt_FR_n->GetBinError(1)/hist_tt_FR_n->GetBinContent(1) << endl;
+    cout << "==> % difference = " << 100.*fabs(hist_tt_FR_n->GetBinContent(1)-hist_tt_n->GetBinContent(1))/hist_tt_FR_n->GetBinContent(1) << " +- " << 100.*hist_tt_FR_n->GetBinError(1)/hist_tt_FR_n->GetBinContent(1) << endl << endl;
     
     hist_tt->Rebin(10);
     hist_tt_FR->Rebin(10);
