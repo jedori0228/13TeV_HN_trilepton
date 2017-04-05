@@ -49,6 +49,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
   TH1D *hist_fake = new TH1D("hist_fake", "", n_mass, 0, n_mass);
   TH1D *hist_prompt = new TH1D("hist_prompt", "", n_mass, 0, n_mass);
   TH1D *hist_signal = new TH1D("hist_signal", "", n_mass, 0, n_mass);
+  TH1D *hist_signal_weighted = new TH1D("hist_signal_weighted", "", n_mass, 0, n_mass);
 
   vector<double> signal_syst_Lumi, signal_syst_MuonPt, signal_syst_JES, signal_syst_Uncl, signal_syst_MuonID, signal_syst_PU, signal_syst_TriggerSF;
   vector<double> prompt_syst_Lumi, prompt_syst_MuonPt, prompt_syst_JES, prompt_syst_Uncl, prompt_syst_MuonID, prompt_syst_Norm, prompt_syst_PU, prompt_syst_TriggerSF;
@@ -71,7 +72,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     //double mass;
     //double n_fake,   n_stat_fake,   n_syst_fake;
     //double n_prompt, n_stat_prompt, n_syst_prompt;
-    //double n_signal_gen, n_signal,  n_stat_signal,  n_syst_signal;
+    //double n_signal_weighted, n_signal,  n_stat_signal,  n_syst_signal;
     //double n_data;
 
     hist_mass->SetBinContent(i+1, n_limit.mass);
@@ -85,6 +86,9 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
 
     hist_signal->SetBinContent(i+1, n_limit.n_signal/N_MC);
     hist_signal->SetBinError(i+1, n_limit.err_total(NLimit::signal)/N_MC);
+
+    hist_signal_weighted->SetBinContent(i+1, n_limit.n_signal_weighted);
+    hist_signal_weighted->SetBinError(i+1, n_limit.err_total(NLimit::signal)/N_MC*n_limit.n_signal_weighted);
 
     signal_syst_Lumi.push_back( uncert_lumi*100. );
     signal_syst_MuonPt.push_back( 100.*n_limit.signal_systs[NLimit::MuonPt]/n_limit.n_signal );
@@ -121,6 +125,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
     hist_fake->Write();
     hist_prompt->Write();
     hist_signal->Write();
+    hist_signal_weighted->Write();
     file->Close();
   }
 

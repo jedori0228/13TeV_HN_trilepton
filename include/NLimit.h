@@ -35,7 +35,7 @@ class NLimit {
   double n_prompt, n_stat_prompt, n_syst_prompt;
   std::map<systsource, double> prompt_systs;
 
-  double n_signal_gen, n_signal,  n_stat_signal,  n_syst_signal;
+  double n_signal_weighted, n_signal,  n_stat_signal,  n_syst_signal;
   std::map<systsource, double> signal_systs;
 
   double n_data;

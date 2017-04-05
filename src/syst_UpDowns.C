@@ -523,6 +523,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     n_limit.prompt_systs[NLimit::TriggerSF] = GetMeanUncert(syst_error_prompt.at(17), syst_error_prompt.at(18));
 
     n_limit.n_signal = yields_signal.at(0);
+    n_limit.n_signal_weighted = yields_signal_weighted.at(0);
     n_limit.n_stat_signal = stat_error_signal;
     n_limit.n_syst_signal = sqrt(squared_syst_signal);
     n_limit.signal_systs[NLimit::MuonPt] = GetMeanUncert(syst_error_signal.at(1), syst_error_signal.at(2));
