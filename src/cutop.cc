@@ -118,8 +118,11 @@ bool cutop::isSearchRegion(){
   }
 
   //==== finally, do b-jet beto
+  //==== but, don't do that for ZZ
   if(BVeto){
-    pass &= (nbjets==0); 
+    if(!SearchRegion.Contains("ZZ")){
+      pass &= (nbjets==0);
+    }
   }
 
   return pass;

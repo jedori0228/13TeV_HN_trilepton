@@ -696,7 +696,7 @@ _ZZ	fourthLepton_RelIso	-999
 _ZZ	fourthLepton_dXY	-999
 _ZZ	fourthLepton_dXYSig	-999
 _ZZ	fourthLepton_dZ	-999
-_ZZ	m_llll	10
+_ZZ	m_llll	20
 _ZZ	ZLepton_leading_Pt	5
 _ZZ	ZLepton_leading_Eta	5
 _ZZ	ZLepton_leading_RelIso	-999
@@ -762,7 +762,7 @@ _ZZ_4mu0el fourthLepton_RelIso -999
 _ZZ_4mu0el fourthLepton_dXY  -999
 _ZZ_4mu0el fourthLepton_dXYSig -999
 _ZZ_4mu0el fourthLepton_dZ -999
-_ZZ_4mu0el m_llll  10
+_ZZ_4mu0el m_llll  20
 _ZZ_4mu0el ZLepton_leading_Pt  5
 _ZZ_4mu0el ZLepton_leading_Eta 5
 _ZZ_4mu0el ZLepton_leading_RelIso  -999
