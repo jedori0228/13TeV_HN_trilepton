@@ -83,14 +83,14 @@ void run_trilepton_mumumu_CR(int XXX, bool ScaleMC=true){
       "_ZJets", "_ZJets_3mu0el", "_ZJets_2mu1el",
       "_ZLep",
       "_ZGamma", "_ZGamma_3mu0el", "_ZGamma_2mu1el",
-      "_ZZ", "_ZZ_4mu0el"
+      "_ZZ", "_ZZ_4mu0el", "_ZZ_2mu2el"
     };
     m.drawdata = {
       true, true, true,
       true, true, true,
       true,
       true, true, true,
-      true, true
+      true, true, true
     };
 
     if(ScaleMC){
@@ -99,7 +99,7 @@ void run_trilepton_mumumu_CR(int XXX, bool ScaleMC=true){
         true, true, true,
         true,
         true, true, true,
-        true, true
+        true, true, true
       };
     }
     else{
@@ -108,7 +108,7 @@ void run_trilepton_mumumu_CR(int XXX, bool ScaleMC=true){
         false, false, false,
         false,
         false, false, false,
-        false, false
+        false, false, false
       };
     }
 

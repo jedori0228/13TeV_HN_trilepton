@@ -379,7 +379,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       cout
       << "[Prompt]" << endl
       << "Central Value = " << yields_prompt.at(0) << endl
-      << "Muon Resolution" << endl
+      << "Muon Momentum Scale" << endl
       << "  Up   = " << yields_prompt.at(1) << " ==> Diff = " << syst_error_prompt.at(1) << " ("<<100.*rel_syst_error_prompt.at(1)<<" %)" << endl
       << "  Down = " << yields_prompt.at(2) << " ==> Diff = " << syst_error_prompt.at(2) << " ("<<100.*rel_syst_error_prompt.at(2)<<" %)" << endl
       << "  Mean = " << GetMeanUncert(syst_error_prompt.at(1), syst_error_prompt.at(2)) << " ("<<100.*GetMeanUncert(rel_syst_error_prompt.at(1), rel_syst_error_prompt.at(2)) << " %)" << endl
@@ -418,7 +418,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       cout
       << "[Fake]" << endl
       << "Central Value = " << yields_fake.at(0) << endl
-      << "Muon Resolution" << endl
+      << "Muon Momentum Scale" << endl
       << "  Up   = " << yields_fake.at(1) << " ==> Diff = " << syst_error_fake.at(1) << " ("<<100.*rel_syst_error_fake.at(1)<<" %)" << endl
       << "  Down = " << yields_fake.at(2) << " ==> Diff = " << syst_error_fake.at(2) << " ("<<100.*rel_syst_error_fake.at(2)<<" %)" << endl
       << "  Mean = " << GetMeanUncert(syst_error_fake.at(1), syst_error_fake.at(2)) << " ("<<100.*GetMeanUncert(rel_syst_error_fake.at(1), rel_syst_error_fake.at(2)) << " %)" << endl
@@ -445,7 +445,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       cout
       << "[signal]" << endl
       << "Central Value = " << yields_signal.at(0) << endl
-      << "Muon Resolution" << endl
+      << "Muon Momentum Scale" << endl
       << "  Up   = " << yields_signal.at(1) << " ==> Diff = " << syst_error_signal.at(1) << " ("<<100.*rel_syst_error_signal.at(1)<<" %)" << endl
       << "  Down = " << yields_signal.at(2) << " ==> Diff = " << syst_error_signal.at(2) << " ("<<100.*rel_syst_error_signal.at(2)<<" %)" << endl
       << "  Mean = " << GetMeanUncert(syst_error_signal.at(1), syst_error_signal.at(2)) << " ("<<100.*GetMeanUncert(rel_syst_error_signal.at(1), rel_syst_error_signal.at(2)) << " %)" << endl

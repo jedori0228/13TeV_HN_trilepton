@@ -11,7 +11,7 @@ void HiggsCombindedLimit(){
   TString filepath = WORKING_DIR+"/plots/"+dataset+"/LimitOutput/HiggsCombinedTools/";
   TString plotpath = WORKING_DIR+"/plots/"+dataset+"/LimitOutput/HiggsCombinedTools/";
 
-  TString dirname = "170405";
+  TString dirname = "170410_ZZOnlyLeading20GeV";
   filepath += dirname+"/";
   plotpath += dirname+"/";
 
