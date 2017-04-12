@@ -1,0 +1,13 @@
+ZZTo4L_powheg	0.935373	0.0620127
+WZTo3LNu_powheg	0.984144	0.0941029
+ZGto2LG	0.919311	0.195673
+VVV	1	0.5
+WWW	1	0.5
+WWZ	1	0.5
+WZZ	1	0.5
+ZZZ	1	0.5
+ttV	1	0.5
+ttW	1	0.5
+ttZ	1	0.5
+ttH_nonbb	1	0.5
+top	1	0.5
