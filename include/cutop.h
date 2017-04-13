@@ -44,6 +44,8 @@ class cutop {
   Double_t        ThreeLeptonConfig;
   Double_t        FourLeptonConfig;
   Double_t        nbjets;
+  Double_t        deltaR_OS_min;
+  Double_t        gamma_star_mass;
   
   // List of branches
   TBranch        *b_first_pt;   //!
@@ -68,6 +70,8 @@ class cutop {
   TBranch        *b_ThreeLeptonConfig;
   TBranch        *b_FourLeptonConfig;
   TBranch        *b_nbjets;
+  TBranch        *b_deltaR_OS_min;
+  TBranch        *b_gamma_star_mass;
   
   double TotalEvent;
   double n_weighted;
@@ -80,6 +84,8 @@ class cutop {
   double cut_third_pt;
   double cut_W_pri_mass;
   double cut_W_sec_mass;
+  double cut_deltaR_OS_min;
+  double cut_gamma_star_mass;
   int signalclass;
   double cut_HN_mass;
   double cut_PFMET;
@@ -111,8 +117,10 @@ MCNormSF(1.), MCNormSF_uncert(0.),
 cut_first_pt(20.), cut_second_pt(10.), cut_third_pt(10.),
 cut_W_pri_mass(9999.),
 signalclass(1),
-cut_HN_mass(9999.),
+cut_HN_mass(999999.),
 cut_W_sec_mass(9999.),
+cut_deltaR_OS_min(9999.),
+cut_gamma_star_mass(9999.),
 cut_PFMET(0.),
 SearchRegion("Preselection"),
 BVeto(false)
@@ -195,6 +203,8 @@ void cutop::Init(TTree *tree)
   fChain->SetBranchAddress("ThreeLeptonConfig", &ThreeLeptonConfig, &b_ThreeLeptonConfig);
   fChain->SetBranchAddress("FourLeptonConfig", &FourLeptonConfig, &b_FourLeptonConfig);
   fChain->SetBranchAddress("nbjets", &nbjets, &b_nbjets);
+  fChain->SetBranchAddress("deltaR_OS_min", &deltaR_OS_min, &b_deltaR_OS_min);
+  fChain->SetBranchAddress("gamma_star_mass", &gamma_star_mass, &b_gamma_star_mass);
 
   Notify();
 }

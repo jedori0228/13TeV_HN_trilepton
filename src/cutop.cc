@@ -32,6 +32,8 @@ void cutop::Loop()
         if( ! (third_pt < cut_third_pt) ) continue;
         if( ! (W_pri_lowmass_mass < cut_W_pri_mass) ) continue;
         if( ! (HN_mass_by_signalclass() < cut_HN_mass ) ) continue;
+        //if( ! (deltaR_OS_min > cut_deltaR_OS_min) ) continue;
+        if( ! (gamma_star_mass > cut_gamma_star_mass) ) continue;
       }
       else{
         if( ! (first_pt > cut_first_pt) ) continue;

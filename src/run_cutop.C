@@ -4,6 +4,7 @@ double PunziFunction(double eff_sig, double bkg_tot, double syst_fake, double bk
 void printcurrunttime();
 void fillarray(vector<double>& array, double start, double end, double d);
 void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max);
+double GetdR(int mass);
 
 void run_cutop(int sig_mass){
 
@@ -81,14 +82,16 @@ void run_cutop(int sig_mass){
 
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/UpDownSyst/";
   
-  vector<double> cuts_first_pt, cuts_second_pt, cuts_third_pt, cuts_W_pri_mass, cuts_PFMET, cuts_HN_mass;
+  vector<double> cuts_first_pt, cuts_second_pt, cuts_third_pt, cuts_W_pri_mass, cuts_PFMET, cuts_HN_mass, cuts_deltaR_OS_min, cuts_gamma_star_mass;
   
   if(SignalClass==1||SignalClass==2){
-    fillarray( cuts_first_pt, 25, 100, 5 );
-    fillarray( cuts_second_pt, 15, 100, 5 );
-    fillarray( cuts_third_pt, 15, 100, 5 );
-    fillarray( cuts_W_pri_mass, 85, 200, 5);
+    fillarray( cuts_first_pt, 25, 80, 5 );
+    fillarray( cuts_second_pt, 15, 50, 5 );
+    fillarray( cuts_third_pt, 15, 50, 5 );
+    fillarray( cuts_W_pri_mass, 100, 150, 5);
     fillarray( cuts_HN_mass, 0, 100, 10);
+    //fillarray( cuts_deltaR_OS_min, 0, GetdR(sig_mass), 10 );
+    fillarray( cuts_gamma_star_mass, 0, 60, 5);
     cuts_PFMET.push_back(0.);
   }
   else if(SignalClass==3){
@@ -121,6 +124,7 @@ void run_cutop(int sig_mass){
     fillarray( cuts_PFMET, 20, max_tmp, dx_tmp);
 
     cuts_HN_mass.push_back(0.);
+    cuts_gamma_star_mass.push_back(0.);
     
   }
   else if(SignalClass==4){
@@ -140,14 +144,16 @@ void run_cutop(int sig_mass){
   cuts_third_pt.clear();
   cuts_W_pri_mass.clear();
   cuts_PFMET.clear();
+  cuts_HN_mass.clear();
   cuts_first_pt = {60.};
   cuts_second_pt = {45.};
   cuts_third_pt = {25.};
   cuts_W_pri_mass = {125.};
   cuts_PFMET = {0.};
+  cuts_HN_mass = {9999.};
 */
 
-  Long64_t TOTAL_it = cuts_first_pt.size()*cuts_second_pt.size()*cuts_third_pt.size()*cuts_W_pri_mass.size()*cuts_PFMET.size()*cuts_HN_mass.size();
+  Long64_t TOTAL_it = cuts_first_pt.size()*cuts_second_pt.size()*cuts_third_pt.size()*cuts_W_pri_mass.size()*cuts_PFMET.size()*cuts_HN_mass.size()*cuts_gamma_star_mass.size();
   cout << "#### Cut Variables ####" << endl;
 
   cout << "first_pt : ";
@@ -174,6 +180,10 @@ void run_cutop(int sig_mass){
   for(unsigned int i=0; i<cuts_HN_mass.size(); i++) cout << cuts_HN_mass.at(i) << ' ';
   cout << endl << "=> # of variables = " << cuts_HN_mass.size() << endl;
 
+  cout << "gamma star mass : ";
+  for(unsigned int i=0; i<cuts_gamma_star_mass.size(); i++) cout << cuts_gamma_star_mass.at(i) << ' ';
+  cout << endl << "=> # of variables = " << cuts_gamma_star_mass.size() << endl;
+
   Long64_t LogEvery = 1000;
   
   cout
@@ -181,7 +191,7 @@ void run_cutop(int sig_mass){
   << "TOTAL # of Loop = " << TOTAL_it << endl
   << "##################################################" << endl;
 
-  double cut_first_pt_SEL=0., cut_second_pt_SEL=0., cut_third_pt_SEL=0., cut_W_pri_mass_SEL=0., cut_PFMET_SEL=0., cut_HN_mass_SEL=0.;
+  double cut_first_pt_SEL=0., cut_second_pt_SEL=0., cut_third_pt_SEL=0., cut_W_pri_mass_SEL=0., cut_PFMET_SEL=0., cut_HN_mass_SEL=0., cut_gamma_star_mass_SEL=0.;
   double n_bkg_prompt_SEL=0, n_bkg_fake_SEL=0, n_signal_SEL=0, n_data_SEL=0;
   double err_bkg_prompt_SEL=0, err_sig_SEL=0, err_data_SEL=0;
   double eff_sig_SEL=0;
@@ -195,156 +205,164 @@ void run_cutop(int sig_mass){
         for(unsigned int i_W_pri_mass=0; i_W_pri_mass<cuts_W_pri_mass.size(); i_W_pri_mass++){
           for(unsigned int i_PFMET=0; i_PFMET<cuts_PFMET.size(); i_PFMET++){
             for(unsigned int i_HN_mass=0; i_HN_mass<cuts_HN_mass.size(); i_HN_mass++){
+              for(unsigned int i_gamma_star_mass=0; i_gamma_star_mass<cuts_gamma_star_mass.size(); i_gamma_star_mass++){
 
-            this_it++;
-            if(this_it%LogEvery==0){
-              cout << "["; printcurrunttime(); cout <<"] ";
-              cout
-              << this_it<<"/"<<TOTAL_it << " ( "<<100.*this_it/TOTAL_it<<" % ) : Current Max Punzi = " << max_punzi << endl;
-              if(SignalClass==1||SignalClass==2){
-                cout
-                << "(first pt) < " << cut_first_pt_SEL << " GeV" << endl
-                << "(second pt) < " << cut_second_pt_SEL << " GeV" << endl
-                << "(third pt) < " << cut_third_pt_SEL << " GeV" << endl
-                << "W_pri_mass < " << cut_W_pri_mass_SEL << " GeV" << endl
-                << "HN mass < " << cut_HN_mass_SEL << " GeV" << endl;
+                this_it++;
+                if(this_it%LogEvery==0){
+                  cout << "["; printcurrunttime(); cout <<"] ";
+                  cout
+                  << this_it<<"/"<<TOTAL_it << " ( "<<100.*this_it/TOTAL_it<<" % ) : Current Max Punzi = " << max_punzi << endl;
+                  if(SignalClass==1||SignalClass==2){
+                    cout
+                    << "(first pt) < " << cut_first_pt_SEL << " GeV" << endl
+                    << "(second pt) < " << cut_second_pt_SEL << " GeV" << endl
+                    << "(third pt) < " << cut_third_pt_SEL << " GeV" << endl
+                    << "W_pri_mass < " << cut_W_pri_mass_SEL << " GeV" << endl
+                    << "HN mass < " << cut_HN_mass_SEL << " GeV" << endl
+                    << "gamma star mass > " << cut_gamma_star_mass_SEL << " GeV" << endl;
+                  }
+                  else{
+                    cout
+                    << "(first pt) > " << cut_first_pt_SEL << " GeV" << endl
+                    << "(second pt) > " << cut_second_pt_SEL << " GeV" << endl
+                    << "(third pt) > " << cut_third_pt_SEL << " GeV" << endl
+                    << "W_pri_mass > " << cut_W_pri_mass_SEL << " GeV" << endl
+                    << "PFMET > " << cut_PFMET_SEL << " GeV" << endl;
+                  }
+                  cout
+                  //<< "==> Data = " << n_data_SEL << endl
+                  << "==> Prompt bkg = " << n_bkg_prompt_SEL << endl
+                  << "==> Fake bkg = " << n_bkg_fake_SEL << endl
+                  << "==> Total bkg = " << n_bkg_prompt_SEL+n_bkg_fake_SEL << endl
+                  << "==> n_signal = " << n_signal_SEL << ", eff_sig = " << eff_sig_SEL << endl
+                  << "==> Max Punzi = " << max_punzi << endl
+                  << "=========================================================================================================" << endl;
+                }
+
+                if(sig_mass<80){
+                  bool CutsAreOrders = ( cuts_second_pt.at(i_second_pt) <= cuts_first_pt.at(i_first_pt)   ) &&
+                                       ( cuts_third_pt.at(i_third_pt)   <= cuts_second_pt.at(i_second_pt) );
+                  if(!CutsAreOrders){
+                    //cout << cuts_first_pt.at(i_first_pt) << ", " << cuts_second_pt.at(i_second_pt) << ", " << cuts_third_pt.at(i_third_pt) << " => skip" << endl;
+                    continue;
+                  }
+                }
+                else{
+                  bool CutsAreOrders = ( cuts_third_pt.at(i_third_pt)   <= cuts_second_pt.at(i_second_pt) ) &&
+                                       ( cuts_second_pt.at(i_second_pt) <= cuts_first_pt.at(i_first_pt)   );
+                  if(!CutsAreOrders){
+                    //cout << cuts_first_pt.at(i_first_pt) << ", " << cuts_second_pt.at(i_second_pt) << ", " << cuts_third_pt.at(i_third_pt) << " => skip" << endl;
+                    continue;
+                  }
+                }
+
+                double n_bkg_prompt(0.), n_bkg_fake(0.), n_signal(0.), n_data(0.);
+                double prompt_syst(0.);
+
+                cutop m_data(filepath+"trilepton_mumumu_ntp_data_DoubleMuon_cat_"+catversion+".root", "Ntp_Central");
+                m_data.cut_first_pt = cuts_first_pt.at(i_first_pt);
+                m_data.cut_second_pt = cuts_second_pt.at(i_second_pt);
+                m_data.cut_third_pt = cuts_third_pt.at(i_third_pt);
+                m_data.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
+                m_data.cut_PFMET = cuts_PFMET.at(i_PFMET);
+                m_data.cut_HN_mass = cuts_HN_mass.at(i_HN_mass);
+                m_data.cut_gamma_star_mass = cuts_gamma_star_mass.at(i_gamma_star_mass);
+                m_data.signalclass = SignalClass;
+                m_data.BVeto = DoBVeto;
+                m_data.Loop();
+                n_data = m_data.n_weighted;
+
+                if(n_data<1) continue;
+
+                TH1D *hist_bkg_for_err = new TH1D("hist_bkg_for_err", "", 1, 0., 1.); 
+                for(unsigned int k=0; k<bkg_prompt_list.size(); k++){
+                  TString this_samplename = bkg_prompt_list.at(k);
+                  cutop m_bkg_prompt(filepath+"trilepton_mumumu_ntp_SK"+this_samplename+"_dilep_cat_"+catversion+".root", "Ntp_Central");
+                  m_bkg_prompt.cut_first_pt = cuts_first_pt.at(i_first_pt);
+                  m_bkg_prompt.cut_second_pt = cuts_second_pt.at(i_second_pt);
+                  m_bkg_prompt.cut_third_pt = cuts_third_pt.at(i_third_pt);
+                  m_bkg_prompt.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
+                  m_bkg_prompt.cut_PFMET = cuts_PFMET.at(i_PFMET);
+                  m_bkg_prompt.cut_HN_mass = cuts_HN_mass.at(i_HN_mass);
+                  m_bkg_prompt.cut_gamma_star_mass = cuts_gamma_star_mass.at(i_gamma_star_mass);
+                  m_bkg_prompt.signalclass = SignalClass;
+                  m_bkg_prompt.MCNormSF = 1.;
+                  m_bkg_prompt.MCNormSF_uncert = 0.;
+                  m_bkg_prompt.BVeto = DoBVeto;
+                  m_bkg_prompt.Loop();
+
+                  //==== for convenience, we keep "SF==1 n_bkg",
+                  //==== and then multiply MC Norm. SF, after we run Loop()
+                  n_bkg_prompt += MCNormSF[this_samplename]        *m_bkg_prompt.n_weighted;
+                  prompt_syst  += MCNormSF_uncert[this_samplename] *m_bkg_prompt.n_weighted;
+
+                  if(TOTAL_it==1){
+                    cout << this_samplename << " : " << m_bkg_prompt.n_weighted << ", error = " << m_bkg_prompt.hist_for_error->GetBinError(1) << endl;
+                  }
+
+                  hist_bkg_for_err->Add(m_bkg_prompt.hist_for_error);
+                }
+
+                cutop m_sig(filepath+"trilepton_mumumu_ntp_SKHN_MuMuMu_"+TString::Itoa(sig_mass, 10)+"_cat_"+catversion+".root", "Ntp_Central");
+                m_sig.cut_first_pt = cuts_first_pt.at(i_first_pt);
+                m_sig.cut_second_pt = cuts_second_pt.at(i_second_pt);
+                m_sig.cut_third_pt = cuts_third_pt.at(i_third_pt);
+                m_sig.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
+                m_sig.cut_PFMET = cuts_PFMET.at(i_PFMET);
+                m_sig.cut_HN_mass = cuts_HN_mass.at(i_HN_mass);
+                m_sig.cut_gamma_star_mass = cuts_gamma_star_mass.at(i_gamma_star_mass);
+                m_sig.signalclass = SignalClass;
+                m_sig.BVeto = DoBVeto;
+                m_sig.Loop();
+                double n_generated = 100000.;
+                if(sig_mass==200) n_generated = 96193.;
+                if(sig_mass==400) n_generated = 99070.;
+                n_signal = m_sig.n_unweighted;
+
+                cutop m_bkg_fake(filepath+"trilepton_mumumu_ntp_SKfake_sfed_HighdXY_dilep_cat_"+catversion+".root", "Ntp_Central");
+                m_bkg_fake.cut_first_pt = cuts_first_pt.at(i_first_pt);
+                m_bkg_fake.cut_second_pt = cuts_second_pt.at(i_second_pt);
+                m_bkg_fake.cut_third_pt = cuts_third_pt.at(i_third_pt);
+                m_bkg_fake.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
+                m_bkg_fake.cut_PFMET = cuts_PFMET.at(i_PFMET);
+                m_bkg_fake.cut_HN_mass = cuts_HN_mass.at(i_HN_mass);
+                m_bkg_fake.cut_gamma_star_mass = cuts_gamma_star_mass.at(i_gamma_star_mass);
+                m_bkg_fake.signalclass = SignalClass;
+                m_bkg_fake.BVeto = DoBVeto;
+                m_bkg_fake.Loop();
+                n_bkg_fake = m_bkg_fake.n_weighted;
+
+                double this_punzi = PunziFunction(n_signal/n_generated, n_bkg_prompt+n_bkg_fake, uncert_fake, n_bkg_fake, prompt_syst);
+
+                //==== update punzi, if larger
+                if( this_punzi > max_punzi ){
+                  cut_first_pt_SEL = cuts_first_pt.at(i_first_pt);
+                  cut_second_pt_SEL = cuts_second_pt.at(i_second_pt);
+                  cut_third_pt_SEL = cuts_third_pt.at(i_third_pt);
+                  cut_W_pri_mass_SEL = cuts_W_pri_mass.at(i_W_pri_mass);
+                  cut_PFMET_SEL = cuts_PFMET.at(i_PFMET);
+                  cut_HN_mass_SEL = cuts_HN_mass.at(i_HN_mass);
+                  cut_gamma_star_mass_SEL = cuts_gamma_star_mass.at(i_gamma_star_mass);
+                  
+                  n_bkg_prompt_SEL = n_bkg_prompt;
+                  n_bkg_fake_SEL = n_bkg_fake;
+                  n_signal_SEL = n_signal;
+                  eff_sig_SEL = n_signal/n_generated;
+                  n_data_SEL = n_data;
+
+                  err_bkg_prompt_SEL = hist_bkg_for_err->GetBinError(1);
+                  err_sig_SEL = m_bkg_fake.hist_for_error->GetBinError(1);
+                  err_data_SEL = m_data.hist_for_error->GetBinError(1);
+
+                  max_punzi = this_punzi;
+                }
+                
               }
-              else{
-                cout
-                << "(first pt) > " << cut_first_pt_SEL << " GeV" << endl
-                << "(second pt) > " << cut_second_pt_SEL << " GeV" << endl
-                << "(third pt) > " << cut_third_pt_SEL << " GeV" << endl
-                << "W_pri_mass > " << cut_W_pri_mass_SEL << " GeV" << endl
-                << "PFMET > " << cut_PFMET_SEL << " GeV" << endl;
-              }
-              cout
-              //<< "==> Data = " << n_data_SEL << endl
-              << "==> Prompt bkg = " << n_bkg_prompt_SEL << endl
-              << "==> Fake bkg = " << n_bkg_fake_SEL << endl
-              << "==> Total bkg = " << n_bkg_prompt_SEL+n_bkg_fake_SEL << endl
-              << "==> n_signal = " << n_signal_SEL << ", eff_sig = " << eff_sig_SEL << endl
-              << "==> Max Punzi = " << max_punzi << endl
-              << "=========================================================================================================" << endl;
             }
-
-            if(sig_mass<80){
-              bool CutsAreOrders = ( cuts_second_pt.at(i_second_pt) <= cuts_first_pt.at(i_first_pt)   ) &&
-                                   ( cuts_third_pt.at(i_third_pt)   <= cuts_second_pt.at(i_second_pt) );
-              if(!CutsAreOrders){
-                //cout << cuts_first_pt.at(i_first_pt) << ", " << cuts_second_pt.at(i_second_pt) << ", " << cuts_third_pt.at(i_third_pt) << " => skip" << endl;
-                continue;
-              }
-            }
-            else{
-              bool CutsAreOrders = ( cuts_third_pt.at(i_third_pt)   <= cuts_second_pt.at(i_second_pt) ) &&
-                                   ( cuts_second_pt.at(i_second_pt) <= cuts_first_pt.at(i_first_pt)   );
-              if(!CutsAreOrders){
-                //cout << cuts_first_pt.at(i_first_pt) << ", " << cuts_second_pt.at(i_second_pt) << ", " << cuts_third_pt.at(i_third_pt) << " => skip" << endl;
-                continue;
-              }
-            }
-
-            double n_bkg_prompt(0.), n_bkg_fake(0.), n_signal(0.), n_data(0.);
-            double prompt_syst(0.);
-
-            cutop m_data(filepath+"trilepton_mumumu_ntp_data_DoubleMuon_cat_"+catversion+".root", "Ntp_Central");
-            m_data.cut_first_pt = cuts_first_pt.at(i_first_pt);
-            m_data.cut_second_pt = cuts_second_pt.at(i_second_pt);
-            m_data.cut_third_pt = cuts_third_pt.at(i_third_pt);
-            m_data.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
-            m_data.cut_PFMET = cuts_PFMET.at(i_PFMET);
-            m_data.cut_HN_mass = cuts_HN_mass.at(i_HN_mass);
-            m_data.signalclass = SignalClass;
-            m_data.BVeto = DoBVeto;
-            m_data.Loop();
-            n_data = m_data.n_weighted;
-
-            if(n_data<1) continue;
-
-            TH1D *hist_bkg_for_err = new TH1D("hist_bkg_for_err", "", 1, 0., 1.); 
-            for(unsigned int k=0; k<bkg_prompt_list.size(); k++){
-              TString this_samplename = bkg_prompt_list.at(k);
-              cutop m_bkg_prompt(filepath+"trilepton_mumumu_ntp_SK"+this_samplename+"_dilep_cat_"+catversion+".root", "Ntp_Central");
-              m_bkg_prompt.cut_first_pt = cuts_first_pt.at(i_first_pt);
-              m_bkg_prompt.cut_second_pt = cuts_second_pt.at(i_second_pt);
-              m_bkg_prompt.cut_third_pt = cuts_third_pt.at(i_third_pt);
-              m_bkg_prompt.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
-              m_bkg_prompt.cut_PFMET = cuts_PFMET.at(i_PFMET);
-              m_bkg_prompt.cut_HN_mass = cuts_HN_mass.at(i_HN_mass);
-              m_bkg_prompt.signalclass = SignalClass;
-              m_bkg_prompt.MCNormSF = 1.;
-              m_bkg_prompt.MCNormSF_uncert = 0.;
-              m_bkg_prompt.BVeto = DoBVeto;
-              m_bkg_prompt.Loop();
-
-              //==== for convenience, we keep "SF==1 n_bkg",
-              //==== and then multiply MC Norm. SF, after we run Loop()
-              n_bkg_prompt += MCNormSF[this_samplename]        *m_bkg_prompt.n_weighted;
-              prompt_syst  += MCNormSF_uncert[this_samplename] *m_bkg_prompt.n_weighted;
-
-              if(TOTAL_it==1){
-                cout << this_samplename << " : " << m_bkg_prompt.n_weighted << ", error = " << m_bkg_prompt.hist_for_error->GetBinError(1) << endl;
-              }
-
-              hist_bkg_for_err->Add(m_bkg_prompt.hist_for_error);
-            }
-
-            cutop m_sig(filepath+"trilepton_mumumu_ntp_SKHN_MuMuMu_"+TString::Itoa(sig_mass, 10)+"_cat_"+catversion+".root", "Ntp_Central");
-            m_sig.cut_first_pt = cuts_first_pt.at(i_first_pt);
-            m_sig.cut_second_pt = cuts_second_pt.at(i_second_pt);
-            m_sig.cut_third_pt = cuts_third_pt.at(i_third_pt);
-            m_sig.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
-            m_sig.cut_PFMET = cuts_PFMET.at(i_PFMET);
-            m_sig.cut_HN_mass = cuts_HN_mass.at(i_HN_mass);
-            m_sig.signalclass = SignalClass;
-            m_sig.BVeto = DoBVeto;
-            m_sig.Loop();
-            double n_generated = 100000.;
-            if(sig_mass==200) n_generated = 96193.;
-            if(sig_mass==400) n_generated = 99070.;
-            n_signal = m_sig.n_unweighted;
-
-            cutop m_bkg_fake(filepath+"trilepton_mumumu_ntp_SKfake_sfed_HighdXY_dilep_cat_"+catversion+".root", "Ntp_Central");
-            m_bkg_fake.cut_first_pt = cuts_first_pt.at(i_first_pt);
-            m_bkg_fake.cut_second_pt = cuts_second_pt.at(i_second_pt);
-            m_bkg_fake.cut_third_pt = cuts_third_pt.at(i_third_pt);
-            m_bkg_fake.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
-            m_bkg_fake.cut_PFMET = cuts_PFMET.at(i_PFMET);
-            m_bkg_fake.cut_HN_mass = cuts_HN_mass.at(i_HN_mass);
-            m_bkg_fake.signalclass = SignalClass;
-            m_bkg_fake.BVeto = DoBVeto;
-            m_bkg_fake.Loop();
-            n_bkg_fake = m_bkg_fake.n_weighted;
-
-            double this_punzi = PunziFunction(n_signal/n_generated, n_bkg_prompt+n_bkg_fake, uncert_fake, n_bkg_fake, prompt_syst);
-
-            //==== update punzi, if larger
-            if( this_punzi > max_punzi ){
-              cut_first_pt_SEL = cuts_first_pt.at(i_first_pt);
-              cut_second_pt_SEL = cuts_second_pt.at(i_second_pt);
-              cut_third_pt_SEL = cuts_third_pt.at(i_third_pt);
-              cut_W_pri_mass_SEL = cuts_W_pri_mass.at(i_W_pri_mass);
-              cut_PFMET_SEL = cuts_PFMET.at(i_PFMET);
-              cut_HN_mass_SEL = cuts_HN_mass.at(i_HN_mass);
-              
-              n_bkg_prompt_SEL = n_bkg_prompt;
-              n_bkg_fake_SEL = n_bkg_fake;
-              n_signal_SEL = n_signal;
-              eff_sig_SEL = n_signal/n_generated;
-              n_data_SEL = n_data;
-
-              err_bkg_prompt_SEL = hist_bkg_for_err->GetBinError(1);
-              err_sig_SEL = m_bkg_fake.hist_for_error->GetBinError(1);
-              err_data_SEL = m_data.hist_for_error->GetBinError(1);
-
-              max_punzi = this_punzi;
-            }
-            
           }
         }
       }
     }
-  }
   }
 
   cout << "##################" << endl;
@@ -359,7 +377,8 @@ void run_cutop(int sig_mass){
     << "(second pt) < " << cut_second_pt_SEL << " GeV" << endl
     << "(third pt) < " << cut_third_pt_SEL << " GeV" << endl
     << "W_pri_mass < " << cut_W_pri_mass_SEL << " GeV" << endl
-    << "HN mass < " << cut_HN_mass_SEL << " GeV" << endl;
+    << "HN mass < " << cut_HN_mass_SEL << " GeV" << endl
+    << "gamma star mass > " << cut_gamma_star_mass_SEL << " GeV" << endl;
   }
   else{
     cout
@@ -581,6 +600,15 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
 }
 
 
+double GetdR(int mass){
+
+  if(mass == 5) return 0.5;
+  else if(mass == 10) return 1.0;
+  else if(mass == 20) return 2.0;
+  else if(mass == 30) return 2.5;
+  else return 3.5;
+
+}
 
 
 
