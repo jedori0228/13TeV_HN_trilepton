@@ -31,6 +31,7 @@ void cutop::Loop()
         if( ! (second_pt < cut_second_pt) ) continue;
         if( ! (third_pt < cut_third_pt) ) continue;
         if( ! (W_pri_lowmass_mass < cut_W_pri_mass) ) continue;
+        if( ! (HN_mass_by_signalclass() < cut_HN_mass ) ) continue;
       }
       else{
         if( ! (first_pt > cut_first_pt) ) continue;

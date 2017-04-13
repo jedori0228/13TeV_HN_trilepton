@@ -81,13 +81,14 @@ void run_cutop(int sig_mass){
 
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/UpDownSyst/";
   
-  vector<double> cuts_first_pt, cuts_second_pt, cuts_third_pt, cuts_W_pri_mass, cuts_PFMET;
+  vector<double> cuts_first_pt, cuts_second_pt, cuts_third_pt, cuts_W_pri_mass, cuts_PFMET, cuts_HN_mass;
   
   if(SignalClass==1||SignalClass==2){
     fillarray( cuts_first_pt, 25, 100, 5 );
     fillarray( cuts_second_pt, 15, 100, 5 );
     fillarray( cuts_third_pt, 15, 100, 5 );
     fillarray( cuts_W_pri_mass, 85, 200, 5);
+    fillarray( cuts_HN_mass, 0, 100, 10);
     cuts_PFMET.push_back(0.);
   }
   else if(SignalClass==3){
@@ -118,6 +119,8 @@ void run_cutop(int sig_mass){
       dx_tmp = 10;
     }
     fillarray( cuts_PFMET, 20, max_tmp, dx_tmp);
+
+    cuts_HN_mass.push_back(0.);
     
   }
   else if(SignalClass==4){
@@ -137,14 +140,14 @@ void run_cutop(int sig_mass){
   cuts_third_pt.clear();
   cuts_W_pri_mass.clear();
   cuts_PFMET.clear();
-  cuts_first_pt = {25.};
-  cuts_second_pt = {30.};
-  cuts_third_pt = {15.};
-  cuts_W_pri_mass = {130};
-  cuts_PFMET = {20};
+  cuts_first_pt = {60.};
+  cuts_second_pt = {45.};
+  cuts_third_pt = {25.};
+  cuts_W_pri_mass = {125.};
+  cuts_PFMET = {0.};
 */
 
-  Long64_t TOTAL_it = cuts_first_pt.size()*cuts_second_pt.size()*cuts_third_pt.size()*cuts_W_pri_mass.size()*cuts_PFMET.size();
+  Long64_t TOTAL_it = cuts_first_pt.size()*cuts_second_pt.size()*cuts_third_pt.size()*cuts_W_pri_mass.size()*cuts_PFMET.size()*cuts_HN_mass.size();
   cout << "#### Cut Variables ####" << endl;
 
   cout << "first_pt : ";
@@ -167,6 +170,10 @@ void run_cutop(int sig_mass){
   for(unsigned int i=0; i<cuts_PFMET.size(); i++) cout << cuts_PFMET.at(i) << ' ';
   cout << endl << "=> # of variables = " << cuts_PFMET.size() << endl;
 
+  cout << "HN mass : ";
+  for(unsigned int i=0; i<cuts_HN_mass.size(); i++) cout << cuts_HN_mass.at(i) << ' ';
+  cout << endl << "=> # of variables = " << cuts_HN_mass.size() << endl;
+
   Long64_t LogEvery = 1000;
   
   cout
@@ -174,7 +181,7 @@ void run_cutop(int sig_mass){
   << "TOTAL # of Loop = " << TOTAL_it << endl
   << "##################################################" << endl;
 
-  double cut_first_pt_SEL=0., cut_second_pt_SEL=0., cut_third_pt_SEL=0., cut_W_pri_mass_SEL=0., cut_PFMET_SEL=0.;
+  double cut_first_pt_SEL=0., cut_second_pt_SEL=0., cut_third_pt_SEL=0., cut_W_pri_mass_SEL=0., cut_PFMET_SEL=0., cut_HN_mass_SEL=0.;
   double n_bkg_prompt_SEL=0, n_bkg_fake_SEL=0, n_signal_SEL=0, n_data_SEL=0;
   double err_bkg_prompt_SEL=0, err_sig_SEL=0, err_data_SEL=0;
   double eff_sig_SEL=0;
@@ -187,6 +194,7 @@ void run_cutop(int sig_mass){
       for(unsigned int i_third_pt=0; i_third_pt<cuts_third_pt.size(); i_third_pt++){
         for(unsigned int i_W_pri_mass=0; i_W_pri_mass<cuts_W_pri_mass.size(); i_W_pri_mass++){
           for(unsigned int i_PFMET=0; i_PFMET<cuts_PFMET.size(); i_PFMET++){
+            for(unsigned int i_HN_mass=0; i_HN_mass<cuts_HN_mass.size(); i_HN_mass++){
 
             this_it++;
             if(this_it%LogEvery==0){
@@ -198,7 +206,8 @@ void run_cutop(int sig_mass){
                 << "(first pt) < " << cut_first_pt_SEL << " GeV" << endl
                 << "(second pt) < " << cut_second_pt_SEL << " GeV" << endl
                 << "(third pt) < " << cut_third_pt_SEL << " GeV" << endl
-                << "W_pri_mass < " << cut_W_pri_mass_SEL << " GeV" << endl;
+                << "W_pri_mass < " << cut_W_pri_mass_SEL << " GeV" << endl
+                << "HN mass < " << cut_HN_mass_SEL << " GeV" << endl;
               }
               else{
                 cout
@@ -244,6 +253,7 @@ void run_cutop(int sig_mass){
             m_data.cut_third_pt = cuts_third_pt.at(i_third_pt);
             m_data.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
             m_data.cut_PFMET = cuts_PFMET.at(i_PFMET);
+            m_data.cut_HN_mass = cuts_HN_mass.at(i_HN_mass);
             m_data.signalclass = SignalClass;
             m_data.BVeto = DoBVeto;
             m_data.Loop();
@@ -260,6 +270,7 @@ void run_cutop(int sig_mass){
               m_bkg_prompt.cut_third_pt = cuts_third_pt.at(i_third_pt);
               m_bkg_prompt.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
               m_bkg_prompt.cut_PFMET = cuts_PFMET.at(i_PFMET);
+              m_bkg_prompt.cut_HN_mass = cuts_HN_mass.at(i_HN_mass);
               m_bkg_prompt.signalclass = SignalClass;
               m_bkg_prompt.MCNormSF = 1.;
               m_bkg_prompt.MCNormSF_uncert = 0.;
@@ -284,6 +295,7 @@ void run_cutop(int sig_mass){
             m_sig.cut_third_pt = cuts_third_pt.at(i_third_pt);
             m_sig.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
             m_sig.cut_PFMET = cuts_PFMET.at(i_PFMET);
+            m_sig.cut_HN_mass = cuts_HN_mass.at(i_HN_mass);
             m_sig.signalclass = SignalClass;
             m_sig.BVeto = DoBVeto;
             m_sig.Loop();
@@ -298,6 +310,7 @@ void run_cutop(int sig_mass){
             m_bkg_fake.cut_third_pt = cuts_third_pt.at(i_third_pt);
             m_bkg_fake.cut_W_pri_mass = cuts_W_pri_mass.at(i_W_pri_mass);
             m_bkg_fake.cut_PFMET = cuts_PFMET.at(i_PFMET);
+            m_bkg_fake.cut_HN_mass = cuts_HN_mass.at(i_HN_mass);
             m_bkg_fake.signalclass = SignalClass;
             m_bkg_fake.BVeto = DoBVeto;
             m_bkg_fake.Loop();
@@ -312,6 +325,7 @@ void run_cutop(int sig_mass){
               cut_third_pt_SEL = cuts_third_pt.at(i_third_pt);
               cut_W_pri_mass_SEL = cuts_W_pri_mass.at(i_W_pri_mass);
               cut_PFMET_SEL = cuts_PFMET.at(i_PFMET);
+              cut_HN_mass_SEL = cuts_HN_mass.at(i_HN_mass);
               
               n_bkg_prompt_SEL = n_bkg_prompt;
               n_bkg_fake_SEL = n_bkg_fake;
@@ -331,6 +345,7 @@ void run_cutop(int sig_mass){
       }
     }
   }
+  }
 
   cout << "##################" << endl;
   cout << "#### Finished ####" << endl;
@@ -343,7 +358,8 @@ void run_cutop(int sig_mass){
     << "(first pt) < " << cut_first_pt_SEL << " GeV" << endl
     << "(second pt) < " << cut_second_pt_SEL << " GeV" << endl
     << "(third pt) < " << cut_third_pt_SEL << " GeV" << endl
-    << "W_pri_mass < " << cut_W_pri_mass_SEL << " GeV" << endl;
+    << "W_pri_mass < " << cut_W_pri_mass_SEL << " GeV" << endl
+    << "HN mass < " << cut_HN_mass_SEL << " GeV" << endl;
   }
   else{
     cout

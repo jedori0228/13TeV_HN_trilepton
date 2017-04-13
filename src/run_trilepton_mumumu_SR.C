@@ -144,9 +144,9 @@ void run_trilepton_mumumu_SR(int XXX){
   //============================
 
   m.histname = {
-    "HN_mass_class1", "HN_mass_class2", "HN_mass_class3", "HN_mass_class4",
-    "W_pri_lowmass_mass", "W_pri_highmass_mass",
-    "deltaR_OS_min", "gamma_star_mass", "h_Njets", "z_candidate_mass",
+    "h_HN_mass_class1", "h_HN_mass_class2", "h_HN_mass_class3", "h_HN_mass_class4",
+    "h_W_pri_lowmass_mass", "h_W_pri_highmass_mass",
+    "h_deltaR_OS_min", "h_gamma_star_mass", "h_Njets", "h_z_candidate_mass",
     "h_PFMET", "h_PFMET_phi",
     "h_leadingLepton_Pt",
     "h_secondLepton_Pt",
@@ -166,15 +166,16 @@ void run_trilepton_mumumu_SR(int XXX){
     "h_leadingLepton_GlobalChi2",
     "h_secondLepton_GlobalChi2",
     "h_thirdLepton_GlobalChi2",
-    "n_events",
+    "h_Nevents",
     "h_nVertices",
     "h_osllmass",
     "h_Nbjets",
-    "W_sec_highmass_mass",
+    "h_W_sec_highmass_mass",
     "h_leadingLepton_dXYSig",
     "h_secondLepton_dXYSig",
     "h_thirdLepton_dXYSig",
-    "h_mlll"
+    "h_mlll",
+    "h_mT"
   };
   m.x_title = {
     "m(#mu#mu#nu) [GeV]", "m(#mu#mu#nu) [GeV]", "m(#mu#mu#nu) [GeV]", "m(#mu#mu#nu) [GeV]",
@@ -207,7 +208,8 @@ void run_trilepton_mumumu_SR(int XXX){
     "#sigma(dXY)",
     "#sigma(dXY)",
     "#sigma(dXY)",
-    "m(#mu#mu#mu) [GeV]"
+    "m(#mu#mu#mu) [GeV]",
+    "m_{T}(#mu, #slash{E}_{T}^{miss}) [GeV]"
   };
   m.units = {
     "GeV", "GeV", "GeV", "GeV",
@@ -259,14 +261,19 @@ void run_trilepton_mumumu_SR(int XXX){
   //====================================
 
   for(unsigned int i=0; i<m.histname_suffix.size(); i++){
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 5)] = 0.001;
+    m.coupling_constants[make_pair(m.histname_suffix.at(i), 5)] = 0.01;
+    m.coupling_constants[make_pair(m.histname_suffix.at(i), 10)] = 0.001;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 20)] = 0.001;
+    m.coupling_constants[make_pair(m.histname_suffix.at(i), 30)] = 0.001;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 40)] = 0.001;
+    m.coupling_constants[make_pair(m.histname_suffix.at(i), 50)] = 0.001;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 60)] = 0.001;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 70)] = 0.001;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 90)] = 0.1;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 100)] = 0.1;
+    m.coupling_constants[make_pair(m.histname_suffix.at(i), 150)] = 0.001;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 200)] = 1.;
+    m.coupling_constants[make_pair(m.histname_suffix.at(i), 300)] = 1.;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 400)] = 10.;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 500)] = 100.;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 700)] = 100.;
@@ -277,19 +284,20 @@ void run_trilepton_mumumu_SR(int XXX){
   //==== set signal mass for each class
   //=====================================
 
-  m.map_class_to_signal_mass[trilepton_mumumu::class1] = {5, 10, 20, 30, 40, 50};
-  m.map_class_to_signal_mass[trilepton_mumumu::class2] = {60, 70};
-  m.map_class_to_signal_mass[trilepton_mumumu::lowmass] = {5, 10, 20, 30, 40, 50, 60, 70};
-  m.map_class_to_signal_mass[trilepton_mumumu::class3] = {90, 100, 150, 200, 300, 400, 500, 700, 1000};
-  m.map_class_to_signal_mass[trilepton_mumumu::class4] = {2000};
-  m.map_class_to_signal_mass[trilepton_mumumu::highmass] = {90, 100, 150, 200, 300, 400, 500, 700, 1000};
-  //m.map_class_to_signal_mass[trilepton_mumumu::class1] = {40, 60, 150, 700};
-  //m.map_class_to_signal_mass[trilepton_mumumu::class2] = {40, 60, 150, 700};
-  //m.map_class_to_signal_mass[trilepton_mumumu::lowmass] = {40, 60, 150, 700};
-  //m.map_class_to_signal_mass[trilepton_mumumu::class3] = {40, 60, 150, 700};
-  //m.map_class_to_signal_mass[trilepton_mumumu::class4] = {40, 60, 150, 700};
-  //m.map_class_to_signal_mass[trilepton_mumumu::highmass] = {40, 60, 150, 700};
-  
+  //m.map_class_to_signal_mass[trilepton_mumumu::class1] = {5, 10, 20, 30, 40, 50};
+  //m.map_class_to_signal_mass[trilepton_mumumu::class2] = {60, 70};
+  //m.map_class_to_signal_mass[trilepton_mumumu::lowmass] = {5, 10, 20, 30, 40, 50, 60, 70};
+  //m.map_class_to_signal_mass[trilepton_mumumu::class3] = {90, 100, 150, 200, 300, 400, 500, 700, 1000};
+  //m.map_class_to_signal_mass[trilepton_mumumu::class4] = {2000};
+  //m.map_class_to_signal_mass[trilepton_mumumu::highmass] = {90, 100, 150, 200, 300, 400, 500, 700, 1000};
+
+  m.map_class_to_signal_mass[trilepton_mumumu::class1] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
+  m.map_class_to_signal_mass[trilepton_mumumu::class2] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
+  m.map_class_to_signal_mass[trilepton_mumumu::lowmass] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
+  m.map_class_to_signal_mass[trilepton_mumumu::class3] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
+  m.map_class_to_signal_mass[trilepton_mumumu::class4] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
+  m.map_class_to_signal_mass[trilepton_mumumu::highmass] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
+
   //=============
   //==== rebins
   //=============

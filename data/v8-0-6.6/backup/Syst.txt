@@ -1,2 +1,0 @@
-Luminosity	0.026
-FakeLooseID	0.40

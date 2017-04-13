@@ -3,7 +3,7 @@
 
 double PunziFunction(double eff_sig, double bkg_tot, double bkg_fake);
 void printcurrunttime();
-void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_second_pt, double& cut_third_pt, double& cut_W_pri_mass, double& cut_PFMET);
+void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_second_pt, double& cut_third_pt, double& cut_W_pri_mass, double& cut_PFMET, double& cut_HN_mass);
 double GetMeanUncert(double a, double b, bool square=false);
 
 NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bool inclusive=false, bool fillNlimit=false){
@@ -95,8 +95,8 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
 
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/UpDownSyst/";
 
-  double cut_first_pt, cut_second_pt, cut_third_pt, cut_W_pri_mass, cut_PFMET;
-  setCutsForEachSignalMass(sig_mass, cut_first_pt, cut_second_pt, cut_third_pt, cut_W_pri_mass, cut_PFMET);
+  double cut_first_pt, cut_second_pt, cut_third_pt, cut_W_pri_mass, cut_PFMET, cut_HN_mass;
+  setCutsForEachSignalMass(sig_mass, cut_first_pt, cut_second_pt, cut_third_pt, cut_W_pri_mass, cut_PFMET, cut_HN_mass);
 
   if(inclusive){
 
@@ -108,6 +108,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       cut_third_pt = 99999999.;
       cut_W_pri_mass = 150;
       cut_PFMET = 0.;
+      cut_HN_mass = 99999999.;
     }
     //==== High Mass
     else{
@@ -117,6 +118,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       cut_third_pt = 10.;
       cut_W_pri_mass = 0.;
       cut_PFMET = 20.;
+      cut_HN_mass = 99999999.;
     }
 
     //==== Preselection
@@ -126,6 +128,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       cut_second_pt = 99999999.;
       cut_third_pt = 99999999.;
       cut_W_pri_mass = 99999999;
+      cut_HN_mass = 99999999.;
       cut_PFMET = 0.;
       sig_mass = 40;
     }
@@ -141,6 +144,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       << "(second pt) < " << cut_second_pt << " GeV" << endl
       << "(third pt) < " << cut_third_pt << " GeV" << endl
       << "W_pri_mass < " << cut_W_pri_mass << " GeV" << endl
+      << "HN mass < " << cut_HN_mass << " GeV" << endl
       << "====================================================================" << endl << endl;
     }
     else{
@@ -212,6 +216,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       m_bkg_prompt.cut_third_pt = cut_third_pt;
       m_bkg_prompt.cut_W_pri_mass = cut_W_pri_mass;
       m_bkg_prompt.cut_PFMET = cut_PFMET;
+      m_bkg_prompt.cut_HN_mass = cut_HN_mass;
       m_bkg_prompt.signalclass = SignalClass;
       m_bkg_prompt.MCNormSF = MCNormSF[this_samplename];
       double MCNormDir(0.);
@@ -238,6 +243,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     m_bkg_fake.cut_third_pt = cut_third_pt;
     m_bkg_fake.cut_W_pri_mass = cut_W_pri_mass;
     m_bkg_fake.cut_PFMET = cut_PFMET;
+    m_bkg_fake.cut_HN_mass = cut_HN_mass;
     m_bkg_fake.signalclass = SignalClass;
     m_bkg_fake.BVeto = DoBVeto;
     m_bkg_fake.Loop();
@@ -250,6 +256,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     m_sig.cut_third_pt = cut_third_pt;
     m_sig.cut_W_pri_mass = cut_W_pri_mass;
     m_sig.cut_PFMET = cut_PFMET;
+    m_sig.cut_HN_mass = cut_HN_mass;
     m_sig.signalclass = SignalClass;
     m_sig.BVeto = DoBVeto;
     m_sig.Loop();
@@ -263,6 +270,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     m_data.cut_third_pt = cut_third_pt;
     m_data.cut_W_pri_mass = cut_W_pri_mass;
     m_data.cut_PFMET = cut_PFMET;
+    m_data.cut_HN_mass = cut_HN_mass;
     m_data.signalclass = SignalClass;
     m_data.BVeto = DoBVeto;
     m_data.Loop();
@@ -559,7 +567,7 @@ void printcurrunttime(){
   
 }
 
-void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_second_pt, double& cut_third_pt, double& cut_W_pri_mass, double& cut_PFMET){
+void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_second_pt, double& cut_third_pt, double& cut_W_pri_mass, double& cut_PFMET, double& cut_HN_mass){
 
   if(sig_mass == 5){
     cut_first_pt = 60.;
@@ -567,6 +575,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 25.;
     cut_W_pri_mass = 125.;
     cut_PFMET = 0.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 10){
     cut_first_pt = 55.;
@@ -574,6 +583,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 35.;
     cut_W_pri_mass = 130.;
     cut_PFMET = 0.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 20){
     cut_first_pt = 50.;
@@ -581,6 +591,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 40.;
     cut_W_pri_mass = 130.;
     cut_PFMET = 0.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 30){
     cut_first_pt = 45.;
@@ -588,6 +599,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 35.;
     cut_W_pri_mass = 130.;
     cut_PFMET = 0.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 40){
     cut_first_pt = 35.;
@@ -595,6 +607,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 25.;
     cut_W_pri_mass = 130.;
     cut_PFMET = 0.;
+    cut_HN_mass = 50.;
   }
   else if(sig_mass == 50){
     cut_first_pt = 30.;
@@ -602,6 +615,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 30.;
     cut_W_pri_mass = 125.;
     cut_PFMET = 0.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 60){
     cut_first_pt = 30.;
@@ -609,6 +623,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 25.;
     cut_W_pri_mass = 130.;
     cut_PFMET = 0.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 70){
     cut_first_pt = 35.;
@@ -616,6 +631,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 25.;
     cut_W_pri_mass = 125.;
     cut_PFMET = 0.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 90){
     cut_first_pt = 45.;
@@ -623,6 +639,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 15.;
     cut_W_pri_mass = 80.;
     cut_PFMET = 20.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 100){
     cut_first_pt = 30.;
@@ -630,6 +647,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 15.;
     cut_W_pri_mass = 110.;
     cut_PFMET = 20.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 150){
     cut_first_pt = 45.;
@@ -637,6 +655,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 25.;
     cut_W_pri_mass = 160.;
     cut_PFMET = 20.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 200){
     cut_first_pt = 65.;
@@ -644,6 +663,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 30.;
     cut_W_pri_mass = 250.;
     cut_PFMET = 20.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 300){
     cut_first_pt = 120.;
@@ -651,6 +671,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 45.;
     cut_W_pri_mass = 350.;
     cut_PFMET = 20.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 400){
     cut_first_pt = 120.;
@@ -658,6 +679,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 50.;
     cut_W_pri_mass = 480.;
     cut_PFMET = 40.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 500){
     cut_first_pt = 150.;
@@ -665,6 +687,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 50.;
     cut_W_pri_mass = 530.;
     cut_PFMET = 50.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 700){
     cut_first_pt = 200.;
@@ -672,6 +695,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 45.;
     cut_W_pri_mass = 760.;
     cut_PFMET = 50.;
+    cut_HN_mass = 100.;
   }
   else if(sig_mass == 1000){
     cut_first_pt = 290.;
@@ -679,6 +703,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_third_pt = 50.;
     cut_W_pri_mass = 920.;
     cut_PFMET = 50.;
+    cut_HN_mass = 100.;
   }
   else{
     cout << "Wrong Signal Mass" << endl;
@@ -686,6 +711,7 @@ void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_se
     cut_second_pt = 9999999;
     cut_third_pt = 99999999;
     cut_W_pri_mass = 99999999;
+    cut_HN_mass = 99999999;
   }
 
 }
