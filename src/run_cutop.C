@@ -89,7 +89,7 @@ void run_cutop(int sig_mass){
     fillarray( cuts_second_pt, 15, 50, 5 );
     fillarray( cuts_third_pt, 15, 50, 5 );
     fillarray( cuts_W_pri_mass, 100, 150, 5);
-    fillarray( cuts_HN_mass, 0, 100, 10);
+    fillarray( cuts_HN_mass, sig_mass, 80, 10);
     //fillarray( cuts_deltaR_OS_min, 0, GetdR(sig_mass), 10 );
     fillarray( cuts_gamma_star_mass, 0, 60, 5);
     cuts_PFMET.push_back(0.);
