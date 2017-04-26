@@ -21,7 +21,7 @@ void run_trilepton_mumumu_SR(int XXX){
   //==== set data class
   //=====================
 
-  m.data_class = dataset+"/SR/";
+  m.data_class = "v8-0-6.6_dZ0p5/SR/";
 
   //================================
   //==== set prefixes and suffixes
