@@ -88,7 +88,7 @@ for i in range(0,17):
 
   out.write("imax 1  number of channels\n") 
   out.write("jmax 1  number of backgrounds\n") 
-  out.write("kmax 3  number of nuisance parameters (sources of systematical uncertainties)\n") 
+  out.write("kmax 2  number of nuisance parameters (sources of systematical uncertainties)\n") 
   out.write("------------\n") 
   out.write("# we have just one channel, in which we observe 0 events\n") 
   out.write("bin 1\n") 
@@ -103,7 +103,7 @@ for i in range(0,17):
   out.write("process\t0\t1\n")
   out.write("rate\t"+str(signal_weighted)+"\t"+str(bkg_yield)+"\n")
   out.write("------------\n")
-  out.write("lumi\tlnN\t1.026\t1.026\n")
+  #out.write("lumi\tlnN\t1.026\t1.026\n")
   out.write("sigerr\tlnN\t"+str(signal_yield_err)+"\t-\n")
   out.write("bkgerr\tlnN\t-\t"+str(bkg_yield_err)+"\n")
   out.close()

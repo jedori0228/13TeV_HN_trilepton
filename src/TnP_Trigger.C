@@ -16,8 +16,8 @@ void TnP_Trigger(int period){
     return;
   }
 
-  TString CutsOnDen = "pair_dPhiPrimeDeg_bin0__pair_deltaR_bin0";
-  if(DataPeriod=="GH") CutsOnDen = "pair_deltaR_bin0";
+  TString CutsOnDen = "dB_bin0__dzPV_bin0__pair_dPhiPrimeDeg_bin0__pair_deltaR_bin0";
+  if(DataPeriod=="GH") CutsOnDen = "dB_bin0__dzPV_bin0__pair_deltaR_bin0";
 
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
   TString dataset = getenv("CATANVERSION");
@@ -273,8 +273,8 @@ void TnP_Trigger(int period){
     TString outputTriggerEffname = "MuonTriggerEfficiency_TRILEP_"+trigger+"_Run"+DataPeriod+".root";
     TFile *file_TriggerEff = new TFile(plotpath+outputTriggerEffname, "RECREATE");
 
-    TString CutsOnDen2 = "pair_dPhiPrimeDeg_bin0_&_pair_deltaR_bin0";
-    if(DataPeriod=="GH") CutsOnDen2 = "pair_deltaR_bin0";
+    TString CutsOnDen2 = "dB_bin0_&_dzPV_bin0_&_pair_dPhiPrimeDeg_bin0_&_pair_deltaR_bin0";
+    if(DataPeriod=="GH") CutsOnDen2 = "dB_bin0_&_dzPV_bin0_&_pair_deltaR_bin0";
 
     TCanvas *c_TriggerEff_Data = (TCanvas*)file_Trigger_Data->Get(dirname+"fit_eff_plots/abseta_pt_PLOT_"+CutsOnDen2);
     TCanvas *c_TriggerEff_MC = (TCanvas*)file_Trigger_MC->Get(dirname+"fit_eff_plots/abseta_pt_PLOT_"+CutsOnDen2);
@@ -305,6 +305,10 @@ void TnP_Trigger(int period){
     hist_TriggerEff_MC->GetXaxis()->SetTitle("muon |#eta|");
     hist_TriggerEff_MC->GetYaxis()->SetTitle("muon p_{T} [GeV]");
     c_eff_MC->SaveAs(plotpath+"/abseta_pt_MC.pdf");
+    if(trigger=="DoubleIsoMu17Mu8_IsoMu17leg"){
+      hist_TriggerEff_MC->GetYaxis()->SetRangeUser(10, 25);
+      c_eff_MC->SaveAs(plotpath+"/abseta_pt_MC_zoom.pdf");
+    }
     c_eff_MC->Close();
 
     //=== draw Data efficiency 
@@ -323,6 +327,10 @@ void TnP_Trigger(int period){
     hist_TriggerEff_Data->Divide(hist_TriggerEff_MC);
     hist_TriggerEff_Data->Draw("texte1");
     c_eff_Data->SaveAs(plotpath+"/abseta_pt_SF.pdf");
+    if(trigger=="DoubleIsoMu17Mu8_IsoMu17leg"){
+      hist_TriggerEff_Data->GetYaxis()->SetRangeUser(10, 25);
+      c_eff_Data->SaveAs(plotpath+"/abseta_pt_Data_zoom.pdf");
+    }
     c_eff_Data->Close();
 
 

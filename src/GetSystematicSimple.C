@@ -85,7 +85,7 @@ void GetSystematicSimple(int sig_mass){
   else if(sig_mass <= 1000) SignalClass = 3;
   else SignalClass = 4;
 
-  double cut_first_pt, cut_second_pt, cut_third_pt, cut_W_pri_mass, cut_PFMET;
+  double cut_first_pt, cut_second_pt, cut_third_pt, cut_W_pri_mass, cut_PFMET, cut_HN_mass;
 
   //==== Low Mass
   if(sig_mass < 80){
@@ -95,6 +95,7 @@ void GetSystematicSimple(int sig_mass){
     cut_third_pt = 99999999.;
     cut_W_pri_mass = 150;
     cut_PFMET = 0.;
+    cut_HN_mass = 99999999.;
   }
   //==== High Mass
   else{
@@ -151,6 +152,7 @@ void GetSystematicSimple(int sig_mass){
         m_bkg_prompt.cut_third_pt = cut_third_pt;
         m_bkg_prompt.cut_W_pri_mass = cut_W_pri_mass;
         m_bkg_prompt.cut_PFMET = cut_PFMET;
+        m_bkg_prompt.cut_HN_mass = cut_HN_mass;
         m_bkg_prompt.signalclass = SignalClass;
         m_bkg_prompt.MCNormSF = MCNormSF[this_samplename];
         double MCNormDir(0.);
@@ -176,6 +178,7 @@ void GetSystematicSimple(int sig_mass){
       m_bkg_fake.cut_third_pt = cut_third_pt;
       m_bkg_fake.cut_W_pri_mass = cut_W_pri_mass;
       m_bkg_fake.cut_PFMET = cut_PFMET;
+      m_bkg_fake.cut_HN_mass = cut_HN_mass;
       m_bkg_fake.signalclass = SignalClass;
       m_bkg_fake.BVeto = DoBVeto;
       m_bkg_fake.Loop();
@@ -188,6 +191,7 @@ void GetSystematicSimple(int sig_mass){
       m_data.cut_third_pt = cut_third_pt;
       m_data.cut_W_pri_mass = cut_W_pri_mass;
       m_data.cut_PFMET = cut_PFMET;
+      m_data.cut_HN_mass = cut_HN_mass;
       m_data.signalclass = SignalClass;
       m_data.BVeto = DoBVeto;
       m_data.Loop();
@@ -200,6 +204,7 @@ void GetSystematicSimple(int sig_mass){
       m_sig.cut_third_pt = cut_third_pt;
       m_sig.cut_W_pri_mass = cut_W_pri_mass;
       m_sig.cut_PFMET = cut_PFMET;
+      m_sig.cut_HN_mass = cut_HN_mass;
       m_sig.signalclass = SignalClass;
       m_sig.BVeto = DoBVeto;
       m_sig.Loop();

@@ -268,11 +268,11 @@ void run_trilepton_mumumu_SR(int XXX){
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 40)] = 0.001;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 50)] = 0.001;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 60)] = 0.001;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 70)] = 0.001;
+    m.coupling_constants[make_pair(m.histname_suffix.at(i), 70)] = 0.01;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 90)] = 0.1;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 100)] = 0.1;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 150)] = 0.001;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 200)] = 1.;
+    m.coupling_constants[make_pair(m.histname_suffix.at(i), 150)] = 0.1;
+    m.coupling_constants[make_pair(m.histname_suffix.at(i), 200)] = 0.1;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 300)] = 1.;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 400)] = 10.;
     m.coupling_constants[make_pair(m.histname_suffix.at(i), 500)] = 100.;

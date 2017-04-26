@@ -11,7 +11,7 @@ void HiggsCombindedLimit(){
   TString filepath = WORKING_DIR+"/plots/"+dataset+"/LimitOutput/HiggsCombinedTools/";
   TString plotpath = WORKING_DIR+"/plots/"+dataset+"/LimitOutput/HiggsCombinedTools/";
 
-  TString dirname = "170413_ggZZkfactor";
+  TString dirname = "170426_dXY_0p01_dZ_0p1_usingpreviousoptcut";
   filepath += dirname+"/";
   plotpath += dirname+"/";
 
@@ -111,7 +111,7 @@ void HiggsCombindedLimit(){
   gr_band_2sigma->GetYaxis()->SetTitle("|V_{#muN}^{2}|");
   gr_band_2sigma->GetXaxis()->SetTitle("m(HN) [GeV]");
   gr_band_2sigma->GetYaxis()->SetTitleSize(0.06); 
-  gr_band_2sigma->GetYaxis()->SetRangeUser(0.00002, 10.);
+  gr_band_2sigma->GetYaxis()->SetRangeUser(0.000002, 10.);
   gr_band_2sigma->SetTitle("");
   gr_band_1sigma->Draw("3same");
   gr_13TeV_exp->Draw("lsame");
