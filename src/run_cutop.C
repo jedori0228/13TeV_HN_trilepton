@@ -80,7 +80,7 @@ void run_cutop(int sig_mass){
   else if(sig_mass <= 1000) SignalClass = 3;
   else SignalClass = 4;
 
-  TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/UpDownSyst/";
+  TString filepath = WORKING_DIR+"/rootfiles/v8-0-6.6_dXY_0p05_dZ_0p5/UpDownSyst/";
   
   vector<double> cuts_first_pt, cuts_second_pt, cuts_third_pt, cuts_W_pri_mass, cuts_PFMET, cuts_HN_mass, cuts_deltaR_OS_min, cuts_gamma_star_mass;
   
@@ -151,13 +151,15 @@ void run_cutop(int sig_mass){
   cuts_PFMET.clear();
   cuts_HN_mass.clear();
   cuts_deltaR_OS_min.clear();
-  cuts_first_pt = {40.};
-  cuts_second_pt = {35.};
-  cuts_third_pt = {30.};
-  cuts_W_pri_mass = {105.};
+  cuts_gamma_star_mass.clear();
+  cuts_first_pt = {9999999.};
+  cuts_second_pt = {999999.};
+  cuts_third_pt = {99999.};
+  cuts_W_pri_mass = {9999999.};
   cuts_PFMET = {0.};
-  cuts_HN_mass = {50.};
-  cuts_deltaR_OS_min = {0.5};
+  cuts_HN_mass = {9999999.};
+  cuts_deltaR_OS_min = {0.};
+  cuts_gamma_star_mass = {0.};
 */
 
   Long64_t TOTAL_it = cuts_first_pt.size()*cuts_second_pt.size()*cuts_third_pt.size()*cuts_W_pri_mass.size()*cuts_PFMET.size()*cuts_HN_mass.size()*cuts_deltaR_OS_min.size()*cuts_gamma_star_mass.size();
