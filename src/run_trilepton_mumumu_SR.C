@@ -21,7 +21,7 @@ void run_trilepton_mumumu_SR(int XXX){
   //==== set data class
   //=====================
 
-  m.data_class = "v8-0-6.6_dZ0p5/SR/";
+  m.data_class = "v8-0-6.6_dXY_0p05_dZ_0p5/SR/";
 
   //================================
   //==== set prefixes and suffixes
@@ -60,6 +60,16 @@ void run_trilepton_mumumu_SR(int XXX){
     m.signal_color.push_back(this_color);
     
   }
+
+  m.signal_draw = {
+    true, true, true,
+    true, true, true,
+    true, true,
+    true, true, true,
+    true, true, true,
+    true, true, true
+  };
+/*
   m.signal_draw = {
     false, false, true,
     false, false, false,
@@ -68,6 +78,7 @@ void run_trilepton_mumumu_SR(int XXX){
     true, false, false,
     false, true, true
   };
+*/
 
   //=========================
   //==== set sample mapping
@@ -291,12 +302,19 @@ void run_trilepton_mumumu_SR(int XXX){
   //m.map_class_to_signal_mass[trilepton_mumumu::class4] = {2000};
   //m.map_class_to_signal_mass[trilepton_mumumu::highmass] = {90, 100, 150, 200, 300, 400, 500, 700, 1000};
 
-  m.map_class_to_signal_mass[trilepton_mumumu::class1] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
-  m.map_class_to_signal_mass[trilepton_mumumu::class2] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
-  m.map_class_to_signal_mass[trilepton_mumumu::lowmass] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
-  m.map_class_to_signal_mass[trilepton_mumumu::class3] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
-  m.map_class_to_signal_mass[trilepton_mumumu::class4] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
-  m.map_class_to_signal_mass[trilepton_mumumu::highmass] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
+  //m.map_class_to_signal_mass[trilepton_mumumu::class1] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
+  //m.map_class_to_signal_mass[trilepton_mumumu::class2] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
+  //m.map_class_to_signal_mass[trilepton_mumumu::lowmass] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
+  //m.map_class_to_signal_mass[trilepton_mumumu::class3] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
+  //m.map_class_to_signal_mass[trilepton_mumumu::class4] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
+  //m.map_class_to_signal_mass[trilepton_mumumu::highmass] = {5, 10, 20, 30, 40, 50, 60, 70, 90, 100, 150, 200, 300, 400, 500, 700, 1000};
+
+  m.map_class_to_signal_mass[trilepton_mumumu::class1] = {5, 10, 20, 30, 40, 50};
+  m.map_class_to_signal_mass[trilepton_mumumu::class2] = {60, 70};
+  m.map_class_to_signal_mass[trilepton_mumumu::lowmass] = {10, 30, 50, 70};
+  m.map_class_to_signal_mass[trilepton_mumumu::class3] = {90, 100, 150, 200, 300, 400, 500, 700, 1000};
+  m.map_class_to_signal_mass[trilepton_mumumu::class4] = {2000};
+  m.map_class_to_signal_mass[trilepton_mumumu::highmass] = {100, 1200, 400, 700, 1000};
 
   //=============
   //==== rebins

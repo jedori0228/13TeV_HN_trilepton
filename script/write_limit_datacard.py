@@ -5,8 +5,10 @@ Lumi = 35863.308
 
 WORKING_DIR = os.environ["PLOTTER_WORKING_DIR"]
 dataset = os.environ["CATANVERSION"]
-LIMIT_PATH = WORKING_DIR+"/plots/"+dataset+"/RootfileForLimit/"
+LIMIT_PATH = WORKING_DIR+"/plots/v8-0-6.6_dXY_0p05_dZ_0p5/RootfileForLimit/Before_HNmass_gammastar_deltaR/"
 DATACARDS_PATH = LIMIT_PATH+"datacards"
+
+os.system('mkdir -p '+DATACARDS_PATH)
 
 f = ROOT.TFile(LIMIT_PATH+"/hist.root")
 
@@ -29,9 +31,9 @@ for i in range(0,17):
 
   mass = str(int(hist_mass.GetBinContent(i+1)))
 
-  print ""
-  print "#### HN"+mass+" ####"
-  print ""
+  #print ""
+  #print "#### HN"+mass+" ####"
+  #print ""
 
   xsec = hist_xsec.GetBinContent(i+1)
 
@@ -85,10 +87,11 @@ for i in range(0,17):
   #print "lumi\tlnN\t1.026\t1.026"
   #print "sigerr\tlnN\t"+str(signal_yield_err)+"\t-"
   #print "bkgerr\tlnN\t-\t"+str(bkg_yield_err)
+  print mass+"\t"+str(hist_signal_weighted.GetBinContent(i+1))
 
   out.write("imax 1  number of channels\n") 
   out.write("jmax 1  number of backgrounds\n") 
-  out.write("kmax 3  number of nuisance parameters (sources of systematical uncertainties)\n") 
+  out.write("kmax 2  number of nuisance parameters (sources of systematical uncertainties)\n") 
   out.write("------------\n") 
   out.write("# we have just one channel, in which we observe 0 events\n") 
   out.write("bin 1\n") 
@@ -103,7 +106,7 @@ for i in range(0,17):
   out.write("process\t0\t1\n")
   out.write("rate\t"+str(signal_weighted)+"\t"+str(bkg_yield)+"\n")
   out.write("------------\n")
-  out.write("lumi\tlnN\t1.026\t1.026\n")
+  #out.write("lumi\tlnN\t1.026\t1.026\n")
   out.write("sigerr\tlnN\t"+str(signal_yield_err)+"\t-\n")
   out.write("bkgerr\tlnN\t-\t"+str(bkg_yield_err)+"\n")
   out.close()

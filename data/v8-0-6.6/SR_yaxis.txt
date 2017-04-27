@@ -50,7 +50,7 @@ _cutWlow	h_Njets	300
 _cutWlow	h_z_candidate_mass	100
 _cutWlow	h_PFMET	60
 _cutWlow	h_PFMET_phi	40
-_cutWlow	h_leadingLepton_Pt	120
+_cutWlow	h_leadingLepton_Pt	150
 _cutWlow	h_secondLepton_Pt	150
 _cutWlow	h_thirdLepton_Pt	300
 _cutWlow	h_leadingLepton_Eta	80

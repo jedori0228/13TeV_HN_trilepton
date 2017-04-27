@@ -4,7 +4,7 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
 
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
   TString dataset = getenv("CATANVERSION");
-  TString LIMIT_PATH = WORKING_DIR+"/plots/"+dataset+"/RootfileForLimit/";
+  TString LIMIT_PATH = WORKING_DIR+"/plots/v8-0-6.6_dXY_0p05_dZ_0p5/RootfileForLimit/After_HNmass_gammastar_deltaR/";
   //TString LIMIT_PATH = getenv("LIMIT_PATH");
 
   if( !gSystem->mkdir(LIMIT_PATH, kTRUE) ){
