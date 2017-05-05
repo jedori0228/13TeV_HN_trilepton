@@ -71,7 +71,7 @@ bool cutop::isSearchRegion(){
 
   //==== Preselection
   if(SearchRegion=="Preselection"){
-    if(isPreselection==1) pass = true;
+    if(isPreselection==1 && ThreeLeptonConfig==0) pass = true;
   }
 
   //==== WZ
