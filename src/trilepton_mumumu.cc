@@ -58,7 +58,7 @@ void trilepton_mumumu::draw_hist(){
         //==== root file path name
         //==== bkg
         if( i_file < bkglist.size() ){
-          filepath = "./rootfiles/"+data_class+"/"+filename_prefix+"_SK"+bkglist[i_file]+"_dilep"+filename_suffix;
+          filepath = "./rootfiles/"+data_class+"/"+filename_prefix+"_SK"+bkglist[i_file]+"_trilep"+filename_suffix;
           current_sample = bkglist[i_file];
         }
         //==== data for i_file = bkglist.size()

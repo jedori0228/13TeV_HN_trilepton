@@ -109,7 +109,7 @@ void MCNormalizationSF(bool UpdateSF=true){
       for(unsigned int k=0; k<bkg_prompt_list.size(); k++){
         TString this_samplename = bkg_prompt_list.at(k);
 
-        cutop m_bkg_prompt(filepath+"trilepton_mumumu_ntp_SK"+this_samplename+"_dilep_cat_"+catversion+".root", "Ntp_"+this_syst);
+        cutop m_bkg_prompt(filepath+"trilepton_mumumu_ntp_SK"+this_samplename+"_trilep_cat_"+catversion+".root", "Ntp_"+this_syst);
         m_bkg_prompt.SearchRegion = region;
         m_bkg_prompt.MCNormSF = MCNormSF[this_samplename];
         double MCNormDir(0.);
@@ -143,7 +143,7 @@ void MCNormalizationSF(bool UpdateSF=true){
         
       }
       
-      cutop m_bkg_fake(filepath+"trilepton_mumumu_ntp_SKfake_sfed_HighdXY_dilep_cat_"+catversion+".root", "Ntp_"+this_syst);
+      cutop m_bkg_fake(filepath+"trilepton_mumumu_ntp_SKfake_sfed_HighdXY_trilep_cat_"+catversion+".root", "Ntp_"+this_syst);
       m_bkg_fake.SearchRegion = region;
       m_bkg_fake.BVeto = DoBVeto;
       m_bkg_fake.Loop();
@@ -155,7 +155,7 @@ void MCNormalizationSF(bool UpdateSF=true){
       m_data.Loop();
       n_data = m_data.n_weighted;
 
-      cutop m_sig(filepath+"trilepton_mumumu_ntp_SK"+this_signal+"_dilep_cat_"+catversion+".root", "Ntp_"+this_syst);
+      cutop m_sig(filepath+"trilepton_mumumu_ntp_SK"+this_signal+"_trilep_cat_"+catversion+".root", "Ntp_"+this_syst);
       m_sig.SearchRegion = region;
       m_sig.MCNormSF = MCNormSF[this_signal];
       m_sig.BVeto = DoBVeto;

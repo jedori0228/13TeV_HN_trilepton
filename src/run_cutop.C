@@ -113,24 +113,21 @@ void run_cutop(int sig_mass){
     GetCutVar(sig_mass, "third_pt", min_tmp, max_tmp);
     fillarray( cuts_third_pt, min_tmp, max_tmp, dx_tmp );
     
-    double a, b;
-    GetCutVar(sig_mass, "W_pri", a, b);
-    fillarray( cuts_W_pri_mass, a, b, 10);
+    GetCutVar(sig_mass, "W_pri", min_tmp, max_tmp);
+    fillarray( cuts_W_pri_mass, min_tmp, max_tmp, 10);
 
-    if(sig_mass<500){
-      max_tmp = 100;
-      dx_tmp = 5;
-    }
-    else{
-      max_tmp = 150;
-      dx_tmp = 10;
-    }
     fillarray( cuts_PFMET, 20, 60, 10);
+    //GetCutVar(sig_mass, "PFMET", min_tmp, max_tmp);
+    //fillarray( cuts_PFMET, min_tmp, max_tmp, 10);
 
     cuts_HN_mass.push_back(0.);
-    cuts_deltaR_OS_min.push_back(0.);
-    cuts_gamma_star_mass.push_back(0.);
-    
+
+    //cuts_deltaR_OS_min.push_back(0.);
+    //cuts_gamma_star_mass.push_back(0.);
+
+    fillarray( cuts_deltaR_OS_min, 0, GetdR(sig_mass), GetdR(sig_mass)/5. );
+    fillarray( cuts_gamma_star_mass, 0, 30, 5);
+
   }
   else if(SignalClass==4){
 
@@ -293,7 +290,7 @@ void run_cutop(int sig_mass){
                   TH1D *hist_bkg_for_err = new TH1D("hist_bkg_for_err", "", 1, 0., 1.); 
                   for(unsigned int k=0; k<bkg_prompt_list.size(); k++){
                     TString this_samplename = bkg_prompt_list.at(k);
-                    cutop m_bkg_prompt(filepath+"trilepton_mumumu_ntp_SK"+this_samplename+"_dilep_cat_"+catversion+".root", "Ntp_Central");
+                    cutop m_bkg_prompt(filepath+"trilepton_mumumu_ntp_SK"+this_samplename+"_trilep_cat_"+catversion+".root", "Ntp_Central");
                     m_bkg_prompt.cut_first_pt = cuts_first_pt.at(i_first_pt);
                     m_bkg_prompt.cut_second_pt = cuts_second_pt.at(i_second_pt);
                     m_bkg_prompt.cut_third_pt = cuts_third_pt.at(i_third_pt);
@@ -337,7 +334,7 @@ void run_cutop(int sig_mass){
                   if(sig_mass==400) n_generated = 99070.;
                   n_signal = m_sig.n_unweighted;
 
-                  cutop m_bkg_fake(filepath+"trilepton_mumumu_ntp_SKfake_sfed_HighdXY_dilep_cat_"+catversion+".root", "Ntp_Central");
+                  cutop m_bkg_fake(filepath+"trilepton_mumumu_ntp_SKfake_sfed_HighdXY_trilep_cat_"+catversion+".root", "Ntp_Central");
                   m_bkg_fake.cut_first_pt = cuts_first_pt.at(i_first_pt);
                   m_bkg_fake.cut_second_pt = cuts_second_pt.at(i_second_pt);
                   m_bkg_fake.cut_third_pt = cuts_third_pt.at(i_third_pt);
@@ -457,163 +454,163 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
   if(mass == 90){
     if(var == "W_pri"){
       cutvar_min = 80;
-      cutvar_max = 150;
-    }
-    else if(var == "first_pt"){
-      cutvar_min = 25;
-      cutvar_max = 50;
-    }
-    else if(var == "second_pt"){
-      cutvar_min = 15;
-      cutvar_max = 60;
-    }
-    else if(var == "third_pt"){
-      cutvar_min = 15;
-      cutvar_max = 40;
-    }
-  }
-  else if(mass == 100){
-    if(var == "W_pri"){
-      cutvar_min = 80;
-      cutvar_max = 200;
-    }
-    else if(var == "first_pt"){
-      cutvar_min = 25;
-      cutvar_max = 60;
-    }
-    else if(var == "second_pt"){
-      cutvar_min = 15;
-      cutvar_max = 60;
-    }
-    else if(var == "third_pt"){
-      cutvar_min = 15;
-      cutvar_max = 40;
-    }
-  }
-  else if(mass == 150){
-    if(var == "W_pri"){
-      cutvar_min = 100;
-      cutvar_max = 300;
-    }
-    else if(var == "first_pt"){
-      cutvar_min = 25;
-      cutvar_max = 70;
-    }
-    else if(var == "second_pt"){
-      cutvar_min = 15;
-      cutvar_max = 60;
-    }
-    else if(var == "third_pt"){
-      cutvar_min = 15;
-      cutvar_max = 40;
-    }
-  }
-  else if(mass == 200){
-    if(var == "W_pri"){
-      cutvar_min = 200;
-      cutvar_max = 300;
-    }
-    else if(var == "first_pt"){
-      cutvar_min = 25;
       cutvar_max = 100;
     }
-    else if(var == "second_pt"){
-      cutvar_min = 15;
-      cutvar_max = 70;
-    }
-    else if(var == "third_pt"){
-      cutvar_min = 15;
-      cutvar_max = 40;
-    }
-  }
-  else if(mass == 300){
-    if(var == "W_pri"){
-      cutvar_min = 250;
-      cutvar_max = 400;
-    }
     else if(var == "first_pt"){
-      cutvar_min = 50;
-      cutvar_max = 150;
+      cutvar_min = 35;
+      cutvar_max = 55;
     }
     else if(var == "second_pt"){
-      cutvar_min = 15;
-      cutvar_max = 100;
-    }
-    else if(var == "third_pt"){
-      cutvar_min = 15;
-      cutvar_max = 50;
-    }
-  }
-  else if(mass == 400){
-    if(var == "W_pri"){
-      cutvar_min = 400;
-      cutvar_max = 600;
-    }
-    else if(var == "first_pt"){
-      cutvar_min = 100;
-      cutvar_max = 200;
-    }
-    else if(var == "second_pt"){
-      cutvar_min = 15;
-      cutvar_max = 140;
-    }
-    else if(var == "third_pt"){
       cutvar_min = 30;
-      cutvar_max = 60;
+      cutvar_max = 50;
+    }
+    else if(var == "third_pt"){
+      cutvar_min = 10;
+      cutvar_max = 25;
     }
   }
-  else if(mass == 500){
+  if(mass == 100){
     if(var == "W_pri"){
-      cutvar_min = 500;
-      cutvar_max = 700;
+      cutvar_min = 90;
+      cutvar_max = 130;
     }
     else if(var == "first_pt"){
-      cutvar_min = 100;
-      cutvar_max = 250;
+      cutvar_min = 20;
+      cutvar_max = 40;
     }
     else if(var == "second_pt"){
-      cutvar_min = 100;
+      cutvar_min = 10;
+      cutvar_max = 25;
+    }
+    else if(var == "third_pt"){
+      cutvar_min = 10;
+      cutvar_max = 25;
+    }
+  }
+  if(mass == 150){
+    if(var == "W_pri"){
+      cutvar_min = 140;
       cutvar_max = 180;
     }
-    else if(var == "third_pt"){
-      cutvar_min = 30;
-      cutvar_max = 60;
-    }
-  }
-  else if(mass == 700){
-    if(var == "W_pri"){
-      cutvar_min = 700;
-      cutvar_max = 800;
-    }
     else if(var == "first_pt"){
-      cutvar_min = 150;
-      cutvar_max = 250;
+      cutvar_min = 35;
+      cutvar_max = 55;
     }
     else if(var == "second_pt"){
-      cutvar_min = 100;
-      cutvar_max = 250;
+      cutvar_min = 30;
+      cutvar_max = 50;
     }
     else if(var == "third_pt"){
-      cutvar_min = 35;
+      cutvar_min = 15;
+      cutvar_max = 35;
+    }
+  }
+  if(mass == 200){
+    if(var == "W_pri"){
+      cutvar_min = 230;
+      cutvar_max = 270;
+    }
+    else if(var == "first_pt"){
+      cutvar_min = 55;
+      cutvar_max = 75;
+    }
+    else if(var == "second_pt"){
+      cutvar_min = 45;
+      cutvar_max = 65;
+    }
+    else if(var == "third_pt"){
+      cutvar_min = 20;
+      cutvar_max = 40;
+    }
+  }
+  if(mass == 300){
+    if(var == "W_pri"){
+      cutvar_min = 330;
+      cutvar_max = 370;
+    }
+    else if(var == "first_pt"){
+      cutvar_min = 100;
+      cutvar_max = 140;
+    }
+    else if(var == "second_pt"){
+      cutvar_min = 55;
+      cutvar_max = 95;
+    }
+    else if(var == "third_pt"){
+      cutvar_min = 25;
+      cutvar_max = 65;
+    }
+  }
+  if(mass == 400){
+    if(var == "W_pri"){
+      cutvar_min = 460;
+      cutvar_max = 500;
+    }
+    else if(var == "first_pt"){
+      cutvar_min = 100;
+      cutvar_max = 140;
+    }
+    else if(var == "second_pt"){
+      cutvar_min = 45;
+      cutvar_max = 85;
+    }
+    else if(var == "third_pt"){
+      cutvar_min = 30;
       cutvar_max = 70;
     }
   }
-  else if(mass == 1000){
+  if(mass == 500){
     if(var == "W_pri"){
-      cutvar_min = 800;
-      cutvar_max = 1100;
+      cutvar_min = 510;
+      cutvar_max = 550;
     }
     else if(var == "first_pt"){
-      cutvar_min = 150;
-      cutvar_max = 300;
+      cutvar_min = 130;
+      cutvar_max = 170;
     }
     else if(var == "second_pt"){
-      cutvar_min = 100;
+      cutvar_min = 80;
+      cutvar_max = 120;
+    }
+    else if(var == "third_pt"){
+      cutvar_min = 30;
+      cutvar_max = 70;
+    }
+  }
+  if(mass == 700){
+    if(var == "W_pri"){
+      cutvar_min = 740;
+      cutvar_max = 780;
+    }
+    else if(var == "first_pt"){
+      cutvar_min = 180;
+      cutvar_max = 220;
+    }
+    else if(var == "second_pt"){
+      cutvar_min = 80;
+      cutvar_max = 120;
+    }
+    else if(var == "third_pt"){
+      cutvar_min = 25;
+      cutvar_max = 65;
+    }
+  }
+  if(mass == 1000){
+    if(var == "W_pri"){
+      cutvar_min = 900;
+      cutvar_max = 940;
+    }
+    else if(var == "first_pt"){
+      cutvar_min = 270;
+      cutvar_max = 310;
+    }
+    else if(var == "second_pt"){
+      cutvar_min = 160;
       cutvar_max = 200;
     }
     else if(var == "third_pt"){
-      cutvar_min = 50;
-      cutvar_max = 85;
+      cutvar_min = 30;
+      cutvar_max = 70;
     }
   }
   else{
