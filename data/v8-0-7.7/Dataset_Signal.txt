@@ -1,0 +1,17 @@
+5 & /MajoranaNeutrinoToMuMuMu\_M-5\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $4.046 \pm 0.01657$ & 100000 & $2.47 \times 10^4$ \\
+10 & /MajoranaNeutrinoToMuMuMu\_M-10\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $3.982 \pm 0.01731$ & 100000 & $2.51 \times 10^4$ \\
+20 & /MajoranaNeutrinoToMuMuMu\_M-20\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $3.711 \pm 0.01455$ & 100000 & $2.69 \times 10^4$ \\
+30 & /MajoranaNeutrinoToMuMuMu\_M-30\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $3.241 \pm 0.01308$ & 100000 & $3.09 \times 10^4$ \\
+40 & /MajoranaNeutrinoToMuMuMu\_M-40\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $2.619 \pm 0.01147$ & 100000 & $3.82 \times 10^4$ \\
+50 & /MajoranaNeutrinoToMuMuMu\_M-50\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $1.875 \pm 0.008223$ & 100000 & $5.33 \times 10^4$ \\
+60 & /MajoranaNeutrinoToMuMuMu\_M-60\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $1.07 \pm 0.004994$ & 100000 & $9.35 \times 10^4$ \\
+70 & /MajoranaNeutrinoToMuMuMu\_M-70\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $(3.83 \pm 0.01) \times 10^{-1}$ & 100000 & $2.61 \times 10^5$ \\
+90 & /MajoranaNeutrinoToMuMuMu\_M-90\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $(2.33 \pm 0.01) \times 10^{-2}$ & 100000 & $4.29 \times 10^6$ \\
+100 & /MajoranaNeutrinoToMuMuMu\_M-100\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $(1.082 \pm 0.004) \times 10^{-2}$ & 100000 & $9.24 \times 10^6$ \\
+150 & /MajoranaNeutrinoToMuMuMu\_M-150\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $(1.488 \pm 0.007) \times 10^{-3}$ & 100000 & $6.72 \times 10^7$ \\
+200 & /MajoranaNeutrinoToMuMuMu\_M-200\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $(4.57 \pm 0.02) \times 10^{-4}$ & 96193 & $2.11 \times 10^8$ \\
+300 & /MajoranaNeutrinoToMuMuMu\_M-300\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $(9.52 \pm 0.03) \times 10^{-5}$ & 100000 & $1.05 \times 10^9$ \\
+400 & /MajoranaNeutrinoToMuMuMu\_M-400\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $(3.14 \pm 0.02) \times 10^{-5}$ & 99070 & $3.16 \times 10^9$ \\
+500 & /MajoranaNeutrinoToMuMuMu\_M-500\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $(1.29 \pm 0.01) \times 10^{-5}$ & 100000 & $7.75 \times 10^9$ \\
+700 & /MajoranaNeutrinoToMuMuMu\_M-700\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $(3.21 \pm 0.01) \times 10^{-6}$ & 100000 & $3.12 \times 10^10$ \\
+1000 & /MajoranaNeutrinoToMuMuMu\_M-1000\_TuneCUETP8M1\_13TeV-madgraph/A\_v6-v1/MINIAODSIM & $(6.48 \pm 0.05) \times 10^{-7}$ & 100000 & $1.54 \times 10^11$ \\
