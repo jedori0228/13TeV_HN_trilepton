@@ -13,8 +13,9 @@ void syst_FR_make_matrix(){
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");  
   TString dataset = getenv("CATANVERSION");
 
-  TString filepath = WORKING_DIR+"/plots/"+dataset+"/FakeRateCalculator/";
-  TString plotpath = WORKING_DIR+"/plots/"+dataset+"/FR_syst/";
+  TString WhichRootFile = "NoBias";
+  TString filepath = WORKING_DIR+"/plots/"+dataset+"/FakeRateCalculator/"+WhichRootFile+"/";
+  TString plotpath = WORKING_DIR+"/plots/"+dataset+"/FR_syst/"+WhichRootFile+"/";
   
   if( !gSystem->mkdir(plotpath, kTRUE) ){
     cout
@@ -29,6 +30,8 @@ void syst_FR_make_matrix(){
   double bins_dXYMins[] =  {3.0, 4.0, 5.0, 6.0};
   vector<double> RelIsoMaxs = {0.2, 0.3, 0.4, 0.6, 0.8, 1.0};
   double bins_RelIsoMaxs[] =  {0.2, 0.3, 0.4, 0.6, 0.8, 1.0, 1.2};
+
+  vector<TString> jet_conf = {"alljet", "0jet", "withjet", "0bjet", "withbjet"};
   
   TH1D *hist_dXYMins = new TH1D("hist_dXYMins", "", dXYMins.size(), 0., dXYMins.size());
   TH1D *hist_RelIsoMaxs = new TH1D("hist_RelIsoMaxs", "", RelIsoMaxs.size(), 0., RelIsoMaxs.size());
@@ -72,130 +75,60 @@ void syst_FR_make_matrix(){
       
       //cout << "["<<str_dXYCut<<"]"<< endl;
 
-      //==== Get HigdXY FR rootfile
-      TFile *file_FR = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_SingleMuonTrigger_HighdXY.root");
-      TFile *file_FR_0jet = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_SingleMuonTrigger_HighdXY_0jet.root");
-      TFile *file_FR_withjet = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_SingleMuonTrigger_HighdXY_withjet.root");
-      TFile *file_FR_0bjet = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_SingleMuonTrigger_HighdXY_0bjet.root");
-      TFile *file_FR_withbjet = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_SingleMuonTrigger_HighdXY_withbjet.root");
+      for(unsigned int ccc=0; ccc<jet_conf.size(); ccc++){
 
-      //==== FR matrix
-      TH2D *hist_FR = (TH2D*)file_FR->Get(str_dXYCut+"_SingleMuonTrigger_HighdXY_events_F")->Clone();
-      TH2D *hist_FR_0jet = (TH2D*)file_FR_0jet->Get(str_dXYCut+"_SingleMuonTrigger_HighdXY_0jet_events_F")->Clone();
-      TH2D *hist_FR_withjet = (TH2D*)file_FR_withjet->Get(str_dXYCut+"_SingleMuonTrigger_HighdXY_withjet_events_F")->Clone();
-      TH2D *hist_FR_0bjet = (TH2D*)file_FR_0bjet->Get(str_dXYCut+"_SingleMuonTrigger_HighdXY_0bjet_events_F")->Clone();
-      TH2D *hist_FR_withbjet = (TH2D*)file_FR_withbjet->Get(str_dXYCut+"_SingleMuonTrigger_HighdXY_withbjet_events_F")->Clone();
+        TString thisjetconf = jet_conf.at(ccc);
 
-      hist_FR->SetName(str_dXYCut+"_FR_alljet");
-      hist_FR_0jet->SetName(str_dXYCut+"_FR_0jet");
-      hist_FR_withjet->SetName(str_dXYCut+"_FR_withjet");
-      hist_FR_0bjet->SetName(str_dXYCut+"_FR_0bjet");
-      hist_FR_withbjet->SetName(str_dXYCut+"_FR_withbjet");
+        TFile *file_FR = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_HighdXY_"+thisjetconf+".root");
+        TH2D *hist_FR = (TH2D*)file_FR->Get(str_dXYCut+"_HighdXY_"+thisjetconf+"_events_F")->Clone();
+        hist_FR->SetName(str_dXYCut+"_FR_"+thisjetconf);
 
-      //==== # of muons in Denomonator
-      TH1D *hist_n_data_prompt_subtraction_den = (TH1D*)file_FR->Get("hist_n_data_prompt_subtraction_den");
-      TH1D *hist_n_data_prompt_subtraction_num = (TH1D*)file_FR->Get("hist_n_data_prompt_subtraction_num");
-      hist_n_muons->SetBinContent(aaa+1, bbb+1, hist_n_data_prompt_subtraction_den->GetBinContent(1));
-      //==== one-binned FR
-      hist_HighdXY_FR->SetBinContent(aaa+1, bbb+1, hist_n_data_prompt_subtraction_num->GetBinContent(1)/hist_n_data_prompt_subtraction_den->GetBinContent(1));
-      
-      //==== Get QCD FR/FRSF
-      //==== 2D
-      TFile *file_FR_QCD = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_SingleMuonTrigger_QCD_mu.root");
-      TFile *file_FR_QCD_0jet = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_SingleMuonTrigger_0jet_QCD_mu.root");
-      TFile *file_FR_QCD_withjet = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_SingleMuonTrigger_withjet_QCD_mu.root");
-      TFile *file_FR_QCD_0bjet = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_SingleMuonTrigger_0bjet_QCD_mu.root");
-      TFile *file_FR_QCD_withbjet = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_SingleMuonTrigger_withbjet_QCD_mu.root");
+        TFile *file_FR_QCD = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_"+thisjetconf+"_QCD_mu.root");
+        TH2D *hist_FR_QCD = (TH2D*)file_FR_QCD->Get("FR_Small_dXYSig")->Clone();
+        hist_FR_QCD->SetTitle("");
 
-      TH2D *hist_FR_QCD = (TH2D*)file_FR_QCD->Get("FR_Small_dXYSig")->Clone();
-      TH2D *hist_FR_QCD_0jet = (TH2D*)file_FR_QCD_0jet->Get("FR_Small_dXYSig")->Clone();
-      TH2D *hist_FR_QCD_withjet = (TH2D*)file_FR_QCD_withjet->Get("FR_Small_dXYSig")->Clone();
-      TH2D *hist_FR_QCD_0bjet = (TH2D*)file_FR_QCD_0bjet->Get("FR_Small_dXYSig")->Clone();
-      TH2D *hist_FR_QCD_withbjet = (TH2D*)file_FR_QCD_withbjet->Get("FR_Small_dXYSig")->Clone();
+        TH2D *hist_FRSF_QCD = (TH2D*)file_FR_QCD->Get("FRSF")->Clone();
+        hist_FR_QCD->SetName(str_dXYCut+"_FR_QCD_"+thisjetconf);
+        hist_FRSF_QCD->SetName(str_dXYCut+"_FRSF_QCD_"+thisjetconf);
 
-      hist_FR_QCD->SetTitle("");
-      hist_FR_QCD_0jet->SetTitle("");
-      hist_FR_QCD_withjet->SetTitle("");
-      hist_FR_QCD_0bjet->SetTitle("");
-      hist_FR_QCD_withbjet->SetTitle("");
+        //==== write files
 
-      TH2D *hist_FRSF_QCD = (TH2D*)file_FR_QCD->Get("FRSF")->Clone();
-      TH2D *hist_FRSF_QCD_0jet = (TH2D*)file_FR_QCD_0jet->Get("FRSF")->Clone();
-      TH2D *hist_FRSF_QCD_withjet = (TH2D*)file_FR_QCD_withjet->Get("FRSF")->Clone();
-      TH2D *hist_FRSF_QCD_0bjet = (TH2D*)file_FR_QCD_0bjet->Get("FRSF")->Clone();
-      TH2D *hist_FRSF_QCD_withbjet = (TH2D*)file_FR_QCD_withbjet->Get("FRSF")->Clone();
+        file_FRs->cd();
 
-      hist_FR_QCD->SetName(str_dXYCut+"_FR_QCD_alljet");
-      hist_FR_QCD_0jet->SetName(str_dXYCut+"_FR_QCD_0jet");
-      hist_FR_QCD_withjet->SetName(str_dXYCut+"_FR_QCD_withjet");
-      hist_FR_QCD_0bjet->SetName(str_dXYCut+"_FR_QCD_0bjet");
-      hist_FR_QCD_withbjet->SetName(str_dXYCut+"_FR_QCD_withbjet");
+        hist_FR->Write(); 
+        hist_FR_QCD->Write();
+        hist_FRSF_QCD->Write();
 
-      hist_FRSF_QCD->SetName(str_dXYCut+"_FRSF_QCD_alljet");
-      hist_FRSF_QCD_0jet->SetName(str_dXYCut+"_FRSF_QCD_0jet");
-      hist_FRSF_QCD_withjet->SetName(str_dXYCut+"_FRSF_QCD_withjet");
-      hist_FRSF_QCD_0bjet->SetName(str_dXYCut+"_FRSF_QCD_0bjet");
-      hist_FRSF_QCD_withbjet->SetName(str_dXYCut+"_FRSF_QCD_withbjet");
+        //==== multiply SF
+        TH2D *hist_FR_sfed = (TH2D*)hist_FR->Clone();
+        hist_FR_sfed->SetName(str_dXYCut+"_FR_"+thisjetconf+"_sfed");
+        hist_FR_sfed->Multiply(hist_FRSF_QCD);
+        hist_FR_sfed->Write();
 
-      //=== 1D
-      TH1D *hist_QCD_tmp = (TH1D*)file_FR_QCD->Get("hist_FR_QCD");
-      hist_QCD_FR_Large->SetBinContent(aaa+1, bbb+1, hist_QCD_tmp->GetBinContent(1));
-      hist_QCD_FR_Small->SetBinContent(aaa+1, bbb+1, hist_QCD_tmp->GetBinContent(2));
-      hist_QCD_FRSF->SetBinContent(aaa+1, bbb+1, hist_QCD_tmp->GetBinContent(3));
+        if(thisjetconf=="alljet"){
 
-      //==== write files
+          //==== 1-binned FR for each wp
+          TH1D *hist_n_data_prompt_subtraction_den = (TH1D*)file_FR->Get("hist_n_data_prompt_subtraction_den");
+          TH1D *hist_n_data_prompt_subtraction_num = (TH1D*)file_FR->Get("hist_n_data_prompt_subtraction_num");
+          hist_n_muons->SetBinContent(aaa+1, bbb+1, hist_n_data_prompt_subtraction_den->GetBinContent(1));
+          hist_HighdXY_FR->SetBinContent(aaa+1, bbb+1, hist_n_data_prompt_subtraction_num->GetBinContent(1)/hist_n_data_prompt_subtraction_den->GetBinContent(1));
 
-      file_FRs->cd();
+          //=== 1D QCD Large dXYSig / Small dXYSig / Ratio (Scale Factor)
+          TH1D *hist_QCD_tmp = (TH1D*)file_FR_QCD->Get("hist_FR_QCD");
+          hist_QCD_FR_Large->SetBinContent(aaa+1, bbb+1, hist_QCD_tmp->GetBinContent(1));
+          hist_QCD_FR_Small->SetBinContent(aaa+1, bbb+1, hist_QCD_tmp->GetBinContent(2));
+          hist_QCD_FRSF->SetBinContent(aaa+1, bbb+1, hist_QCD_tmp->GetBinContent(3));
 
-      hist_FR->Write(); 
-      hist_FR_0jet->Write();
-      hist_FR_withjet->Write();
-      hist_FR_0bjet->Write();
-      hist_FR_withbjet->Write();
+        }
 
-      hist_FR_QCD->Write();
-      hist_FR_QCD_0jet->Write();
-      hist_FR_QCD_withjet->Write();
-      hist_FR_QCD_0bjet->Write();
-      hist_FR_QCD_withbjet->Write();
+      }
 
-      hist_FRSF_QCD->Write();
-      hist_FRSF_QCD_0jet->Write();
-      hist_FRSF_QCD_withjet->Write();
-      hist_FRSF_QCD_0bjet->Write();
-      hist_FRSF_QCD_withbjet->Write();
-
-      //==== multiply SF
-      TH2D *hist_FR_sfed = (TH2D*)hist_FR->Clone();
-      TH2D *hist_FR_0jet_sfed = (TH2D*)hist_FR_0jet->Clone();
-      TH2D *hist_FR_withjet_sfed = (TH2D*)hist_FR_withjet->Clone();
-      TH2D *hist_FR_0bjet_sfed = (TH2D*)hist_FR_0bjet->Clone();
-      TH2D *hist_FR_withbjet_sfed = (TH2D*)hist_FR_withbjet->Clone();
-
-      hist_FR_sfed->SetName(str_dXYCut+"_FR_alljet_sfed");
-      hist_FR_0jet_sfed->SetName(str_dXYCut+"_FR_0jet_sfed");
-      hist_FR_withjet_sfed->SetName(str_dXYCut+"_FR_withjet_sfed");
-      hist_FR_0bjet_sfed->SetName(str_dXYCut+"_FR_0bjet_sfed");
-      hist_FR_withbjet_sfed->SetName(str_dXYCut+"_FR_withbjet_sfed");
-
-      hist_FR_sfed->Multiply(hist_FRSF_QCD);
-      hist_FR_0jet_sfed->Multiply(hist_FRSF_QCD_0jet);
-      hist_FR_withjet_sfed->Multiply(hist_FRSF_QCD_withjet);
-      hist_FR_0bjet_sfed->Multiply(hist_FRSF_QCD_0bjet);
-      hist_FR_withbjet_sfed->Multiply(hist_FRSF_QCD_withbjet);
-
-      hist_FR_sfed->Write();
-      hist_FR_0jet_sfed->Write();
-      hist_FR_withjet_sfed->Write();
-      hist_FR_0bjet_sfed->Write();
-      hist_FR_withbjet_sfed->Write();
-
-      //==== Get TagZ FR/FRSF
-      TFile *file_TagZ_tmp = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_DiMuonTrigger_TagZ.root");
-      TH1D *hist_TagZ_tmp = (TH1D*)file_TagZ_tmp->Get("hist_FR_TagZ");
-      hist_TagZ_FR_Large->SetBinContent(aaa+1, bbb+1, hist_TagZ_tmp->GetBinContent(1));
-      hist_TagZ_FR_Small->SetBinContent(aaa+1, bbb+1, hist_TagZ_tmp->GetBinContent(2));
-      hist_TagZ_FRSF->SetBinContent(aaa+1, bbb+1, hist_TagZ_tmp->GetBinContent(3));
+			//==== Get TagZ FR/FRSF
+			TFile *file_TagZ_tmp = new TFile(filepath+str_dXYCut+"/13TeV_trimuon_FR_DiMuonTrigger_TagZ.root");
+			TH1D *hist_TagZ_tmp = (TH1D*)file_TagZ_tmp->Get("hist_FR_TagZ");
+			hist_TagZ_FR_Large->SetBinContent(aaa+1, bbb+1, hist_TagZ_tmp->GetBinContent(1));
+			hist_TagZ_FR_Small->SetBinContent(aaa+1, bbb+1, hist_TagZ_tmp->GetBinContent(2));
+			hist_TagZ_FRSF->SetBinContent(aaa+1, bbb+1, hist_TagZ_tmp->GetBinContent(3));
 
     }
   }
@@ -307,7 +240,7 @@ void syst_FR_make_matrix(){
     c_thisfr->SetRightMargin( 0.1 );
     gStyle->SetPaintTextFormat("0.4f");
     hist->Draw("colztexte1");
-    hist->GetXaxis()->SetRangeUser(10, 60);
+    hist->GetXaxis()->SetRangeUser(5, 60);
     hist->SetXTitle("p_{T} [GeV/c]");
     hist->SetYTitle("|#eta|");
     hist->SetTitle("");

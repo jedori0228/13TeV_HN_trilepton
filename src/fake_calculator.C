@@ -31,7 +31,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
 
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
 
-  TString WhichRootFile = "TEST";
+  TString WhichRootFile = "NoBias";
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/FakeRateCalculator/"+WhichRootFile+"/";
   TString plotpath = WORKING_DIR+"/plots/"+dataset+"/FakeRateCalculator/"+WhichRootFile+"/"+str_dXYCut+"/";
   
@@ -738,7 +738,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
     c_num_prompt_ratio->SetRightMargin( 0.1 );
     gStyle->SetPaintTextFormat("0.4f");
     num_prompt_ratio->Draw("colztexte1");
-    num_prompt_ratio->GetXaxis()->SetRangeUser(10, 60);
+    num_prompt_ratio->GetXaxis()->SetRangeUser(5, 60);
     num_prompt_ratio->SetXTitle("p_{T} [GeV/c]");
     num_prompt_ratio->SetYTitle("|#eta|");
     num_prompt_ratio->SetTitle("");
@@ -753,7 +753,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
     c_den_prompt_ratio->SetRightMargin( 0.1 );
     gStyle->SetPaintTextFormat("0.4f");
     den_prompt_ratio->Draw("colztexte1");
-    den_prompt_ratio->GetXaxis()->SetRangeUser(10, 60);
+    den_prompt_ratio->GetXaxis()->SetRangeUser(5, 60);
     den_prompt_ratio->SetXTitle("p_{T} [GeV/c]");
     den_prompt_ratio->SetYTitle("|#eta|");
     den_prompt_ratio->SetTitle("");
@@ -773,7 +773,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
     gStyle->SetPaintTextFormat("0.4f");
     num_data->Divide(den_data);
     num_data->Draw("colztexte1");
-    num_data->GetXaxis()->SetRangeUser(10, 60);
+    num_data->GetXaxis()->SetRangeUser(5, 60);
     num_data->SetXTitle("p_{T} [GeV/c]");
     num_data->SetYTitle("|#eta|");
     num_data->SetTitle("");
@@ -798,7 +798,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
     }
     num_data_subtracted->Divide(den_data_subtracted);
     num_data_subtracted->Draw("colztexte1");
-    num_data_subtracted->GetXaxis()->SetRangeUser(10, 60);
+    num_data_subtracted->GetXaxis()->SetRangeUser(5, 60);
     num_data_subtracted->SetXTitle("p_{T} [GeV/c]");
     num_data_subtracted->SetYTitle("|#eta|");
     num_data_subtracted->SetTitle("");
@@ -847,8 +847,8 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
     for(int j=0; j<n_eta_bins; j++){
       TH1D *FR_curve = new TH1D("FR_eta_"+TString::Itoa(j,10), "", n_pt_bins, x_bins);
       for(int k=0; k<n_pt_bins; k++){
-        FR_curve->SetBinContent(k+1, num_data_subtracted->GetBinContent(k+1, j+1) );
-        FR_curve->SetBinError(k+1, num_data_subtracted->GetBinError(k+1, j+1) );
+        FR_curve->SetBinContent(k+1, num_data_subtracted->GetBinContent(k+2, j+1) );
+        FR_curve->SetBinError(k+1, num_data_subtracted->GetBinError(k+2, j+1) );
       }
       gr_FR_curve[j] = hist_to_graph(FR_curve);
       gr_FR_curve[j]->SetLineColor(colors[j]);
@@ -952,7 +952,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
         gStyle->SetPaintTextFormat("0.4f");
         c_MCTruth->cd();
         hist_num->Draw("colztexte1");
-        hist_num->GetXaxis()->SetRangeUser(10, 60);
+        hist_num->GetXaxis()->SetRangeUser(5, 60);
         hist_num->SetXTitle("p_{T} [GeV/c]");
         hist_num->SetYTitle("|#eta|");
         hist_num->SetTitle("");
@@ -982,7 +982,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       small_2D->Divide(large_2D);
       small_2D->SetName("FRSF");
       small_2D->Draw("colztexte1");
-      small_2D->GetXaxis()->SetRangeUser(10, 60);
+      small_2D->GetXaxis()->SetRangeUser(5, 60);
       small_2D->SetXTitle("p_{T} [GeV/c]");
       small_2D->SetYTitle("|#eta|");
       small_2D->SetTitle("");
@@ -1007,8 +1007,8 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       for(int j=0; j<4; j++){
         TH1D *SF_curve = new TH1D("FR_eta_"+TString::Itoa(j,10), "", 7, x_bins);
         for(int k=0; k<8; k++){
-          SF_curve->SetBinContent(k+1, small_2D->GetBinContent(k+1, j+1) );
-          SF_curve->SetBinError(k+1, small_2D->GetBinError(k+1, j+1) );
+          SF_curve->SetBinContent(k+1, small_2D->GetBinContent(k+2, j+1) );
+          SF_curve->SetBinError(k+1, small_2D->GetBinError(k+2, j+1) );
         }
         gr_SF_curve[j] = hist_to_graph(SF_curve);
         gr_SF_curve[j]->SetLineColor(colors[j]);
@@ -1085,7 +1085,7 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
   cout << "FR with dXYSig Small : " << FR_Small << endl;
   cout << "==> SF = (small/large) = " << FR_Small/FR_Large << endl;
   //==== Write rootfile
-  TFile *file_FR_QCD = new TFile(plotpath+"/13TeV_trimuon_FR_QCD_mu.root", "UPDATE");
+  TFile *file_FR_QCD = new TFile(plotpath+"/13TeV_trimuon_FR_alljet_QCD_mu.root", "UPDATE");
   TH1D *hist_FR_QCD = new TH1D("hist_FR_QCD", "", 3, 0, 3);
   hist_FR_QCD->SetBinContent(1, FR_Large);
   hist_FR_QCD->SetBinContent(2, FR_Small);
