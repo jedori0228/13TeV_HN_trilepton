@@ -10,8 +10,8 @@ void TestHalfSample(){
   TString dataset = getenv("CATANVERSION");
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
 
-  TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/HalfSample/";
-  TString plotpath = WORKING_DIR+"/plots/"+dataset+"/HalfSample/";
+  TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/FakeRateCalculator/HalfSample/DiMuonTrkVVL/";
+  TString plotpath = WORKING_DIR+"/plots/"+dataset+"/FakeRateCalculator/HalfSample/DiMuonTrkVVL/";
 
   if( !gSystem->mkdir(plotpath, kTRUE) ){
     cout
@@ -25,14 +25,14 @@ void TestHalfSample(){
 
   //==== SampleA
 
-  TFile *file_data = new TFile(filepath+"/FakeRateCalculator_Mu_data_DoubleMuon_cat_v8-0-6.root");
-  TH2D *hist_A_events_F = (TH2D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleA_events_F");
-  TH2D *hist_A_events_F0 = (TH2D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleA_events_F0");
+  TFile *file_data = new TFile(filepath+"/FakeRateCalculator_Mu_dxysig_data_DoubleMuon_cat_"+catversion+".root");
+  TH2D *hist_A_events_F = (TH2D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_events_F");
+  TH2D *hist_A_events_F0 = (TH2D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_events_F0");
 
   for(unsigned int i=0; i<samples.size(); i++){
-    TFile *file_tmp = new TFile(filepath+"/FakeRateCalculator_Mu_SK"+samples.at(i)+"_cat_v8-0-6.root ");
-    TH2D *tmp_A_events_F = (TH2D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleA_events_F");
-    TH2D *tmp_A_events_F0 = (TH2D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleA_events_F0");
+    TFile *file_tmp = new TFile(filepath+"/FakeRateCalculator_Mu_dxysig_SK"+samples.at(i)+"_cat_"+catversion+".root");
+    TH2D *tmp_A_events_F = (TH2D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_events_F");
+    TH2D *tmp_A_events_F0 = (TH2D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_events_F0");
 
     if(tmp_A_events_F) hist_A_events_F->Add(tmp_A_events_F, -1.);
     if(tmp_A_events_F0) hist_A_events_F0->Add(tmp_A_events_F0, -1.);
@@ -65,20 +65,20 @@ void TestHalfSample(){
   for(unsigned int i=0; i<B_vars.size(); i++){
     TString this_var = B_vars.at(i);
 
-    TH1D *hist_A_Predicted = (TH1D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleA_"+this_var+"_Predicted");
-    TH1D *hist_A_F0 = (TH1D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleA_"+this_var+"_F0");
-    TH1D *hist_B_F = (TH1D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleB_"+this_var+"_F");
-    TH1D *hist_B_F0 = (TH1D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleB_"+this_var+"_F0");   
+    TH1D *hist_A_Predicted = (TH1D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_"+this_var+"_Predicted");
+    TH1D *hist_A_F0 = (TH1D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_"+this_var+"_F0");
+    TH1D *hist_B_F = (TH1D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_"+this_var+"_F");
+    TH1D *hist_B_F0 = (TH1D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_"+this_var+"_F0");   
 
-    for(unsigned int i=0; i<samples.size(); i++){
-      TFile *file_tmp = new TFile(filepath+"/FakeRateCalculator_Mu_SK"+samples.at(i)+"_cat_v8-0-6.root ");
+    for(unsigned int j=0; j<samples.size(); j++){
+      TFile *file_tmp = new TFile(filepath+"/FakeRateCalculator_Mu_dxysig_SK"+samples.at(j)+"_cat_"+catversion+".root");
 
 
-      TH1D *tmp_hist_A_Predicted = (TH1D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleA_"+this_var+"_Predicted");
-      TH1D *tmp_hist_A_F0 = (TH1D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleA_"+this_var+"_F0");
+      TH1D *tmp_hist_A_Predicted = (TH1D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_"+this_var+"_Predicted");
+      TH1D *tmp_hist_A_F0 = (TH1D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_"+this_var+"_F0");
 
-      TH1D *tmp_hist_B_F = (TH1D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleB_"+this_var+"_F");
-      TH1D *tmp_hist_B_F0 = (TH1D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleB_"+this_var+"_F0");
+      TH1D *tmp_hist_B_F = (TH1D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_"+this_var+"_F");
+      TH1D *tmp_hist_B_F0 = (TH1D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_"+this_var+"_F0");
 
       if(tmp_hist_A_Predicted) hist_A_Predicted->Add(tmp_hist_A_Predicted, -1.);
       if(tmp_hist_A_F0) hist_A_F0->Add(tmp_hist_A_F0, -1.);
@@ -164,21 +164,37 @@ void TestHalfSample(){
 
     hist_axis(hist_A_Predicted, ratio);
 
+    cout << "## Var = " << this_var << " ##" << endl;
+    for(int aaa=1; aaa<=ratio->GetXaxis()->GetNbins(); aaa++){
+      double left = ratio->GetXaxis()->GetBinLowEdge(aaa);
+      double right = ratio->GetXaxis()->GetBinUpEdge(aaa);
+      double center = ratio->GetBinContent(aaa);
+      double error = ratio->GetBinError(aaa);
+
+      double diff = abs(1.-center);
+      double syst = 0;
+      if(diff>error){
+        syst = sqrt(diff*diff-error*error);
+      }
+      cout << "["<<left<<", "<<right<<"] : " << ratio->GetBinContent(aaa) << "\t" << ratio->GetBinError(aaa) << " => " << syst << endl;
+      
+    }
+
     c_B_FR->SaveAs(plotpath+"/B_"+this_var+".pdf");
     c_B_FR->Close();
     
   }
 
 /*
-dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleA_events_F
-dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleA_events_F0
+dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_events_F
+dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_events_F0
 
-dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleB_PFMET_F
-dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleB_PFMET_F0
-dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleB_njets_F
-dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleB_njets_F0
-dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleB_events_F
-dXYSigMin_4p0_LooseRelIsoMax_0p4_SingleMuonTrigger_HighdXY_HalfSample_SampleB_events_F0
+dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_PFMET_F
+dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_PFMET_F0
+dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_njets_F
+dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_njets_F0
+dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_events_F
+dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_events_F0
 */
 
 
