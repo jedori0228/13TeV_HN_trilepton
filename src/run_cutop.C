@@ -137,7 +137,7 @@ void run_cutop(int sig_mass){
     return;
   }
 
-
+/*
   //===============
   //==== FOR TEST
   //===============
@@ -157,7 +157,7 @@ void run_cutop(int sig_mass){
   cuts_HN_mass = {9999999.};
   cuts_deltaR_OS_min = {0.};
   cuts_gamma_star_mass = {0.};
-
+*/
 
   Long64_t TOTAL_it = cuts_first_pt.size()*cuts_second_pt.size()*cuts_third_pt.size()*cuts_W_pri_mass.size()*cuts_PFMET.size()*cuts_HN_mass.size()*cuts_deltaR_OS_min.size()*cuts_gamma_star_mass.size();
   cout << "#### Cut Variables ####" << endl;
@@ -239,7 +239,9 @@ void run_cutop(int sig_mass){
                       << "(second pt) > " << cut_second_pt_SEL << " GeV" << endl
                       << "(third pt) > " << cut_third_pt_SEL << " GeV" << endl
                       << "W_pri_mass > " << cut_W_pri_mass_SEL << " GeV" << endl
-                      << "PFMET > " << cut_PFMET_SEL << " GeV" << endl;
+                      << "PFMET > " << cut_PFMET_SEL << " GeV" << endl
+                      << "deltaR os min > " << cut_deltaR_OS_min_SEL << endl
+                      << "gamma star mass > " << cut_gamma_star_mass_SEL << " GeV" << endl;
                     }
                     cout
                     //<< "==> Data = " << n_data_SEL << endl
