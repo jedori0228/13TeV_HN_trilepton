@@ -1,4 +1,4 @@
-void get_numbers_for_limit(){
+void GetNonPromptRatio(){
 
   TH1::SetDefaultSumw2(true);
 
@@ -15,8 +15,8 @@ void get_numbers_for_limit(){
   vector<double> n_events;
   double n_total;
   for(unsigned int i=0; i<bkgs.size(); i++){
-    TFile* file_sig = new TFile(WORKING_DIR+"/rootfiles/"+dataset+"/"+SearchRegion+"/non_prompt/trilepton_mumumu_SK"+bkgs.at(i)+"_dilep_cat_"+catversion+".root");
-    TH1D* hist_sig = (TH1D*)file_sig->Get("n_events"+cut);
+    TFile* file_sig = new TFile(WORKING_DIR+"/rootfiles/"+dataset+"/"+SearchRegion+"/non_prompt/trilepton_mumumu_SK"+bkgs.at(i)+"_trilep_cat_"+catversion+".root");
+    TH1D* hist_sig = (TH1D*)file_sig->Get("h_Nevents"+cut);
     //TH1D* hist_sig = (TH1D*)file_sig->Get("h_Nbjets"+cut);
 
     if(!hist_sig){

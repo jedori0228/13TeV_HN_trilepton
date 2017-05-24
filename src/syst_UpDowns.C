@@ -164,6 +164,8 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       << "(third pt) > " << cut_third_pt << " GeV" << endl
       << "W_pri_mass > " << cut_W_pri_mass << " GeV" << endl
       << "PFMET > " << cut_PFMET << " GeV" << endl
+      << "deltaR OS min > " << cut_deltaR_OS_min << endl
+      << "gamma star mass > " << cut_gamma_star_mass << " GeV" << endl
       << "====================================================================" << endl << endl;
     }
   }
