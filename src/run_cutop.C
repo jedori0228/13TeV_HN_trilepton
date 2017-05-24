@@ -123,10 +123,9 @@ void run_cutop(int sig_mass){
     cuts_HN_mass.push_back(0.);
 
     //cuts_deltaR_OS_min.push_back(0.);
-    //cuts_gamma_star_mass.push_back(0.);
-
     fillarray( cuts_deltaR_OS_min, 0, GetdR(sig_mass), GetdR(sig_mass)/5. );
-    fillarray( cuts_gamma_star_mass, 0, 30, 5);
+
+    cuts_gamma_star_mass.push_back(0.);
 
   }
   else if(SignalClass==4){
@@ -240,8 +239,7 @@ void run_cutop(int sig_mass){
                       << "(third pt) > " << cut_third_pt_SEL << " GeV" << endl
                       << "W_pri_mass > " << cut_W_pri_mass_SEL << " GeV" << endl
                       << "PFMET > " << cut_PFMET_SEL << " GeV" << endl
-                      << "deltaR os min > " << cut_deltaR_OS_min_SEL << endl
-                      << "gamma star mass > " << cut_gamma_star_mass_SEL << " GeV" << endl;
+                      << "deltaR os min > " << cut_deltaR_OS_min_SEL << endl;
                     }
                     cout
                     //<< "==> Data = " << n_data_SEL << endl
@@ -410,8 +408,7 @@ void run_cutop(int sig_mass){
     << "(third pt) > " << cut_third_pt_SEL << " GeV" << endl
     << "W_pri_mass > " << cut_W_pri_mass_SEL << " GeV" << endl
     << "PFMET > " << cut_PFMET_SEL << " GeV" << endl
-    << "deltaR os min > " << cut_deltaR_OS_min_SEL << endl
-    << "gamma star mass > " << cut_gamma_star_mass_SEL << " GeV" << endl;;
+    << "deltaR os min > " << cut_deltaR_OS_min_SEL << endl;
   }
   cout
   //<< "==> Data = " << n_data_SEL << endl

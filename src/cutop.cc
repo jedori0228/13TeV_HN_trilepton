@@ -42,7 +42,6 @@ void cutop::Loop()
         if( ! (W_pri_highmass_mass > cut_W_pri_mass) ) continue;
         if( ! (PFMET > cut_PFMET) ) continue;
         if( ! (deltaR_OS_min > cut_deltaR_OS_min) ) continue;
-        if( ! (gamma_star_mass > cut_gamma_star_mass) ) continue;
       }
     }
     
