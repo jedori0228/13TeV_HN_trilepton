@@ -286,7 +286,9 @@ void signal_study(){
   cout << "====== pt order ======" << endl;
   for(int i=0; i<n_all; i++){
     //cout << x_all[i] << '\t' << y_reco_leading_SS_match_gen_l_1[i]*100. << '\t' << y_reco_subleading_SS_match_gen_l_1[i]*100. << endl;
-    cout << x_all[i] << '\t' << y_gen_l_1_leadingSS[i]*100. << '\t' << 100.-y_gen_l_1_leadingSS[i]*100. << endl;
+    //cout << x_all[i] << '\t' << y_gen_l_1_leadingSS[i]*100. << '\t' << 100.-y_gen_l_1_leadingSS[i]*100. << endl;
+    cout << int(x_all[i]) << " & " << std::fixed<<std::setprecision(1) << y_gen_l_1_leadingSS[i]*100. << " & " << std::fixed<<std::setprecision(1) << 100.-y_gen_l_1_leadingSS[i]*100. << " \\\\" << endl;
+    if(x_all[i]==70) cout << "\\hline" << endl;
   }
   //cout << "1) leading it matched to gen_l_1" << endl;
   //gr_reco_leading_SS_match_gen_l_1->Print();

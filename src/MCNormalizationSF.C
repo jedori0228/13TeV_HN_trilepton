@@ -46,8 +46,9 @@ void MCNormalizationSF(bool UpdateSF=true){
     "ZZ_4mu0el",
     "WZ_3mu0el",
     "ZGamma_3mu0el"
-    //"ZZ_4mu0el",
-    //"WZ_3mu0el",
+    //"ZZ",
+    //"WZ",
+    //"ZGamma"
   };
   vector<TString> NormCalcOrder = {
     "ZZTo4L_powheg",

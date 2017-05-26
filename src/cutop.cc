@@ -25,6 +25,7 @@ void cutop::Loop()
 
     if(!isSearchRegion()) continue;
 
+    //==== MuMuMu optimized cut
     if(SearchRegion=="Preselection"){
       if(signalclass==1 || signalclass==2){
         if( ! (first_pt < cut_first_pt) ) continue;
@@ -44,6 +45,29 @@ void cutop::Loop()
         if( ! (deltaR_OS_min > cut_deltaR_OS_min) ) continue;
       }
     }
+    //==== MuMue optimized cut
+    else if(SearchRegion=="Preselection_MuMuE"){
+      if(signalclass==1 || signalclass==2){
+        if( ! (first_pt < cut_first_pt) ) continue;
+        if( ! (second_pt < cut_second_pt) ) continue;
+        if( ! (third_pt < cut_third_pt) ) continue;
+        if( ! (W_pri_lowmass_mass < cut_W_pri_mass) ) continue;
+        //if( ! (HN_mass_by_signalclass() < cut_HN_mass ) ) continue;
+        if( ! (PFMET < cut_PFMET) ) continue;
+      }
+      else{
+        if( ! (first_pt > cut_first_pt) ) continue;
+        if( ! (second_pt > cut_second_pt) ) continue;
+        if( ! (third_pt > cut_third_pt) ) continue;
+        if( ! (W_pri_highmass_mass > cut_W_pri_mass) ) continue;
+        if( ! (PFMET > cut_PFMET) ) continue;
+      }
+    }
+
+    else{
+
+    }
+
     
     n_weighted += weight;
     n_unweighted++;
@@ -72,6 +96,12 @@ bool cutop::isSearchRegion(){
   //==== Preselection
   if(SearchRegion=="Preselection"){
     if(isPreselection==1 && ThreeLeptonConfig==0) pass = true;
+  }
+  else if(SearchRegion=="Preselection_MuMuMu"){
+    if(isPreselection==1 && ThreeLeptonConfig==0) pass = true;
+  }
+  else if(SearchRegion=="Preselection_MuMuE"){
+    if(isPreselection==1 && ThreeLeptonConfig==1) pass = true;
   }
 
   //==== WZ

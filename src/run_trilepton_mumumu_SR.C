@@ -29,9 +29,9 @@ void run_trilepton_mumumu_SR(int XXX){
 
   m.filename_prefix = "trilepton_mumumu";
   m.filename_suffix = "_cat_"+catversion+".root";
-  m.histname_suffix = {"_cut0", "_cutWlow", "_cutWhigh"};
-  m.drawdata = {false, false, false};
-  m.ApplyMCNormSF = {true, true, true};
+  m.histname_suffix = {"_cut0", "_cutWlow", "_cutWhigh", "_MuMuE"};
+  m.drawdata = {false, false, false, false};
+  m.ApplyMCNormSF = {true, true, true, true};
   //m.ApplyMCNormSF = {false, false, false};
 
   //==========================

@@ -4,8 +4,10 @@ void make_rootfile_for_limit(bool newfile=true, bool printsyst=false){
 
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
   TString dataset = getenv("CATANVERSION");
-  TString LIMIT_PATH = WORKING_DIR+"/plots/"+dataset+"/RootfileForLimit/";
-  //TString LIMIT_PATH = getenv("LIMIT_PATH");
+  TString LIMIT_PATH = WORKING_DIR+"/plots/"+dataset+"/Limit/";
+  TString WhichDirectoryInCutop = "170524_v8-0-7.11";
+
+  LIMIT_PATH = LIMIT_PATH+WhichDirectoryInCutop+"/";
 
   if( !gSystem->mkdir(LIMIT_PATH, kTRUE) ){
     cout

@@ -82,8 +82,9 @@ void trilepton_mumumu::draw_hist(){
           }
 
           //cout << "signal_index = " << signal_index << " => mass = " << signal_mass[signal_index] << endl;
-          //TString string_signal_mass = "HN"+TString::Itoa(signal_mass[signal_index],10)+"_mumumu_VmuN_0p1";
-          TString string_signal_mass = "HN_MuMuMu_"+TString::Itoa(signal_mass[signal_index],10);
+          TString WhichChannel = "MuMuMu";
+          if(histname_suffix[i_cut].Contains("MuMuE")) WhichChannel = "SSSF_MuMuE";
+          TString string_signal_mass = "HN_"+WhichChannel+"_"+TString::Itoa(signal_mass[signal_index],10);
           filepath = "./rootfiles/"+data_class+"/"+filename_prefix+"_SK"+string_signal_mass+filename_suffix;
           current_sample = string_signal_mass;
         }

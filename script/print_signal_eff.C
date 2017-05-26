@@ -35,9 +35,9 @@ void print_signal_eff(){
     
     TFile *file = new TFile(filepath+"trilepton_mumumu_SKHN_MuMuMu_"+str_mass+"_cat_"+catversion+".root");
 
-    TH1D *hist_Preselection = (TH1D*)file->Get("n_events_cut0");
-    TH1D *hist_LowMass = (TH1D*)file->Get("n_events_cutWlow");
-    TH1D *hist_HighMass = (TH1D*)file->Get("n_events_cutWhigh");
+    TH1D *hist_Preselection = (TH1D*)file->Get("h_Nevents_cut0");
+    TH1D *hist_LowMass = (TH1D*)file->Get("h_Nevents_cutWlow");
+    TH1D *hist_HighMass = (TH1D*)file->Get("h_Nevents_cutWhigh");
 
 
     cout

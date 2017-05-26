@@ -5,8 +5,14 @@ Lumi = 35863.308
 
 WORKING_DIR = os.environ["PLOTTER_WORKING_DIR"]
 dataset = os.environ["CATANVERSION"]
-LIMIT_PATH = WORKING_DIR+"/plots/"+dataset+"/RootfileForLimit/"
-DATACARDS_PATH = LIMIT_PATH+"datacards"
+LIMIT_PATH = WORKING_DIR+"/plots/"+dataset+"/Limit/"
+
+WHICHCUTOPDIR = "170524_mumue_previous"
+LIMIT_PATH = LIMIT_PATH+WHICHCUTOPDIR+"/"
+
+DATACARDS_PATH = LIMIT_PATH+"/datacards/"
+
+os.system("mkdir -p "+DATACARDS_PATH)
 
 f = ROOT.TFile(LIMIT_PATH+"/hist.root")
 
@@ -92,7 +98,7 @@ for i in range(0,17):
   out.write("------------\n") 
   out.write("# we have just one channel, in which we observe 0 events\n") 
   out.write("bin 1\n") 
-  out.write("observation 0\n") 
+  out.write("observation "+str(bkg_yield)+"\n") 
   out.write("------------\n") 
   out.write("# now we list the expected events for signal and all backgrounds in that bin\n") 
   out.write("# the second 'process' line must have a positive number for backgrounds, and 0 for signal\n") 
@@ -105,7 +111,12 @@ for i in range(0,17):
   out.write("------------\n")
   #out.write("lumi\tlnN\t1.026\t1.026\n")
   out.write("sigerr\tlnN\t"+str(signal_yield_err)+"\t-\n")
-  out.write("bkgerr\tlnN\t-\t"+str(bkg_yield_err)+"\n")
+
+  if "mumue" in WHICHCUTOPDIR:
+    out.write("bkgerr\tlnN\t-\t"+str(1.30)+"\n")
+  else:
+    out.write("bkgerr\tlnN\t-\t"+str(bkg_yield_err)+"\n")
+
   out.close()
 
 

@@ -39,7 +39,7 @@ void CutStudy_bjet(){
   lg->SetBorderSize(0);
   lg->SetFillStyle(0);
   for(unsigned int i=0; i<samples.size(); i++){
-    TFile *file = new TFile(filepath+"/trilepton_mumumu_SK"+samples.at(i)+"_dilep_cat_"+catversion+".root");
+    TFile *file = new TFile(filepath+"/trilepton_mumumu_SK"+samples.at(i)+"_trilep_cat_"+catversion+".root");
     TH1D *hist = (TH1D*)file->Get("CutStudy_nbjet");
 
     int bin_cut_left = hist->GetXaxis()->FindBin(cut_left);
