@@ -13,6 +13,8 @@ void syst_FR_get_unct(){
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");  
   TString dataset = getenv("CATANVERSION");
 
+  TString WhichRootFile = "DiMuonTrkVVL";
+
   vector<TString> channels = {"BasicSelection", "ZVeto", "ZVeto_mllloffZ", "Preselection", "LowMass", "HighMass"};
 
   for(unsigned int it_channel=0; it_channel<channels.size(); it_channel++){
@@ -20,7 +22,7 @@ void syst_FR_get_unct(){
     TString channel = channels.at(it_channel);
 
 		TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/FR_syst/";
-		TString plotpath = WORKING_DIR+"/plots/"+dataset+"/FR_syst/"+channel+"/";
+		TString plotpath = WORKING_DIR+"/plots/"+dataset+"/FR_syst/"+WhichRootFile+"/"+channel+"/";
 
 		if( !gSystem->mkdir(plotpath, kTRUE) ){
 			cout

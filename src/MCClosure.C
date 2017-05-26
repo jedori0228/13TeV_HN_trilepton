@@ -29,13 +29,18 @@ void MCClosure(){
 
   vector<TString> vars = {"", "_leadingLepton_Pt", "_secondLepton_Pt", "_thirdLepton_Pt", "_PFMET"};
   vector<int> rebins = {1, 10, 10, 10, 10};
-  vector<double> xmaxs = {1, 100, 100, 100, 100};
-  vector<double> ymaxs = {300, 200, 200, 200, 200};
+  vector<double> xmaxs = {1, 100, 100, 50, 100};
+  vector<double> ymaxs = {300, 60, 60, 150, 40};
   vector<TString> xtitles = {"", "FirstLepton p_{T} [GeV]", "SecondLepton p_{T} [GeV]", "ThirdLepton p_{T} [GeV]", "PFMET [GeV]"};
 
-  vector<TString> samples = {"DYJets_10to50", "DYJets", "TTJets_aMC"};
-  vector<TString> alias = {"DY", "DY", "t#bar{t}"};
-  vector<Color_t> colors = {kYellow, kYellow, kRed};
+
+//'DYJets_10to50' 'DYJets' 'DYJets_MG_10to50' 'DYJets_MG'
+//'TTJets_aMC' 'TTLL_powheg'
+
+  vector<TString> samples = {"DYJets_MG_added", "TT_powheg"};
+  //vector<TString> samples = {"DYJets_added", "TTJets_aMC"};
+  vector<TString> alias = {"DY", "t#bar{t}"};
+  vector<Color_t> colors = {kYellow, kRed};
 
   for(unsigned int i=0; i<vars.size(); i++){
 
@@ -71,7 +76,13 @@ void MCClosure(){
       tmp_Predicted->SetLineColor(colors.at(j));
       tmp_Predicted->SetFillColor(colors.at(j));
 
-      if(sample!="DYJets_10to50") lg->AddEntry(tmp_Predicted, alias.at(j), "f");
+      if(var==""){
+        cout << "["<<sample<<"]" << endl;
+        cout << "Measured : " << tmp_Measured->GetEntries() << "\t" << tmp_Measured->GetBinContent(1) << endl;
+        cout << "Predicted : " << tmp_Predicted->GetEntries() << "\t" << tmp_Predicted->GetBinContent(1) << endl;
+      }
+
+      lg->AddEntry(tmp_Predicted, alias.at(j), "f");
 
       //==== Set Error
       for(int aaa=1; aaa<=tmp_Measured->GetXaxis()->GetNbins(); aaa++){
@@ -106,10 +117,12 @@ void MCClosure(){
       double y_Predicted = Predicted->GetBinContent(1);
       double error = Predicted->GetBinError(1);
 
+      cout << "##################" << endl;
       cout << "Measured = " << y_Measured << endl;
       cout << "Predicted = " << y_Predicted << " +- " << error << endl;
 
       cout << 100.*fabs(y_Measured-y_Predicted)/y_Predicted << "\t" << 100.*error/y_Predicted << endl;
+      cout << "##################" << endl;
 
     }
 
