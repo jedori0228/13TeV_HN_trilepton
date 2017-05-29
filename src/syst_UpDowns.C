@@ -362,7 +362,8 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       //==== low mass
       if(sig_mass < 80){
         cout
-        <<str_mass<<"\t& $< "<<cut_W_pri_mass<<"$\t& $< "<<cut_first_pt<<"$\t& $< "<<cut_second_pt<<"$\t& $< "<<cut_third_pt << "$\t& "
+        <<str_mass<<"\t& $< "<<cut_W_pri_mass<<"$\t& $< "<<cut_first_pt<<"$\t& $< "<<cut_second_pt<<"$\t& $< "<<cut_third_pt
+        << "$\t& $>"<<cut_deltaR_OS_min << "$\t& $>"<<cut_gamma_star_mass << "$\t& $<"<<cut_HN_mass<<"$\t& "
         <<"$"<<std::fixed<<std::setprecision(2)<<yields_prompt.at(0)
         <<" \\pm "<<std::fixed<<std::setprecision(2)<<stat_error_prompt<<"~\\mathrm{(stat.)}"
         <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_prompt) << "~\\mathrm{(syst.)}$\t& "
@@ -380,7 +381,8 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
       //==== high mass
       else{
         cout
-        <<str_mass<<"\t& $> "<<cut_W_pri_mass<<"$\t& $> "<<cut_PFMET<<"$\t& $> "<<cut_first_pt<<"$\t& $> "<<cut_second_pt<<"$\t& $> "<<cut_third_pt << "$\t& "
+        <<str_mass<<"\t& $> "<<cut_W_pri_mass<<"$\t& $> "<<cut_PFMET<<"$\t& $> "<<cut_first_pt<<"$\t& $> "<<cut_second_pt<<"$\t& $> "<<cut_third_pt
+        << "$\t& $>"<<cut_deltaR_OS_min << "$\t& $>"<<cut_gamma_star_mass << "$\t& "
         <<"$"<<std::fixed<<std::setprecision(2)<<yields_prompt.at(0)
         <<" \\pm "<<std::fixed<<std::setprecision(2)<<stat_error_prompt<<"~\\mathrm{(stat.)}"
         <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_prompt) << "~\\mathrm{(syst.)}$\t& "

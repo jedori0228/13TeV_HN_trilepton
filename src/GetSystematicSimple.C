@@ -145,7 +145,7 @@ void GetSystematicSimple(int sig_mass){
       for(unsigned int k=0; k<this_bkg_prompt_list.size(); k++){
         TString this_samplename = this_bkg_prompt_list.at(k);
 
-        cutop m_bkg_prompt(filepath+"trilepton_mumumu_ntp_SK"+this_samplename+"_dilep_cat_"+catversion+".root", "Ntp_"+this_syst);
+        cutop m_bkg_prompt(filepath+"trilepton_mumumu_ntp_SK"+this_samplename+"_trilep_cat_"+catversion+".root", "Ntp_"+this_syst);
         m_bkg_prompt.SearchRegion = region;
         m_bkg_prompt.cut_first_pt = cut_first_pt;
         m_bkg_prompt.cut_second_pt = cut_second_pt;
@@ -171,7 +171,7 @@ void GetSystematicSimple(int sig_mass){
         
       }
       
-      cutop m_bkg_fake(filepath+"trilepton_mumumu_ntp_SKfake_sfed_HighdXY_dilep_cat_"+catversion+".root", "Ntp_"+this_syst);
+      cutop m_bkg_fake(filepath+"trilepton_mumumu_ntp_SKfake_sfed_HighdXY_trilep_cat_"+catversion+".root", "Ntp_"+this_syst);
       m_bkg_fake.SearchRegion = region;
       m_bkg_fake.cut_first_pt = cut_first_pt;
       m_bkg_fake.cut_second_pt = cut_second_pt;
