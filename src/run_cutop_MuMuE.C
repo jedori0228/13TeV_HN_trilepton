@@ -455,163 +455,163 @@ void GetCutVar(int mass, TString var, double& cutvar_min, double& cutvar_max){
   if(mass == 90){
     if(var == "W_pri"){
       cutvar_min = 80;
-      cutvar_max = 100;
+      cutvar_max = 105;
     }
     else if(var == "first_pt"){
-      cutvar_min = 35;
-      cutvar_max = 55;
+      cutvar_min = 50;
+      cutvar_max = 90;
     }
     else if(var == "second_pt"){
-      cutvar_min = 30;
-      cutvar_max = 50;
+      cutvar_min = 10;
+      cutvar_max = 32;
     }
     else if(var == "third_pt"){
-      cutvar_min = 10;
-      cutvar_max = 25;
+      cutvar_min = 20;
+      cutvar_max = 60;
     }
   }
   if(mass == 100){
     if(var == "W_pri"){
-      cutvar_min = 90;
-      cutvar_max = 130;
+      cutvar_min = 80;
+      cutvar_max = 105;
     }
     else if(var == "first_pt"){
-      cutvar_min = 20;
-      cutvar_max = 40;
+      cutvar_min = 50;
+      cutvar_max = 90;
     }
     else if(var == "second_pt"){
       cutvar_min = 10;
-      cutvar_max = 25;
+      cutvar_max = 38;
     }
     else if(var == "third_pt"){
-      cutvar_min = 10;
-      cutvar_max = 25;
+      cutvar_min = 15;
+      cutvar_max = 55;
     }
   }
   if(mass == 150){
     if(var == "W_pri"){
-      cutvar_min = 140;
-      cutvar_max = 180;
+      cutvar_min = 80;
+      cutvar_max = 105;
     }
     else if(var == "first_pt"){
-      cutvar_min = 35;
-      cutvar_max = 55;
+      cutvar_min = 40;
+      cutvar_max = 80;
     }
     else if(var == "second_pt"){
-      cutvar_min = 30;
-      cutvar_max = 50;
+      cutvar_min = 15;
+      cutvar_max = 55;
     }
     else if(var == "third_pt"){
-      cutvar_min = 15;
-      cutvar_max = 35;
+      cutvar_min = 10;
+      cutvar_max = 45;
     }
   }
   if(mass == 200){
     if(var == "W_pri"){
-      cutvar_min = 230;
-      cutvar_max = 270;
+      cutvar_min = 80;
+      cutvar_max = 105;
     }
     else if(var == "first_pt"){
-      cutvar_min = 55;
-      cutvar_max = 75;
+      cutvar_min = 54;
+      cutvar_max = 94;
     }
     else if(var == "second_pt"){
-      cutvar_min = 45;
-      cutvar_max = 65;
+      cutvar_min = 15;
+      cutvar_max = 55;
     }
     else if(var == "third_pt"){
       cutvar_min = 20;
-      cutvar_max = 40;
+      cutvar_max = 60;
     }
   }
   if(mass == 300){
     if(var == "W_pri"){
-      cutvar_min = 330;
-      cutvar_max = 370;
+      cutvar_min = 80;
+      cutvar_max = 105;
     }
     else if(var == "first_pt"){
-      cutvar_min = 100;
-      cutvar_max = 140;
+      cutvar_min = 54;
+      cutvar_max = 94;
     }
     else if(var == "second_pt"){
-      cutvar_min = 55;
-      cutvar_max = 95;
+      cutvar_min = 15;
+      cutvar_max = 55;
     }
     else if(var == "third_pt"){
-      cutvar_min = 25;
-      cutvar_max = 65;
+      cutvar_min = 20;
+      cutvar_max = 60;
     }
   }
   if(mass == 400){
     if(var == "W_pri"){
-      cutvar_min = 460;
-      cutvar_max = 500;
+      cutvar_min = 480;
+      cutvar_max = 520;
     }
     else if(var == "first_pt"){
-      cutvar_min = 100;
-      cutvar_max = 140;
+      cutvar_min = 40;
+      cutvar_max = 80;
     }
     else if(var == "second_pt"){
-      cutvar_min = 45;
-      cutvar_max = 85;
+      cutvar_min = 10;
+      cutvar_max = 44;
     }
     else if(var == "third_pt"){
-      cutvar_min = 30;
-      cutvar_max = 70;
+      cutvar_min = 10;
+      cutvar_max = 45;
     }
   }
   if(mass == 500){
     if(var == "W_pri"){
-      cutvar_min = 510;
-      cutvar_max = 550;
+      cutvar_min = 480;
+      cutvar_max = 520;
     }
     else if(var == "first_pt"){
-      cutvar_min = 130;
-      cutvar_max = 170;
+      cutvar_min = 40;
+      cutvar_max = 80;
     }
     else if(var == "second_pt"){
-      cutvar_min = 80;
-      cutvar_max = 120;
+      cutvar_min = 10;
+      cutvar_max = 44;
     }
     else if(var == "third_pt"){
-      cutvar_min = 30;
-      cutvar_max = 70;
+      cutvar_min = 10;
+      cutvar_max = 45;
     }
   }
   if(mass == 700){
     if(var == "W_pri"){
-      cutvar_min = 740;
-      cutvar_max = 780;
+      cutvar_min = 500;
+      cutvar_max = 540;
     }
     else if(var == "first_pt"){
-      cutvar_min = 180;
-      cutvar_max = 220;
+      cutvar_min = 85;
+      cutvar_max = 125;
     }
     else if(var == "second_pt"){
-      cutvar_min = 80;
-      cutvar_max = 120;
+      cutvar_min = 10;
+      cutvar_max = 35;
     }
     else if(var == "third_pt"){
-      cutvar_min = 25;
-      cutvar_max = 65;
+      cutvar_min = 10;
+      cutvar_max = 30;
     }
   }
   if(mass == 1000){
     if(var == "W_pri"){
-      cutvar_min = 900;
-      cutvar_max = 940;
+      cutvar_min = 500;
+      cutvar_max = 540;
     }
     else if(var == "first_pt"){
-      cutvar_min = 270;
-      cutvar_max = 310;
+      cutvar_min = 85;
+      cutvar_max = 125;
     }
     else if(var == "second_pt"){
-      cutvar_min = 160;
-      cutvar_max = 200;
+      cutvar_min = 10;
+      cutvar_max = 35;
     }
     else if(var == "third_pt"){
-      cutvar_min = 30;
-      cutvar_max = 70;
+      cutvar_min = 10;
+      cutvar_max = 30;
     }
   }
   else{
