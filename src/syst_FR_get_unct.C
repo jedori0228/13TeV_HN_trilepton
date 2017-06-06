@@ -17,12 +17,21 @@ void syst_FR_get_unct(){
 
   vector<TString> channels = {"BasicSelection", "ZVeto", "ZVeto_mllloffZ", "Preselection", "LowMass", "HighMass"};
 
+  bool UsePtCone = false;
+
+  TString filenamemid = "";
+  TString xyvar = "pt_vs_eta";
+  if(UsePtCone){
+    filenamemid = "UsePtCone_";
+    xyvar = "pt_cone_vs_eta";
+  }
+
   for(unsigned int it_channel=0; it_channel<channels.size(); it_channel++){
 
     TString channel = channels.at(it_channel);
 
 		TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/FR_syst/";
-		TString plotpath = WORKING_DIR+"/plots/"+dataset+"/FR_syst/"+WhichRootFile+"/"+channel+"/";
+		TString plotpath = WORKING_DIR+"/plots/"+dataset+"/FR_syst/"+WhichRootFile+"/"+xyvar+"/"+channel+"/";
 
 		if( !gSystem->mkdir(plotpath, kTRUE) ){
 			cout
@@ -46,7 +55,7 @@ void syst_FR_get_unct(){
 		TH2D *hist_n_TLL = new TH2D("hist_n_TLL", "", dXYMins.size(), bins_dXYMins, RelIsoMaxs.size(), bins_RelIsoMaxs);
 		TH2D *hist_n_LLL = new TH2D("hist_n_LLL", "", dXYMins.size(), bins_dXYMins, RelIsoMaxs.size(), bins_RelIsoMaxs);
 		
-		TFile *file_tmp = new TFile(filepath+"/trilepton_mumumu_syst_FR_data_DoubleMuon_cat_"+catversion+".root");
+		TFile *file_tmp = new TFile(filepath+"/trilepton_mumumu_syst_FR_data_DoubleMuon_"+filenamemid+"cat_"+catversion+".root");
 		
 		for(int aaa=0; aaa<dXYMins.size(); aaa++){
 			for(int bbb=0; bbb<RelIsoMaxs.size(); bbb++){

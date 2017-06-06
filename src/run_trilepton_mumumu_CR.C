@@ -50,6 +50,7 @@ void run_trilepton_mumumu_CR(int XXX, bool ScaleMC=true){
   m.map_sample_string_to_list["Vgamma"] = {"WGtoLNuG", "WGtoLNuMM", "ZGto2LG"};
   m.map_sample_string_to_list["fake_HighdXY"] = {"fake_HighdXY"};
   m.map_sample_string_to_list["fake_sfed_HighdXY"] = {"fake_sfed_HighdXY"};
+  m.map_sample_string_to_list["fake_sfed_HighdXY_UsePtCone"] = {"fake_sfed_HighdXY_UsePtCone"};
   m.map_sample_string_to_list["fake_DiMuon_HighdXY"] = {"fake_HighdXY"};
   m.map_sample_string_to_list["fake_Dijet"] = {"fake_Dijet"};
   
@@ -69,6 +70,7 @@ void run_trilepton_mumumu_CR(int XXX, bool ScaleMC=true){
   m.map_sample_string_to_legendinfo["Vgamma"] = make_pair("V#gamma", kSpring-7);
   m.map_sample_string_to_legendinfo["fake_HighdXY"] = make_pair("Misd", kAzure+10);
   m.map_sample_string_to_legendinfo["fake_sfed_HighdXY"] = make_pair("Misd", kAzure+10);
+  m.map_sample_string_to_legendinfo["fake_sfed_HighdXY_UsePtCone"] = make_pair("Misd", kAzure+10);
   m.map_sample_string_to_legendinfo["fake_DiMuon_HighdXY"] = make_pair("Misd", kAzure+10);
   m.map_sample_string_to_legendinfo["fake_Dijet"] = make_pair("Misd", kAzure+10);
   
@@ -113,6 +115,7 @@ void run_trilepton_mumumu_CR(int XXX, bool ScaleMC=true){
     }
 
     m.samples_to_use = {"fake_sfed_HighdXY", "WZ_excl", "ZZ_excl", "Zgamma", "VVV", "ttV"};
+    //m.samples_to_use = {"fake_sfed_HighdXY_UsePtCone", "WZ_excl", "ZZ_excl", "Zgamma", "VVV", "ttV"};
   }
   else if(XXX==1){
     m.histname_suffix = {"_WZ", "_ZJets"};

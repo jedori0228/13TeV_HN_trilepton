@@ -919,6 +919,10 @@ void trilepton_mumumu::make_plot_directory(){
     plotpath = plotpath+"/use_FR_method/SFed_DiMuon_HighdXY";
   }
 
+  if( find(samples_to_use.begin(), samples_to_use.end(), "fake_sfed_HighdXY_UsePtCone") != samples_to_use.end() ){
+    plotpath = plotpath+"/use_FR_method/SFed_HighdXY_UsePtCone";
+  }
+
   cout
   << endl
   << "###################################################" << endl
