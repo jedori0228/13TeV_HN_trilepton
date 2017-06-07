@@ -150,9 +150,7 @@ NLimit syst_UpDowns_MuMuE(int sig_mass, bool printnumber=true, bool forlatex=fal
       << "(second pt) < " << cut_second_pt << " GeV" << endl
       << "(third pt) < " << cut_third_pt << " GeV" << endl
       << "W_pri_mass < " << cut_W_pri_mass << " GeV" << endl
-      << "HN mass < " << cut_HN_mass << " GeV" << endl
-      << "deltaR OS min > " << cut_deltaR_OS_min << endl
-      << "gamma star mass > " << cut_gamma_star_mass << " GeV" << endl
+      << "PFMET < " << cut_PFMET << " GeV" << endl
       << "====================================================================" << endl << endl;
     }
     else{
@@ -164,7 +162,6 @@ NLimit syst_UpDowns_MuMuE(int sig_mass, bool printnumber=true, bool forlatex=fal
       << "(third pt) > " << cut_third_pt << " GeV" << endl
       << "W_pri_mass > " << cut_W_pri_mass << " GeV" << endl
       << "PFMET > " << cut_PFMET << " GeV" << endl
-      << "deltaR OS min > " << cut_deltaR_OS_min << endl
       << "====================================================================" << endl << endl;
     }
   }
@@ -588,123 +585,174 @@ void printcurrunttime(){
 void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_second_pt, double& cut_third_pt, double& cut_W_pri_mass, double& cut_PFMET, double& cut_HN_mass, double& cut_deltaR_OS_min, double& cut_gamma_star_mass){
 
   if(sig_mass == 5){
-    cut_first_pt = 56.;
-    cut_second_pt = 34.;
-    cut_third_pt = 34.;
-    cut_W_pri_mass = 170.;
-    cut_PFMET = 38.;
+    cut_first_pt = 55.;
+    cut_second_pt = 35.;
+    cut_third_pt = 25.;
+    cut_W_pri_mass = 120.;
+    cut_HN_mass = 5.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 10){
-    cut_first_pt = 56.;
-    cut_second_pt = 34.;
-    cut_third_pt = 34.;
-    cut_W_pri_mass = 170.;
-    cut_PFMET = 38.;
+    cut_first_pt = 60.;
+    cut_second_pt = 35.;
+    cut_third_pt = 25.;
+    cut_W_pri_mass = 120.;
+    cut_HN_mass = 10.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 20){
-    cut_first_pt = 56.;
-    cut_second_pt = 34.;
-    cut_third_pt = 34.;
-    cut_W_pri_mass = 175.;
-    cut_PFMET = 36.;
+    cut_first_pt = 45.;
+    cut_second_pt = 40.;
+    cut_third_pt = 25.;
+    cut_W_pri_mass = 120.;
+    cut_HN_mass = 20.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 30){
-    cut_first_pt = 65.;
-    cut_second_pt = 36.;
-    cut_third_pt = 34.;
-    cut_W_pri_mass = 175.;
-    cut_PFMET = 38.;
+    cut_first_pt = 60.;
+    cut_second_pt = 35.;
+    cut_third_pt = 25.;
+    cut_W_pri_mass = 120.;
+    cut_HN_mass = 30.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 40){
-    cut_first_pt = 65.;
-    cut_second_pt = 36.;
-    cut_third_pt = 34.;
-    cut_W_pri_mass = 160.;
-    cut_PFMET = 38.;
+    cut_first_pt = 60.;
+    cut_second_pt = 35.;
+    cut_third_pt = 25.;
+    cut_W_pri_mass = 120.;
+    cut_HN_mass = 40.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 50){
-    cut_first_pt = 65.;
-    cut_second_pt = 36.;
-    cut_third_pt = 34.;
-    cut_W_pri_mass = 160.;
-    cut_PFMET = 38.;
+    cut_first_pt = 60.;
+    cut_second_pt = 50.;
+    cut_third_pt = 25.;
+    cut_W_pri_mass = 120.;
+    cut_HN_mass = 50.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 60){
-    cut_first_pt = 65.;
-    cut_second_pt = 36.;
-    cut_third_pt = 34.;
-    cut_W_pri_mass = 160.;
-    cut_PFMET = 38.;
+    cut_first_pt = 55.;
+    cut_second_pt = 50.;
+    cut_third_pt = 25.;
+    cut_W_pri_mass = 120.;
+    cut_HN_mass = 60.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 70){
-    cut_first_pt = 65.;
-    cut_second_pt = 36.;
-    cut_third_pt = 34.;
-    cut_W_pri_mass = 160.;
-    cut_PFMET = 38.;
+    cut_first_pt = 60.;
+    cut_second_pt = 50.;
+    cut_third_pt = 25.;
+    cut_W_pri_mass = 120.;
+    cut_HN_mass = 70.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 90){
-    cut_first_pt = 70.;
-    cut_second_pt = 12.;
-    cut_third_pt = 40.;
-    cut_W_pri_mass = 85.;
-    cut_PFMET = 5.;
+    cut_first_pt = 90.;
+    cut_second_pt = 30.;
+    cut_third_pt = 20.;
+    cut_W_pri_mass = 80.;
+    cut_HN_mass = 9999999.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 100){
-    cut_first_pt = 70.;
-    cut_second_pt = 18.;
-    cut_third_pt = 35.;
-    cut_W_pri_mass = 85.;
-    cut_PFMET = 5.;
+    cut_first_pt = 50.;
+    cut_second_pt = 20.;
+    cut_third_pt = 20.;
+    cut_W_pri_mass = 80.;
+    cut_HN_mass = 9999999.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 150){
-    cut_first_pt = 60.;
-    cut_second_pt = 35.;
+    cut_first_pt = 55.;
+    cut_second_pt = 40.;
     cut_third_pt = 25.;
-    cut_W_pri_mass = 85.;
-    cut_PFMET = 5.;
+    cut_W_pri_mass = 80.;
+    cut_HN_mass = 9999999.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 200){
-    cut_first_pt = 74.;
-    cut_second_pt = 35.;
-    cut_third_pt = 40.;
-    cut_W_pri_mass = 85.;
-    cut_PFMET = 5.;
+    cut_first_pt = 64.;
+    cut_second_pt = 55.;
+    cut_third_pt = 25.;
+    cut_W_pri_mass = 80.;
+    cut_HN_mass = 9999999.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 300){
-    cut_first_pt = 74.;
-    cut_second_pt = 35.;
+    cut_first_pt = 94.;
+    cut_second_pt = 55.;
     cut_third_pt = 40.;
-    cut_W_pri_mass = 85.;
-    cut_PFMET = 5.;
+    cut_W_pri_mass = 80.;
+    cut_HN_mass = 9999999.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 400){
-    cut_first_pt = 60.;
-    cut_second_pt = 24.;
-    cut_third_pt = 25.;
-    cut_W_pri_mass = 500.;
-    cut_PFMET = 5.;
+    cut_first_pt = 80.;
+    cut_second_pt = 40.;
+    cut_third_pt = 40.;
+    cut_W_pri_mass = 480.;
+    cut_HN_mass = 9999999.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 500){
-    cut_first_pt = 60.;
-    cut_second_pt = 24.;
-    cut_third_pt = 25.;
+    cut_first_pt = 80.;
+    cut_second_pt = 40.;
+    cut_third_pt = 40.;
     cut_W_pri_mass = 500.;
-    cut_PFMET = 5.;
+    cut_HN_mass = 9999999.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 700){
-    cut_first_pt = 105.;
-    cut_second_pt = 15.;
-    cut_third_pt = 10.;
-    cut_W_pri_mass = 520.;
-    cut_PFMET = 5.;
+    cut_first_pt = 95.;
+    cut_second_pt = 30.;
+    cut_third_pt = 20.;
+    cut_W_pri_mass = 540.;
+    cut_HN_mass = 9999999.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else if(sig_mass == 1000){
-    cut_first_pt = 105.;
-    cut_second_pt = 15.;
-    cut_third_pt = 10.;
-    cut_W_pri_mass = 520.;
-    cut_PFMET = 5.;
+    cut_first_pt = 95.;
+    cut_second_pt = 30.;
+    cut_third_pt = 20.;
+    cut_W_pri_mass = 540.;
+    cut_HN_mass = 9999999.;
+    cut_deltaR_OS_min = 0;
+    cut_gamma_star_mass = 0.;
+    cut_PFMET = 0.;
   }
   else{
     cout << "Wrong Signal Mass" << endl;

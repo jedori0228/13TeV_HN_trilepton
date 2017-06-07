@@ -224,9 +224,7 @@ void run_cutop_MuMuE(int sig_mass){
                       << "(second pt) < " << cut_second_pt_SEL << " GeV" << endl
                       << "(third pt) < " << cut_third_pt_SEL << " GeV" << endl
                       << "W_pri_mass < " << cut_W_pri_mass_SEL << " GeV" << endl
-                      << "HN mass < " << cut_HN_mass_SEL << " GeV" << endl
-                      << "deltaR os min > " << cut_deltaR_OS_min_SEL << endl
-                      << "gamma star mass > " << cut_gamma_star_mass_SEL << " GeV" << endl;
+                      << "PFMET < " << cut_PFMET_SEL << " GeV" << endl;
                     }
                     else{
                       cout
@@ -234,8 +232,7 @@ void run_cutop_MuMuE(int sig_mass){
                       << "(second pt) > " << cut_second_pt_SEL << " GeV" << endl
                       << "(third pt) > " << cut_third_pt_SEL << " GeV" << endl
                       << "W_pri_mass > " << cut_W_pri_mass_SEL << " GeV" << endl
-                      << "PFMET > " << cut_PFMET_SEL << " GeV" << endl
-                      << "deltaR os min > " << cut_deltaR_OS_min_SEL << endl;
+                      << "PFMET > " << cut_PFMET_SEL << " GeV" << endl;
                     }
                     cout
                     //<< "==> Data = " << n_data_SEL << endl
@@ -395,9 +392,7 @@ void run_cutop_MuMuE(int sig_mass){
     << "(second pt) < " << cut_second_pt_SEL << " GeV" << endl
     << "(third pt) < " << cut_third_pt_SEL << " GeV" << endl
     << "W_pri_mass < " << cut_W_pri_mass_SEL << " GeV" << endl
-    << "HN mass < " << cut_HN_mass_SEL << " GeV" << endl
-    << "deltaR os min > " << cut_deltaR_OS_min_SEL << endl
-    << "gamma star mass > " << cut_gamma_star_mass_SEL << " GeV" << endl;
+    << "PFMET < " << cut_PFMET_SEL << " GeV" << endl;
   }
   else{
     cout
@@ -407,8 +402,7 @@ void run_cutop_MuMuE(int sig_mass){
     << "(second pt) > " << cut_second_pt_SEL << " GeV" << endl
     << "(third pt) > " << cut_third_pt_SEL << " GeV" << endl
     << "W_pri_mass > " << cut_W_pri_mass_SEL << " GeV" << endl
-    << "PFMET > " << cut_PFMET_SEL << " GeV" << endl
-    << "deltaR os min > " << cut_deltaR_OS_min_SEL << endl;
+    << "PFMET > " << cut_PFMET_SEL << " GeV" << endl;
   }
   cout
   //<< "==> Data = " << n_data_SEL << endl
