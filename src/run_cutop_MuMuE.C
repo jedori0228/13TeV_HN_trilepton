@@ -118,7 +118,9 @@ void run_cutop_MuMuE(int sig_mass){
 
     //GetCutVar(sig_mass, "PFMET", min_tmp, max_tmp);
     //fillarray( cuts_PFMET, min_tmp, max_tmp, 10);
-    cuts_PFMET.push_back(0.);
+
+    fillarray( cuts_PFMET, 0, 50, 5);
+
     cuts_HN_mass.push_back(0.);
     cuts_deltaR_OS_min.push_back(0.);
     cuts_gamma_star_mass.push_back(0.);
