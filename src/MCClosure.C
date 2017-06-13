@@ -9,8 +9,10 @@ void MCClosure(){
 
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
 
-  TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/MCClosure/";
-  TString plotpath = WORKING_DIR+"/plots/"+dataset+"/MCClosure/";
+  TString xyvar = "pt_vs_eta";
+
+  TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/MCClosure/"+xyvar+"/";
+  TString plotpath = WORKING_DIR+"/plots/"+dataset+"/MCClosure/"+xyvar+"/";
 
   TString region = "";
   region = "ThreeMuon_ZVeto_mllloffZ_bjetveto";
@@ -28,9 +30,9 @@ void MCClosure(){
   }
 
   vector<TString> vars = {"", "_leadingLepton_Pt", "_secondLepton_Pt", "_thirdLepton_Pt", "_PFMET"};
-  vector<int> rebins = {1, 10, 10, 10, 10};
+  vector<int> rebins = {1, 10, 10, 10, 20};
   vector<double> xmaxs = {1, 100, 100, 50, 100};
-  vector<double> ymaxs = {300, 60, 60, 150, 40};
+  vector<double> ymaxs = {300, 60, 60, 150, 60};
   vector<TString> xtitles = {"", "FirstLepton p_{T} [GeV]", "SecondLepton p_{T} [GeV]", "ThirdLepton p_{T} [GeV]", "PFMET [GeV]"};
 
 

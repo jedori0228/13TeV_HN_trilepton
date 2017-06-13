@@ -3,7 +3,6 @@
 
 double PunziFunction(double eff_sig, double bkg_tot, double bkg_fake);
 void printcurrunttime();
-void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_second_pt, double& cut_third_pt, double& cut_W_pri_mass, double& cut_PFMET, double& cut_HN_mass, double& cut_deltaR_OS_min, double& cut_gamma_star_mass);
 double GetMeanUncert(double a, double b, bool square=false);
 
 NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bool inclusive=false, bool fillNlimit=false){
@@ -78,6 +77,30 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
 
   }
 
+  //=========================
+  //==== Get Optimized Cuts
+  //=========================
+
+  std::map< TString, double > map_HNTriChannl_cutop; // key : <channel>_<mass>_<var>
+
+  string cutline;
+  ifstream in(WORKING_DIR+"/data/"+dataset+"/OpCut.txt");
+  while(getline(in,cutline)){
+    std::istringstream is( cutline );
+    TString channel;
+    TString mass;
+    TString var;
+    double value;
+    is >> channel;
+    is >> mass;
+    is >> var;
+    is >> value;
+
+    TString thiskey = channel+"_"+mass+"_"+var;
+
+    map_HNTriChannl_cutop[thiskey] = value;
+  }
+
   double N_MC = 100000.;
   if(sig_mass==200) N_MC = 96193.;
   if(sig_mass==400) N_MC = 99070.;
@@ -95,8 +118,52 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
 
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/UpDownSyst/";
 
-  double cut_first_pt, cut_second_pt, cut_third_pt, cut_W_pri_mass, cut_PFMET, cut_HN_mass, cut_deltaR_OS_min, cut_gamma_star_mass;
-  setCutsForEachSignalMass(sig_mass, cut_first_pt, cut_second_pt, cut_third_pt, cut_W_pri_mass, cut_PFMET, cut_HN_mass, cut_deltaR_OS_min, cut_gamma_star_mass);
+  double cut_first_pt(0.), cut_second_pt(0.), cut_third_pt(0.),
+         cut_W_pri_mass(0.), cut_HN_mass(0.),
+         cut_deltaR_OS_min(0.), cut_gamma_star_mass(0.),
+         cut_PFMET(0.);
+
+  TString channel = "MuMuMu";
+  TString thiskey_prefix = channel+"_"+TString::Itoa(sig_mass,10);
+
+  std::vector<TString> variables;
+
+  variables.push_back("first_pt");
+  variables.push_back("second_pt");
+  variables.push_back("third_pt");
+  variables.push_back("W_pri_mass");
+  variables.push_back("HN_mass");
+  variables.push_back("deltaR_OS_min");
+  variables.push_back("gamma_star_mass");
+  variables.push_back("PFMET");
+
+  std::map< TString, double > cut_variables;
+
+  for(unsigned int i=0; i<variables.size(); i++){
+    TString key = thiskey_prefix+"_"+variables.at(i);
+    //cout << "[filling] "<<key<<endl;
+
+    std::map< TString, double >::const_iterator mapit;
+    mapit = map_HNTriChannl_cutop.find(key);
+    bool valuefound = (mapit!=map_HNTriChannl_cutop.end());
+
+    if(valuefound){
+      cut_variables[variables.at(i)] = map_HNTriChannl_cutop[key];
+    }
+    else{
+      cerr << "Did not find optimized cut value for "<<key << endl;
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  cut_first_pt =  cut_variables["first_pt"];
+  cut_second_pt = cut_variables["second_pt"];
+  cut_third_pt = cut_variables["third_pt"];
+  cut_W_pri_mass = cut_variables["W_pri_mass"];
+  cut_HN_mass = cut_variables["HN_mass"];
+  cut_deltaR_OS_min = cut_variables["deltaR_OS_min"];
+  cut_gamma_star_mass = cut_variables["gamma_star_mass"];
+  cut_PFMET = cut_variables["PFMET"];
 
   if(inclusive){
 
@@ -584,189 +651,6 @@ void printcurrunttime(){
   TDatime datime;
   cout << datime.GetYear()<<"/"<<datime.GetMonth()<<"/"<<datime.GetDay()<<" "<<datime.GetHour()<<":"<<datime.GetMinute()<<":"<<datime.GetSecond();
   
-}
-
-void setCutsForEachSignalMass(int sig_mass, double& cut_first_pt, double& cut_second_pt, double& cut_third_pt, double& cut_W_pri_mass, double& cut_PFMET, double& cut_HN_mass, double& cut_deltaR_OS_min, double& cut_gamma_star_mass){
-
-  if(sig_mass == 5){
-    cut_first_pt = 40.;
-    cut_second_pt = 35.;
-    cut_third_pt = 25.;
-    cut_W_pri_mass = 110.;
-    cut_HN_mass = 35.;
-    cut_deltaR_OS_min = 0;
-    cut_gamma_star_mass = 0.;
-    cut_PFMET = 0.;
-  }
-  else if(sig_mass == 10){
-    cut_first_pt = 40.;
-    cut_second_pt = 30.;
-    cut_third_pt = 25.;
-    cut_W_pri_mass = 135.;
-    cut_HN_mass = 40.;
-    cut_deltaR_OS_min = 0;
-    cut_gamma_star_mass = 0.;
-    cut_PFMET = 0.;
-  }
-  else if(sig_mass == 20){
-    cut_first_pt = 40.;
-    cut_second_pt = 35.;
-    cut_third_pt = 20.;
-    cut_W_pri_mass = 130.;
-    cut_HN_mass = 40.;
-    cut_deltaR_OS_min = 0.4;
-    cut_gamma_star_mass = 0.;
-    cut_PFMET = 0.;
-  }
-  else if(sig_mass == 30){
-    cut_first_pt = 40.;
-    cut_second_pt = 40.;
-    cut_third_pt = 25.;
-    cut_W_pri_mass = 115.;
-    cut_HN_mass = 40.;
-    cut_deltaR_OS_min = 0.5;
-    cut_gamma_star_mass = 10.;
-    cut_PFMET = 0.;
-  }
-  else if(sig_mass == 40){
-    cut_first_pt = 40.;
-    cut_second_pt = 35.;
-    cut_third_pt = 25.;
-    cut_W_pri_mass = 100.;
-    cut_HN_mass = 50.;
-    cut_deltaR_OS_min = 0.7;
-    cut_gamma_star_mass = 10.;
-    cut_PFMET = 0.;
-  }
-  else if(sig_mass == 50){
-    cut_first_pt = 30.;
-    cut_second_pt = 30.;
-    cut_third_pt = 30.;
-    cut_W_pri_mass = 125.;
-    cut_HN_mass = 80.;
-    cut_deltaR_OS_min = 0;
-    cut_gamma_star_mass = 20.;
-    cut_PFMET = 0.;
-  }
-  else if(sig_mass == 60){
-    cut_first_pt = 30.;
-    cut_second_pt = 30.;
-    cut_third_pt = 30.;
-    cut_W_pri_mass = 100.;
-    cut_HN_mass = 80.;
-    cut_deltaR_OS_min = 0;
-    cut_gamma_star_mass = 20.;
-    cut_PFMET = 0.;
-  }
-  else if(sig_mass == 70){
-    cut_first_pt = 35.;
-    cut_second_pt = 35.;
-    cut_third_pt = 30.;
-    cut_W_pri_mass = 100.;
-    cut_HN_mass = 80.;
-    cut_deltaR_OS_min = 0;
-    cut_gamma_star_mass = 15.;
-    cut_PFMET = 0.;
-  }
-  else if(sig_mass == 90){
-    cut_first_pt = 45.;
-    cut_second_pt = 40.;
-    cut_third_pt = 10.;
-    cut_W_pri_mass = 80.;
-    cut_HN_mass = 9999999.;
-    cut_deltaR_OS_min = 0;
-    cut_gamma_star_mass = 0.;
-    cut_PFMET = 20.;
-  }
-  else if(sig_mass == 100){
-    cut_first_pt = 25.;
-    cut_second_pt = 15.;
-    cut_third_pt = 15.;
-    cut_W_pri_mass = 110.;
-    cut_HN_mass = 9999999.;
-    cut_deltaR_OS_min = 0;
-    cut_gamma_star_mass = 0.;
-    cut_PFMET = 20.;
-  }
-  else if(sig_mass == 150){
-    cut_first_pt = 45.;
-    cut_second_pt = 40.;
-    cut_third_pt = 20.;
-    cut_W_pri_mass = 160.;
-    cut_HN_mass = 9999999.;
-    cut_deltaR_OS_min = 0;
-    cut_gamma_star_mass = 0.;
-    cut_PFMET = 20.;
-  }
-  else if(sig_mass == 200){
-    cut_first_pt = 65.;
-    cut_second_pt = 50.;
-    cut_third_pt = 25.;
-    cut_W_pri_mass = 250.;
-    cut_HN_mass = 9999999.;
-    cut_deltaR_OS_min = 0.7;
-    cut_gamma_star_mass = 0.;
-    cut_PFMET = 20.;
-  }
-  else if(sig_mass == 300){
-    cut_first_pt = 100.;
-    cut_second_pt = 55.;
-    cut_third_pt = 35.;
-    cut_W_pri_mass = 330.;
-    cut_HN_mass = 9999999.;
-    cut_deltaR_OS_min = 1.4;
-    cut_gamma_star_mass = 0.;
-    cut_PFMET = 20.;
-  }
-  else if(sig_mass == 400){
-    cut_first_pt = 120.;
-    cut_second_pt = 65.;
-    cut_third_pt = 50.;
-    cut_W_pri_mass = 480.;
-    cut_HN_mass = 9999999.;
-    cut_deltaR_OS_min = 1.4;
-    cut_gamma_star_mass = 0.;
-    cut_PFMET = 20.;
-  }
-  else if(sig_mass == 500){
-    cut_first_pt = 130.;
-    cut_second_pt = 80.;
-    cut_third_pt = 40.;
-    cut_W_pri_mass = 550.;
-    cut_HN_mass = 9999999.;
-    cut_deltaR_OS_min = 1.4;
-    cut_gamma_star_mass = 0.;
-    cut_PFMET = 40.;
-  }
-  else if(sig_mass == 700){
-    cut_first_pt = 200.;
-    cut_second_pt = 80.;
-    cut_third_pt = 45.;
-    cut_W_pri_mass = 760.;
-    cut_HN_mass = 9999999.;
-    cut_deltaR_OS_min = 1.4;
-    cut_gamma_star_mass = 0.;
-    cut_PFMET = 20.;
-  }
-  else if(sig_mass == 1000){
-    cut_first_pt = 290.;
-    cut_second_pt = 180.;
-    cut_third_pt = 50.;
-    cut_W_pri_mass = 900.;
-    cut_HN_mass = 9999999.;
-    cut_deltaR_OS_min = 0.7;
-    cut_gamma_star_mass = 0.;
-    cut_PFMET = 50.;
-  }
-  else{
-    cout << "Wrong Signal Mass" << endl;
-    cut_first_pt = 9999999;
-    cut_second_pt = 9999999;
-    cut_third_pt = 99999999;
-    cut_W_pri_mass = 99999999;
-    cut_HN_mass = 99999999;
-  }
-
 }
 
 double GetMeanUncert(double a, double b, bool square){

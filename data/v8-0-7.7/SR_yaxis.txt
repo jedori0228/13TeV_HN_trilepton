@@ -798,10 +798,10 @@ _cutHN1000	h_secondLepton_dXYSig	100
 _cutHN1000	h_thirdLepton_dXYSig	100
 _cutHN1000	h_mlll	250
 _cutHN1000	h_mT	250
-_MuMuE	h_HN_mass_class1	100
-_MuMuE	h_HN_mass_class2	100
-_MuMuE	h_HN_mass_class3	150
-_MuMuE	h_HN_mass_class4	150
+_MuMuE	h_HN_mass_class1	30
+_MuMuE	h_HN_mass_class2	30
+_MuMuE	h_HN_mass_class3	30
+_MuMuE	h_HN_mass_class4	30
 _MuMuE	h_W_pri_lowmass_mass	200
 _MuMuE	h_W_pri_highmass_mass	100
 _MuMuE	h_deltaR_OS_min	70

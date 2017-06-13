@@ -30,6 +30,7 @@ void run_trilepton_mumumu_SR(int XXX){
   m.filename_prefix = "trilepton_mumumu";
   m.filename_suffix = "_cat_"+catversion+".root";
   m.histname_suffix = {"_cut0", "_cutWlow", "_cutWhigh", "_MuMuE"};
+  //m.drawdata = {true, true, true, true, true};
   m.drawdata = {false, false, false, false};
   m.ApplyMCNormSF = {true, true, true, true};
   //m.ApplyMCNormSF = {false, false, false};
@@ -56,6 +57,7 @@ void run_trilepton_mumumu_SR(int XXX){
 
     m.histname_suffix.push_back(thiscut);
     m.drawdata.push_back(false);
+    //m.drawdata.push_back(true);
     m.ApplyMCNormSF.push_back(true);
     m.signal_color.push_back(this_color);
     
