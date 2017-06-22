@@ -102,8 +102,7 @@ NLimit syst_UpDowns_MuMuE(int sig_mass, bool printnumber=true, bool forlatex=fal
   }
 
   double N_MC = 100000.;
-  if(sig_mass==200) N_MC = 96193.;
-  if(sig_mass==400) N_MC = 99070.;
+  if(sig_mass==500) N_MC = 99588.;
 
   TString region = "Preselection_MuMuE";
   //TString region = "WZ_3mu0el";
@@ -167,8 +166,8 @@ NLimit syst_UpDowns_MuMuE(int sig_mass, bool printnumber=true, bool forlatex=fal
       cut_first_pt = 99999999.;
       cut_second_pt = 99999999.;
       cut_third_pt = 99999999.;
-      cut_W_pri_mass = 150;
-      cut_PFMET = 0.;
+      cut_W_pri_mass = 99999999.;
+      cut_PFMET = 99999999.;
       cut_HN_mass = 99999999.;
       cut_deltaR_OS_min = 0.;
       cut_gamma_star_mass = 0.;
@@ -180,7 +179,7 @@ NLimit syst_UpDowns_MuMuE(int sig_mass, bool printnumber=true, bool forlatex=fal
       cut_second_pt = 10.;
       cut_third_pt = 10.;
       cut_W_pri_mass = 0.;
-      cut_PFMET = 20.;
+      cut_PFMET = 0.;
       cut_HN_mass = 99999999.;
       cut_deltaR_OS_min = 0.;
       cut_gamma_star_mass = 0.;
@@ -416,12 +415,12 @@ NLimit syst_UpDowns_MuMuE(int sig_mass, bool printnumber=true, bool forlatex=fal
       TString str_mass = TString::Itoa(sig_mass, 10);
 
       double data_yield = yields_data.at(0);
-      if(region=="Preselection") data_yield = 9999;
+      if(region=="Preselection_MuMuE") data_yield = 9999;
 
       //==== low mass
       if(sig_mass < 80){
         cout
-        <<str_mass<<"\t& $< "<<cut_W_pri_mass<<"$\t& $< "<<cut_first_pt<<"$\t& $< "<<cut_second_pt<<"$\t& $< "<<cut_third_pt << "$\t& "
+        <<str_mass<<"\t& $< "<<cut_W_pri_mass<<"$\t& $< "<<cut_PFMET<<"$\t& $< "<<cut_first_pt<<"$\t& $< "<<cut_second_pt<<"$\t& $< "<<cut_third_pt << "$\t& "
         <<"$"<<std::fixed<<std::setprecision(2)<<yields_prompt.at(0)
         <<" \\pm "<<std::fixed<<std::setprecision(2)<<stat_error_prompt<<"~\\mathrm{(stat.)}"
         <<" \\pm "<<std::fixed<<std::setprecision(2)<<sqrt(squared_syst_prompt) << "~\\mathrm{(syst.)}$\t& "
@@ -619,6 +618,9 @@ NLimit syst_UpDowns_MuMuE(int sig_mass, bool printnumber=true, bool forlatex=fal
     n_limit.signal_systs[NLimit::TriggerSF] = GetMeanUncert(syst_error_signal.at(17), syst_error_signal.at(18));
 
     n_limit.n_data = yields_data.at(0);
+
+    n_limit.CheckZeroEntry();
+
   }  
 
   return n_limit;

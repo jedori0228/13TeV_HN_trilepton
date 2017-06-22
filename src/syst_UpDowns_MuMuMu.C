@@ -5,7 +5,7 @@ double PunziFunction(double eff_sig, double bkg_tot, double bkg_fake);
 void printcurrunttime();
 double GetMeanUncert(double a, double b, bool square=false);
 
-NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bool inclusive=false, bool fillNlimit=false){
+NLimit syst_UpDowns_MuMuMu(int sig_mass, bool printnumber=true, bool forlatex=false, bool inclusive=false, bool fillNlimit=false){
 
   TH1::SetDefaultSumw2(true);
 
@@ -108,6 +108,7 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
   TString region = "Preselection";
   //TString region = "WZ_3mu0el";
   //TString region = "ZJets_3mu0el";
+  //TString region = "ZJets";
   //TString region = "ZZ";
   
   int SignalClass;
@@ -629,6 +630,9 @@ NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bo
     n_limit.signal_systs[NLimit::TriggerSF] = GetMeanUncert(syst_error_signal.at(17), syst_error_signal.at(18));
 
     n_limit.n_data = yields_data.at(0);
+
+    n_limit.CheckZeroEntry();
+
   }  
 
   return n_limit;

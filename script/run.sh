@@ -19,13 +19,13 @@ if [ $whichRun = "FR" ]; then
   RelIso=$3
 
   if [ $dXYSig = "all" ]; then
-		for i in 3.0 4.0 5.0
-		do
-			for j in 0.2 0.3 0.4 0.6 0.8 1.0
-			do
-				root -l -b -q "src/fake_calculator.C($i, $j)"
-			done
-		done
+    for i in 3.0 4.0 5.0
+    do
+      for j in 0.2 0.3 0.4 0.6 0.8 1.0
+      do
+        root -l -b -q "src/fake_calculator.C($i, $j)"
+      done
+    done
   else
     root -l -b -q "src/fake_calculator.C($dXYSig, $RelIso)" 
   fi
@@ -33,17 +33,27 @@ fi
 
 #NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bool inclusive=false, bool fillNlimit=false){
 if [ $whichRun = "syst" ]; then
-  for mass in 5 10 20 30 40 50 60 70
-  do
-    root -l -b -q "src/syst_UpDowns.C($mass,true, true, false, false)" &> $PLOTTER_WORKING_DIR/tmp.txt
-    python script/syst_latex_output_cleanup.py $PLOTTER_WORKING_DIR/tmp.txt
-  done
+  if [ -z "$3" ]; then
+    echo "Running MuMuE"
+    for mass in 5 10 20 30 40 50 60 70 90 100 150 200 300 400 500 700 1000
+    do
+      root -l -b -q "src/syst_UpDowns_MuMuE.C($mass,true, true, false, false)" &> $PLOTTER_WORKING_DIR/tmp.txt
+      python script/syst_latex_output_cleanup.py $PLOTTER_WORKING_DIR/tmp.txt
+    done
+  else
+    echo "Running MuMuMu"
+    for mass in 5 10 20 30 40 50 60 70
+    do
+      root -l -b -q "src/syst_UpDowns_MuMuMu.C($mass,true, true, false, false)" &> $PLOTTER_WORKING_DIR/tmp.txt
+      python script/syst_latex_output_cleanup.py $PLOTTER_WORKING_DIR/tmp.txt
+    done
 
-  for mass in 90 100 150 200 300 400 500 700 1000
-  do
-    root -l -b -q "src/syst_UpDowns.C($mass,true, true, false, false)" &> $PLOTTER_WORKING_DIR/tmp.txt
-    python script/syst_latex_output_cleanup.py $PLOTTER_WORKING_DIR/tmp.txt
-  done
+    for mass in 90 100 150 200 300 400 500 700 1000
+    do
+      root -l -b -q "src/syst_UpDowns_MuMuMu.C($mass,true, true, false, false)" &> $PLOTTER_WORKING_DIR/tmp.txt
+      python script/syst_latex_output_cleanup.py $PLOTTER_WORKING_DIR/tmp.txt
+    done
+  fi
 fi
 
 if [ $whichRun = "MCSF" ]; then
