@@ -1,4 +1,4 @@
-void print_signal_eff(){
+void print_signal_eff_MuMuMu(){
 
   TString catversion = getenv("CATVERSION");
   TString dataset = getenv("CATANVERSION");
@@ -35,9 +35,9 @@ void print_signal_eff(){
     
     TFile *file = new TFile(filepath+"trilepton_mumumu_SKHN_MuMuMu_"+str_mass+"_cat_"+catversion+".root");
 
-    TH1D *hist_Preselection = (TH1D*)file->Get("h_Nevents_cut0");
-    TH1D *hist_LowMass = (TH1D*)file->Get("h_Nevents_cutWlow");
-    TH1D *hist_HighMass = (TH1D*)file->Get("h_Nevents_cutWhigh");
+    TH1D *hist_Preselection = (TH1D*)file->Get("h_Nevents_cut_MuMuMu_Presel");
+    TH1D *hist_LowMass = (TH1D*)file->Get("h_Nevents_cut_MuMuMu_low");
+    TH1D *hist_HighMass = (TH1D*)file->Get("h_Nevents_cut_MuMuMu_high");
 
 
     cout
