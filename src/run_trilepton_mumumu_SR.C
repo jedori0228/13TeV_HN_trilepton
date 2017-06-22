@@ -29,7 +29,7 @@ void run_trilepton_mumumu_SR(int XXX){
 
   m.filename_prefix = "trilepton_mumumu";
   m.filename_suffix = "_cat_"+catversion+".root";
-  m.histname_suffix = {"_cut0", "_cutWlow", "_cutWhigh", "_MuMuE"};
+  m.histname_suffix = {"_cut_MuMuMu_Presel", "_cut_MuMuMu_low", "_cut_MuMuMu_high", "_cut_SSSF_MuMuE_Presel"};
   //m.drawdata = {true, true, true, true, true};
   m.drawdata = {false, false, false, false};
   m.ApplyMCNormSF = {true, true, true, true};
@@ -48,7 +48,7 @@ void run_trilepton_mumumu_SR(int XXX){
     500, 700, 1000
   };
   for(unsigned int i=0; i<m.signal_mass.size(); i++){
-    TString thiscut = "_cutHN"+TString::Itoa(m.signal_mass.at(i),10);
+    TString thiscut = "_cut_MuMuMu_HN"+TString::Itoa(m.signal_mass.at(i),10);
     Color_t this_color;
     if(i<=5) this_color = kAzure+(-9+2*i);
     else if(i<=10) this_color = kRed+(-10+2*(i-6));
@@ -180,9 +180,9 @@ void run_trilepton_mumumu_SR(int XXX){
     "h_mT"
   };
   m.x_title = {
-    "m(#mu#mu#nu) [GeV]", "m(#mu#mu#nu) [GeV]", "m(#mu#mu#nu) [GeV]", "m(#mu#mu#nu) [GeV]",
-    "m(#mu#mu#mu#nu) [GeV]", "m(#mu#mu#mu#nu) [GeV]",
-    "#DeltaR(OS)_{min}", "m(#mu+#mu-) [GeV]", "# of jets", "m(#mu+#mu-) [GeV]",
+    "m(ll#nu) [GeV]", "m(ll#nu) [GeV]", "m(ll#nu) [GeV]", "m(ll#nu) [GeV]",
+    "m(lll#nu) [GeV]", "m(lll#nu) [GeV]",
+    "#DeltaR(OS)_{min}", "m(l+l-) [GeV]", "# of jets", "m(l+l-) [GeV]",
     "#slash{E}_{T}^{miss} [GeV]", "#phi of #slash{E}_{T}^{miss}",
     "p_{T} [GeV]",
     "p_{T} [GeV]",
@@ -206,12 +206,12 @@ void run_trilepton_mumumu_SR(int XXX){
     "# of Vertices",
     "m(OS) [GeV]",
     "# of b-tagged jets",
-    "m(#mu#nu) [GeV]",
+    "m(l#nu) [GeV]",
     "#sigma(dXY)",
     "#sigma(dXY)",
     "#sigma(dXY)",
-    "m(#mu#mu#mu) [GeV]",
-    "m_{T}(#mu, #slash{E}_{T}^{miss}) [GeV]"
+    "m(lll) [GeV]",
+    "m_{T}(l, #slash{E}_{T}^{miss}) [GeV]"
   };
   m.units = {
     "GeV", "GeV", "GeV", "GeV",
@@ -263,23 +263,44 @@ void run_trilepton_mumumu_SR(int XXX){
   //====================================
 
   for(unsigned int i=0; i<m.histname_suffix.size(); i++){
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 5)] = 0.01;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 10)] = 0.001;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 20)] = 0.001;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 30)] = 0.001;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 40)] = 0.001;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 50)] = 0.001;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 60)] = 0.001;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 70)] = 0.01;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 90)] = 0.1;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 100)] = 0.1;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 150)] = 0.1;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 200)] = 0.1;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 300)] = 1.;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 400)] = 10.;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 500)] = 100.;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 700)] = 100.;
-    m.coupling_constants[make_pair(m.histname_suffix.at(i), 1000)] = 100.;
+    if(!m.histname_suffix.at(i).Contains("MuMuE")){
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 5)] = 0.01;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 10)] = 0.001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 20)] = 0.001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 30)] = 0.001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 40)] = 0.001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 50)] = 0.001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 60)] = 0.001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 70)] = 0.01;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 90)] = 0.1;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 100)] = 0.1;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 150)] = 0.1;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 200)] = 0.1;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 300)] = 1.;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 400)] = 10.;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 500)] = 100.;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 700)] = 100.;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 1000)] = 100.;
+    }
+    else{
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 5)] = 0.001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 10)] = 0.0001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 20)] = 0.0001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 30)] = 0.0001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 40)] = 0.0001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 50)] = 0.0001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 60)] = 0.0001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 70)] = 0.001;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 90)] = 0.01;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 100)] = 0.01;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 150)] = 0.01;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 200)] = 0.01;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 300)] = 0.1;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 400)] = 1.;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 500)] = 10.;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 700)] = 10.;
+      m.coupling_constants[make_pair(m.histname_suffix.at(i), 1000)] = 10.;
+    }
   }
 
   //=====================================
