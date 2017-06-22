@@ -43,12 +43,15 @@ void MCNormalizationSF(bool UpdateSF=true){
     "VVV"
   };
   vector<TString> NormCalcOrder_region = {
-    "ZZ_4mu0el",
-    "WZ_3mu0el",
-    "ZGamma_3mu0el"
-    //"ZZ",
-    //"WZ",
-    //"ZGamma"
+    //"ZZ_4mu0el",
+    //"WZ_3mu0el",
+    //"ZGamma_3mu0el"
+    "ZZ",
+    "WZ",
+    "ZGamma"
+    //"ZZ_2mu2el",
+    //"WZ_2mu1el",
+    //"ZGamma_2mu1el"
   };
   vector<TString> NormCalcOrder = {
     "ZZTo4L_powheg",
