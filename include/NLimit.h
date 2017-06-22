@@ -42,6 +42,7 @@ class NLimit {
 
   double err_total(source src);
   static TString SystSourceStr(systsource systsrc);
+  void CheckZeroEntry();
 };
 
 #endif

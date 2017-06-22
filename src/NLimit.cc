@@ -38,3 +38,29 @@ TString NLimit::SystSourceStr(systsource systsrc){
 
 }
 
+void NLimit::CheckZeroEntry(){
+
+  if(n_fake==0){
+    n_stat_fake = 0;
+    n_syst_fake = 0;
+    for(std::map<systsource, double>::iterator it=fake_systs.begin(); it!=fake_systs.end(); it++){
+      it->second = 0;
+    }
+  }
+  if(n_prompt==0){
+    n_stat_prompt = 0;
+    n_syst_prompt = 0;
+    for(std::map<systsource, double>::iterator it=prompt_systs.begin(); it!=prompt_systs.end(); it++){
+      it->second = 0;
+    }
+  }
+  if(n_signal==0){
+    n_stat_signal = 0;
+    n_syst_signal = 0;
+    for(std::map<systsource, double>::iterator it=signal_systs.begin(); it!=signal_systs.end(); it++){
+      it->second = 0;
+    }
+  }
+
+}
+
