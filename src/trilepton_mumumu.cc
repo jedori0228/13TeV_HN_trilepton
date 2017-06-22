@@ -512,8 +512,8 @@ void trilepton_mumumu::draw_canvas(THStack* mc_stack, TH1D* mc_error, TH1D* hist
   //==== signal_class
   signal_class this_sc = no_class;
   //==== cutdR_cutW is only applied for low mass yet
-  if( histname_suffix[i_cut] == "_cutWlow" ) this_sc = lowmass;
-  if( histname_suffix[i_cut] == "_cutWhigh" ) this_sc = highmass;
+  if( histname_suffix[i_cut] == "_cut_MuMuMu_low" ) this_sc = lowmass;
+  if( histname_suffix[i_cut] == "_cut_MuMuMu_high" ) this_sc = highmass;
   if( histname[i_var].Contains("class1") ) this_sc = class1;
   else if( histname[i_var].Contains("class2") ) this_sc = class2;
   else if( histname[i_var].Contains("class3") ) this_sc = class3;
@@ -867,20 +867,21 @@ TString trilepton_mumumu::legend_coupling_label(int mass){
  
   //cout << "mass = " << mass << endl;
   //cout << " coupling = " << coupling_const.at(signal_survive_index[mass]) << endl;
-  double log_coupling = TMath::Log10(coupling_constant(mass)/(1.*TMath::Power(10,log_of_generation_mixing)));
-  //cout << " log coupling = " << log_coupling << endl;
+  double log_scale = TMath::Log10(coupling_constant(mass)/(1.*TMath::Power(10,log_of_generation_mixing)));
+  double log_coupling = TMath::Log10(coupling_constant(mass));
+  //cout << " log coupling = " << log_scale << endl;
   
-  //if(log_coupling == 0) return "HN"+TString::Itoa(mass, 10)+", |V_{N#mu}|^{2}=1";
-  //else return "HN"+TString::Itoa(mass, 10)+", |V_{N#mu}|^{2}=10^{"+TString::Itoa(log_coupling, 10)+"}";
+  if(log_coupling == 0) return "HN"+TString::Itoa(mass, 10)+", |V_{N#mu}|^{2}=1";
+  else return "HN"+TString::Itoa(mass, 10)+", |V_{N#mu}|^{2}=10^{"+TString::Itoa(log_coupling, 10)+"}";
 
-  //if(log_coupling == 0) return "m(HN) = "+TString::Itoa(mass, 10)+" GeV/c^{2}, |V_{N#mu}|^{2}=0.01";
-  //return "10^{"+TString::Itoa(log_coupling, 10)+"} #times m(HN) = "+TString::Itoa(mass, 10)+" GeV/c^{2}, |V_{N#mu}|^{2}=0.01";
+  //if(log_scale == 0) return "m(HN) = "+TString::Itoa(mass, 10)+" GeV/c^{2}, |V_{N#mu}|^{2}=0.01";
+  //return "10^{"+TString::Itoa(log_scale, 10)+"} #times m(HN) = "+TString::Itoa(mass, 10)+" GeV/c^{2}, |V_{N#mu}|^{2}=0.01";
 
-  if(log_coupling == 0) return "m(HN) = "+TString::Itoa(mass, 10)+" GeV/c^{2}";
-  return "10^{"+TString::Itoa(log_coupling, 10)+"} #times m(HN) = "+TString::Itoa(mass, 10)+" GeV/c^{2}";
+  //if(log_scale == 0) return "m(HN) = "+TString::Itoa(mass, 10)+" GeV/c^{2}";
+  //return "10^{"+TString::Itoa(log_scale, 10)+"} #times m(HN) = "+TString::Itoa(mass, 10)+" GeV/c^{2}";
 
-  //if(log_coupling == 0) return "#splitline{m(N) = "+TString::Itoa(mass, 10)+" GeV/c^{2}}{|V_{N#mu}|^{2}=0.01}";
-  //return "#splitline{10^{"+TString::Itoa(log_coupling, 10)+"} #times m(N) = "+TString::Itoa(mass, 10)+" GeV}{|V_{N#mu}|^{2}=0.01}";
+  //if(log_scale == 0) return "#splitline{m(N) = "+TString::Itoa(mass, 10)+" GeV/c^{2}}{|V_{N#mu}|^{2}=0.01}";
+  //return "#splitline{10^{"+TString::Itoa(log_scale, 10)+"} #times m(N) = "+TString::Itoa(mass, 10)+" GeV}{|V_{N#mu}|^{2}=0.01}";
   
 }
 
