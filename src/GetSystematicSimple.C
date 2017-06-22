@@ -12,7 +12,10 @@ void GetSystematicSimple(int sig_mass){
   TString dataset = getenv("CATANVERSION");
   
   TString filepath = WORKING_DIR+"/rootfiles/"+dataset+"/UpDownSyst/";
-  
+
+  //TString region = "Preselection";
+  TString region = "Preselection_MuMuE";
+
   //=====================================
   //==== Setting calculated systematics
   //=====================================
@@ -78,7 +81,6 @@ void GetSystematicSimple(int sig_mass){
 
   }
 
-  TString region = "Preselection";
   int SignalClass;
   if(sig_mass <= 50) SignalClass = 1;
   else if(sig_mass <= 80) SignalClass = 2;
@@ -88,23 +90,47 @@ void GetSystematicSimple(int sig_mass){
   double cut_first_pt, cut_second_pt, cut_third_pt, cut_W_pri_mass, cut_PFMET, cut_HN_mass;
 
   //==== Low Mass
-  if(sig_mass < 80){
-    cout << "#### Low Mass ####" << endl;
-    cut_first_pt = 99999999.;
-    cut_second_pt = 99999999.;
-    cut_third_pt = 99999999.;
-    cut_W_pri_mass = 150;
-    cut_PFMET = 0.;
-    cut_HN_mass = 99999999.;
+  if(region=="Preselection"){
+    if(sig_mass < 80){
+      cout << "#### Low Mass ####" << endl;
+      cut_first_pt = 99999999.;
+      cut_second_pt = 99999999.;
+      cut_third_pt = 99999999.;
+      cut_W_pri_mass = 150;
+      cut_PFMET = 0.;
+      cut_HN_mass = 99999999.;
+    }
+    //==== High Mass
+    else{
+      cout << "#### High Mass ####" << endl;
+      cut_first_pt = 20.;
+      cut_second_pt = 10.;
+      cut_third_pt = 10.;
+      cut_W_pri_mass = 0.;
+      cut_PFMET = 20.;
+    }
   }
-  //==== High Mass
-  else{
-    cout << "#### High Mass ####" << endl;
-    cut_first_pt = 20.;
-    cut_second_pt = 10.;
-    cut_third_pt = 10.;
-    cut_W_pri_mass = 0.;
-    cut_PFMET = 20.;
+
+  if(region=="Preselection_MuMuE"){
+    if(sig_mass < 80){
+      cout << "#### Low Mass ####" << endl;
+      cut_first_pt = 99999999.;
+      cut_second_pt = 99999999.;
+      cut_third_pt = 99999999.;
+      cut_W_pri_mass = 99999999.;
+      cut_PFMET = 99999999.;
+      cut_HN_mass = 99999999.;
+    }
+    //==== High Mass
+    else{
+      cout << "#### High Mass ####" << endl;
+      cut_first_pt = 20.;
+      cut_second_pt = 10.;
+      cut_third_pt = 10.;
+      cut_W_pri_mass = 0.;
+      cut_PFMET = 0.;
+      cut_HN_mass = 99999999.;
+    }
   }
 
 
@@ -197,7 +223,9 @@ void GetSystematicSimple(int sig_mass){
       m_data.Loop();
       n_data = m_data.n_weighted;
 
-      cutop m_sig(filepath+"trilepton_mumumu_ntp_SKHN_MuMuMu_"+TString::Itoa(sig_mass, 10)+"_cat_"+catversion+".root", "Ntp_"+this_syst);
+      TString channel = "MuMuMu";
+      if(region=="Preselection_MuMuE") channel = "SSSF_MuMuE";
+      cutop m_sig(filepath+"trilepton_mumumu_ntp_SKHN_"+channel+"_"+TString::Itoa(sig_mass, 10)+"_cat_"+catversion+".root", "Ntp_"+this_syst);
       m_sig.SearchRegion = region;
       m_sig.cut_first_pt = cut_first_pt;
       m_sig.cut_second_pt = cut_second_pt;

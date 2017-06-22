@@ -7,11 +7,14 @@ void GetNonPromptRatio(){
   TString dataset = getenv("CATANVERSION");
 
   TString SearchRegion = "SR";
-  TString cut = "_cut0";
-  //TString cut = "_cutWlow";
+  //TString cut = "_cut_MuMuMu_Presel";
+  TString cut = "_cut_SSSF_MuMuE_Presel";
   //TString cut = "_cutWhigh";
 
   vector<TString> bkgs = {"DYJets_10to50", "DYJets", "WJets", "TTJets_aMC", "WW", "WZ", "ZZ"};
+  if(cut.Contains("MuMuE")){
+    bkgs = {"TTJets_aMC", "ttW", "ttZ", "ttH_nonbb", "ttH_bb"};
+  }
   vector<double> n_events;
   double n_total;
   for(unsigned int i=0; i<bkgs.size(); i++){
@@ -36,11 +39,22 @@ void GetNonPromptRatio(){
   
 
   cout << "==>" << endl;
-  cout
-  << "DY : " << 100.*(n_events.at(0)+n_events.at(1))/n_total << endl
-  << "WJets : " << 100.*n_events.at(2)/n_total << endl
-  << "ttbar : " << 100.*n_events.at(3)/n_total << endl
-  << "VV : " << 100.*(n_events.at(4)+n_events.at(5)+n_events.at(6))/n_total << endl;
+  if(!cut.Contains("MuMuE")){
+    cout
+    << "DY : " << 100.*(n_events.at(0)+n_events.at(1))/n_total << endl
+    << "WJets : " << 100.*n_events.at(2)/n_total << endl
+    << "ttbar : " << 100.*n_events.at(3)/n_total << endl
+    << "VV : " << 100.*(n_events.at(4)+n_events.at(5)+n_events.at(6))/n_total << endl;
+  }
+  else{
+    cout
+    << "ttabr : " << 100.*n_events.at(0)/n_total << endl
+    << "ttW : " << 100.*n_events.at(1)/n_total << endl
+    << "ttZ : " << 100.*n_events.at(2)/n_total << endl
+    << "ttH_nonbb : " << 100.*n_events.at(3)/n_total << endl
+    << "ttH_bb : " << 100.*n_events.at(4)/n_total << endl;
+
+  }
 
 
 }
