@@ -202,7 +202,7 @@ void syst_FR_get_unct(){
 		hist_yield->GetYaxis()->SetTitle("Maximum Loose Isolation");
 		hist_yield->GetXaxis()->SetTitle("Minimum |dXYSig|");
 		hist_axis(hist_yield);
-		gStyle->SetPaintTextFormat("0.2f");
+		gStyle->SetPaintTextFormat("0.1f");
 		c_yield->SaveAs(plotpath+channel+"_yield.pdf");
 		c_yield->Close();
 

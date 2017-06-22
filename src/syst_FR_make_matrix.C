@@ -38,17 +38,10 @@ void syst_FR_make_matrix(){
   for(int aaa=0; aaa<dXYMins.size(); aaa++) hist_dXYMins->SetBinContent(aaa+1, dXYMins.at(aaa));
   for(int bbb=0; bbb<RelIsoMaxs.size(); bbb++) hist_RelIsoMaxs->SetBinContent(bbb+1, RelIsoMaxs.at(bbb));
 
-  TH1I* hist_bins = new TH1I("hist_bins", "", 2, 0, 2);
-  int n_pt_bins = n_pt_bins = 7; // pt : 10-15-20-25-30-35-45-60
-  int n_eta_bins = 4; // eta : 0.0-0.8-1.479-2.0-2.5
-  hist_bins->SetBinContent(1, n_pt_bins);
-  hist_bins->SetBinContent(2, n_eta_bins);
-  
   TFile *file_FRs = new TFile(plotpath+"Trilep_Muon_FakeRate.root", "RECREATE");
   file_FRs->cd();
   hist_dXYMins->Write();
   hist_RelIsoMaxs->Write();
-  hist_bins->Write();
   
   TH2D *hist_n_muons = new TH2D("hist_n_muons", "", dXYMins.size(), bins_dXYMins, RelIsoMaxs.size(), bins_RelIsoMaxs);
   TH2D *hist_HighdXY_FR = new TH2D("hist_HighdXY_FR", "", dXYMins.size(), bins_dXYMins, RelIsoMaxs.size(), bins_RelIsoMaxs);
@@ -169,6 +162,7 @@ void syst_FR_make_matrix(){
   TCanvas *c_HighdXY_FR = new TCanvas("c_HighdXY_FR", "", 800, 800);
   canvas_margin(c_HighdXY_FR);
   c_HighdXY_FR->cd();
+  gStyle->SetPaintTextFormat("0.2f");
   hist_HighdXY_FR->SetMarkerSize(2);
   hist_HighdXY_FR->Draw("coltext");
   hist_HighdXY_FR->GetYaxis()->SetTitle("Maximum Loose Isolation");
