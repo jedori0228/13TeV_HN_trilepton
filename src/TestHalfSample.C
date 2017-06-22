@@ -46,7 +46,7 @@ void TestHalfSample(){
   gStyle->SetPaintTextFormat("0.4f");
   hist_A_events_F->Divide(hist_A_events_F0);
   hist_A_events_F->Draw("colztexte1");
-  hist_A_events_F->GetXaxis()->SetRangeUser(10, 60);
+  hist_A_events_F->GetXaxis()->SetRangeUser(5, 60);
   hist_A_events_F->SetXTitle("p_{T} [GeV/c]");
   hist_A_events_F->SetYTitle("|#eta|");
   hist_A_events_F->SetTitle("");
@@ -61,12 +61,13 @@ void TestHalfSample(){
 
   c_sampleA->Close();
 
+  //return;
+
   vector<TString> B_vars = {"PFMET", "njets"};
   for(unsigned int i=0; i<B_vars.size(); i++){
     TString this_var = B_vars.at(i);
 
-    TH1D *hist_A_Predicted = (TH1D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_"+this_var+"_Predicted");
-    TH1D *hist_A_F0 = (TH1D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_"+this_var+"_F0");
+    TH1D *hist_B_Predicted = (TH1D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_"+this_var+"_Predicted");
     TH1D *hist_B_F = (TH1D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_"+this_var+"_F");
     TH1D *hist_B_F0 = (TH1D*)file_data->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_"+this_var+"_F0");   
 
@@ -74,45 +75,40 @@ void TestHalfSample(){
       TFile *file_tmp = new TFile(filepath+"/FakeRateCalculator_Mu_dxysig_SK"+samples.at(j)+"_cat_"+catversion+".root");
 
 
-      TH1D *tmp_hist_A_Predicted = (TH1D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_"+this_var+"_Predicted");
-      TH1D *tmp_hist_A_F0 = (TH1D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleA_"+this_var+"_F0");
+      TH1D *tmp_hist_B_Predicted = (TH1D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_"+this_var+"_Predicted");
 
       TH1D *tmp_hist_B_F = (TH1D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_"+this_var+"_F");
       TH1D *tmp_hist_B_F0 = (TH1D*)file_tmp->Get("dXYSigMin_4p0_LooseRelIsoMax_0p4_HighdXY_HalfSample_SampleB_"+this_var+"_F0");
 
-      if(tmp_hist_A_Predicted) hist_A_Predicted->Add(tmp_hist_A_Predicted, -1.);
-      if(tmp_hist_A_F0) hist_A_F0->Add(tmp_hist_A_F0, -1.);
+      if(tmp_hist_B_Predicted) hist_B_Predicted->Add(tmp_hist_B_Predicted, -1.);
       if(tmp_hist_B_F) hist_B_F->Add(tmp_hist_B_F, -1.);
       if(tmp_hist_B_F0) hist_B_F0->Add(tmp_hist_B_F0, -1.);
 
       file_tmp->Close();
     }
 
-    //hist_A_Predicted
-    //hist_A_F0
+    //hist_B_Predicted
     //hist_B_F
     //hist_B_F0
 
     if(this_var=="PFMET"){
       int n_rebin = 10;
-      hist_A_Predicted->Rebin(n_rebin);
-      hist_A_F0->Rebin(n_rebin);
+      hist_B_Predicted->Rebin(n_rebin);
       hist_B_F->Rebin(n_rebin);
       hist_B_F0->Rebin(n_rebin);
 
-      hist_A_Predicted->GetXaxis()->SetTitle("PFMET [GeV]");
+      hist_B_Predicted->GetXaxis()->SetTitle("PFMET [GeV]");
     }
     if(this_var=="njets"){
       Double_t xbins[4] = {0., 1., 5., 10.};
-      hist_A_Predicted = (TH1D*)hist_A_Predicted->Rebin(3,"hnew1",xbins);
-      hist_A_F0 = (TH1D*)hist_A_F0->Rebin(3,"hnew2",xbins);
+      hist_B_Predicted = (TH1D*)hist_B_Predicted->Rebin(3,"hnew1",xbins);
       hist_B_F = (TH1D*)hist_B_F->Rebin(3,"hnew3",xbins);
       hist_B_F0 = (TH1D*)hist_B_F0->Rebin(3,"hnew4",xbins);
 
-      hist_A_Predicted->GetXaxis()->SetTitle("# of jets");
+      hist_B_Predicted->GetXaxis()->SetTitle("# of jets");
     }
 
-    hist_A_Predicted->Divide(hist_A_F0);
+    hist_B_Predicted->Divide(hist_B_F0);
     hist_B_F->Divide(hist_B_F0);
 
     TCanvas* c_B_FR = new TCanvas("c_B_FR", "", 800, 800);
@@ -134,35 +130,35 @@ void TestHalfSample(){
     c_B_FR_down->Draw();
     c_B_FR_up->cd();
 
-    hist_A_Predicted->SetLineColor(kRed);
+    hist_B_Predicted->SetLineColor(kRed);
     hist_B_F->SetLineColor(kBlue);
-    hist_A_Predicted->SetLineWidth(3);
+    hist_B_Predicted->SetLineWidth(3);
     hist_B_F->SetLineWidth(3);
 
-    hist_A_Predicted->Draw("histsamee1");
-    hist_A_Predicted->GetYaxis()->SetRangeUser(0., 0.5);
-    if(this_var=="PFMET") hist_A_Predicted->GetXaxis()->SetRangeUser(0., 100.);
+    hist_B_Predicted->Draw("histsamee1");
+    hist_B_Predicted->GetYaxis()->SetRangeUser(0., 0.5);
+    if(this_var=="PFMET") hist_B_Predicted->GetXaxis()->SetRangeUser(0., 100.);
     hist_B_F->Draw("histsamee1");
 
-    hist_A_Predicted->GetYaxis()->SetTitle("Fake Rate");
-    hist_A_Predicted->SetTitle("");
+    hist_B_Predicted->GetYaxis()->SetTitle("Fake Rate");
+    hist_B_Predicted->SetTitle("");
 
     TLegend *lg = new TLegend(0.65, 0.75, 0.97, 0.95);
     lg->SetBorderSize(0);
     lg->SetFillStyle(0);
-    lg->AddEntry(hist_A_Predicted, "Predicted Fake Rate (p)", "l");
+    lg->AddEntry(hist_B_Predicted, "Predicted Fake Rate (p)", "l");
     lg->AddEntry(hist_B_F, "Measured Fake Rate (m)", "l");
     lg->Draw();
 
     c_B_FR_down->cd();
-    TH1D *ratio = (TH1D*)hist_A_Predicted->Clone();
+    TH1D *ratio = (TH1D*)hist_B_Predicted->Clone();
     ratio->Divide(hist_B_F);
     ratio->Draw("PE1same");
     ratio->GetYaxis()->SetRangeUser(0.8, 1.2);
     ratio->GetYaxis()->SetTitle("p/m");
     ratio->SetLineColor(kBlack);
 
-    hist_axis(hist_A_Predicted, ratio);
+    hist_axis(hist_B_Predicted, ratio);
 
     cout << "## Var = " << this_var << " ##" << endl;
     for(int aaa=1; aaa<=ratio->GetXaxis()->GetNbins(); aaa++){
