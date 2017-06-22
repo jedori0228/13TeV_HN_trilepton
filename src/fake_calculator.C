@@ -11,7 +11,7 @@ TString GetPeriod(int period);
 
 void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
 
-  bool Draw5GeV = false;
+  bool Draw5GeV = true;
 
   TH1::SetDefaultSumw2(true);
   TH2::SetDefaultSumw2(true);
@@ -857,13 +857,14 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       //==== 2D FR Histogram starts from 0 GeV bin
       //==== [5,10] GeV is bin2
       //==== [10,15] GeV is bin3
-      int PtBinToSkip = 3;
-      if(Draw5GeV) PtBinToSkip = 2;
+      int PtBinToStartAt = 3;
+      if(Draw5GeV) PtBinToStartAt = 2;
+
       for(int j=0; j<n_eta_bins; j++){
         TH1D *FR_curve = new TH1D("FR_eta_"+TString::Itoa(j,10), "", n_pt_bins, x_bins);
         for(int k=0; k<n_pt_bins; k++){
-          FR_curve->SetBinContent(k+1, num_data_subtracted->GetBinContent(k+PtBinToSkip, j+1) );
-          FR_curve->SetBinError(k+1, num_data_subtracted->GetBinError(k+PtBinToSkip, j+1) );
+          FR_curve->SetBinContent(k+1, num_data_subtracted->GetBinContent(k+PtBinToStartAt, j+1) );
+          FR_curve->SetBinError(k+1, num_data_subtracted->GetBinError(k+PtBinToStartAt, j+1) );
         }
         gr_FR_curve[j] = hist_to_graph(FR_curve);
         gr_FR_curve[j]->SetLineColor(colors[j]);
@@ -951,144 +952,144 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
     for(unsigned it_xyvars=0;it_xyvars<xyvars.size();it_xyvars++){
       TString xyvar = xyvars.at(it_xyvars);
 
-			for(unsigned int it_MC_sample_MCTruth=0; it_MC_sample_MCTruth<MC_sample_MCTruth.size(); it_MC_sample_MCTruth++){
-			
-				TString this_MC_sample_MCTruth = MC_sample_MCTruth.at(it_MC_sample_MCTruth);
-				
-				//==== 2D
-				
-				TH2D *large_2D, *small_2D;
+      for(unsigned int it_MC_sample_MCTruth=0; it_MC_sample_MCTruth<MC_sample_MCTruth.size(); it_MC_sample_MCTruth++){
+      
+        TString this_MC_sample_MCTruth = MC_sample_MCTruth.at(it_MC_sample_MCTruth);
+        
+        //==== 2D
+        
+        TH2D *large_2D, *small_2D;
 
-				//==== FR for each significance region
-				//==== and save FR for SF
-				for(unsigned int it_sig_region=0; it_sig_region<sig_region.size(); it_sig_region++){
+        //==== FR for each significance region
+        //==== and save FR for SF
+        for(unsigned int it_sig_region=0; it_sig_region<sig_region.size(); it_sig_region++){
 
-					TH2D* hist_num = (TH2D*)map_string_to_file[this_MC_sample_MCTruth]->Get(str_dXYCut+"_MCTruth_"+sig_region.at(it_sig_region)+this_MCTruth_njet+"events_"+xyvar+"_F");
-					TH2D* hist_den = (TH2D*)map_string_to_file[this_MC_sample_MCTruth]->Get(str_dXYCut+"_MCTruth_"+sig_region.at(it_sig_region)+this_MCTruth_njet+"events_"+xyvar+"_F0");
-					if( !hist_num || !hist_den ) continue;
-					hist_num->Divide(hist_den);
-					if(sig_region.at(it_sig_region)=="HighdXY_") large_2D = (TH2D*)hist_num->Clone();
-					if(sig_region.at(it_sig_region)=="")         small_2D = (TH2D*)hist_num->Clone();
-					TCanvas* c_MCTruth = new TCanvas("c_MCTruth", "", 1600, 1100);
-					//canvas_margin(c_MCTruth);
-					c_MCTruth->SetLeftMargin(0.07);
-					c_MCTruth->SetRightMargin( 0.1 );
-					gStyle->SetPaintTextFormat("0.4f");
-					c_MCTruth->cd();
-					hist_num->Draw("colztexte1");
-					hist_num->GetXaxis()->SetRangeUser(5, 60);
-					hist_num->SetXTitle("p_{T} [GeV/c]");
-					hist_num->SetYTitle("|#eta|");
-					hist_num->SetTitle("");
-					hist_num->SetMarkerSize(1.3);
-					TString histname_suffix("");
-					if(sig_region.at(it_sig_region) == "HighdXY_") histname_suffix = "Large";
-					if(sig_region.at(it_sig_region) == "") histname_suffix = "Small";
-					c_MCTruth->SaveAs(plotpath+"/2D_FR_MCTruth_"+this_MCTruth_njet+this_MC_sample_MCTruth+"_"+histname_suffix+"_"+xyvar+".pdf");
-					c_MCTruth->Close();
-					delete c_MCTruth;
-				}
-				
-				//==== draw 2D SF
-				TCanvas* c_2D_FR_SF = new TCanvas("c_2D_FR_SF", "", 1600, 1100);
-				//canvas_margin(c_2D_FR_SF);
-				c_2D_FR_SF->SetLeftMargin(0.07);
-				c_2D_FR_SF->SetRightMargin( 0.1 );
-				gStyle->SetPaintTextFormat("0.4f");
-				c_2D_FR_SF->cd();
-				//==== before dividing, save dXYSig small FR for MC-Closure test
-				TString filename_FR = plotpath+"/13TeV_trimuon_FR_"+this_MCTruth_njet+this_MC_sample_MCTruth+"_"+xyvar+".root";
-				TFile* file_FR = new TFile(filename_FR, "RECREATE");
-				file_FR->cd();
-				small_2D->SetName("FR_Small_dXYSig_"+xyvar); 
-				small_2D->Write();
+          TH2D* hist_num = (TH2D*)map_string_to_file[this_MC_sample_MCTruth]->Get(str_dXYCut+"_MCTruth_"+sig_region.at(it_sig_region)+this_MCTruth_njet+"events_"+xyvar+"_F");
+          TH2D* hist_den = (TH2D*)map_string_to_file[this_MC_sample_MCTruth]->Get(str_dXYCut+"_MCTruth_"+sig_region.at(it_sig_region)+this_MCTruth_njet+"events_"+xyvar+"_F0");
+          if( !hist_num || !hist_den ) continue;
+          hist_num->Divide(hist_den);
+          if(sig_region.at(it_sig_region)=="HighdXY_") large_2D = (TH2D*)hist_num->Clone();
+          if(sig_region.at(it_sig_region)=="")         small_2D = (TH2D*)hist_num->Clone();
+          TCanvas* c_MCTruth = new TCanvas("c_MCTruth", "", 1600, 1100);
+          //canvas_margin(c_MCTruth);
+          c_MCTruth->SetLeftMargin(0.07);
+          c_MCTruth->SetRightMargin( 0.1 );
+          gStyle->SetPaintTextFormat("0.4f");
+          c_MCTruth->cd();
+          hist_num->Draw("colztexte1");
+          hist_num->GetXaxis()->SetRangeUser(5, 60);
+          hist_num->SetXTitle("p_{T} [GeV/c]");
+          hist_num->SetYTitle("|#eta|");
+          hist_num->SetTitle("");
+          hist_num->SetMarkerSize(1.3);
+          TString histname_suffix("");
+          if(sig_region.at(it_sig_region) == "HighdXY_") histname_suffix = "Large";
+          if(sig_region.at(it_sig_region) == "") histname_suffix = "Small";
+          c_MCTruth->SaveAs(plotpath+"/2D_FR_MCTruth_"+this_MCTruth_njet+this_MC_sample_MCTruth+"_"+histname_suffix+"_"+xyvar+".pdf");
+          c_MCTruth->Close();
+          delete c_MCTruth;
+        }
+        
+        //==== draw 2D SF
+        TCanvas* c_2D_FR_SF = new TCanvas("c_2D_FR_SF", "", 1600, 1100);
+        //canvas_margin(c_2D_FR_SF);
+        c_2D_FR_SF->SetLeftMargin(0.07);
+        c_2D_FR_SF->SetRightMargin( 0.1 );
+        gStyle->SetPaintTextFormat("0.4f");
+        c_2D_FR_SF->cd();
+        //==== before dividing, save dXYSig small FR for MC-Closure test
+        TString filename_FR = plotpath+"/13TeV_trimuon_FR_"+this_MCTruth_njet+this_MC_sample_MCTruth+"_"+xyvar+".root";
+        TFile* file_FR = new TFile(filename_FR, "RECREATE");
+        file_FR->cd();
+        small_2D->SetName("FR_Small_dXYSig_"+xyvar); 
+        small_2D->Write();
 
-				small_2D->Divide(large_2D);
-				small_2D->SetName("FRSF_"+xyvar);
-				small_2D->Draw("colztexte1");
-				small_2D->GetXaxis()->SetRangeUser(5, 60);
-				small_2D->SetXTitle("p_{T} [GeV/c]");
-				small_2D->SetYTitle("|#eta|");
-				small_2D->SetTitle("");
-				small_2D->SetMarkerSize(1.3);
-				c_2D_FR_SF->SaveAs(plotpath+"/2D_FRSF_MCTruth_"+this_MCTruth_njet+this_MC_sample_MCTruth+"_"+xyvar+".pdf");
-				c_2D_FR_SF->Close();
-				delete c_2D_FR_SF;
-				
-				//==== draw SF curve for each eta region
-				TCanvas *c_1D_SF_curve = new TCanvas("c_1D_SF_curve", "", 800, 800);
-				canvas_margin(c_1D_SF_curve);
-				c_1D_SF_curve->cd();
-				TLegend* lg_SF_curve = new TLegend(0.6, 0.6, 0.9, 0.9);
-				lg_SF_curve->SetFillStyle(0);
-				lg_SF_curve->SetBorderSize(0);
+        small_2D->Divide(large_2D);
+        small_2D->SetName("FRSF_"+xyvar);
+        small_2D->Draw("colztexte1");
+        small_2D->GetXaxis()->SetRangeUser(5, 60);
+        small_2D->SetXTitle("p_{T} [GeV/c]");
+        small_2D->SetYTitle("|#eta|");
+        small_2D->SetTitle("");
+        small_2D->SetMarkerSize(1.3);
+        c_2D_FR_SF->SaveAs(plotpath+"/2D_FRSF_MCTruth_"+this_MCTruth_njet+this_MC_sample_MCTruth+"_"+xyvar+".pdf");
+        c_2D_FR_SF->Close();
+        delete c_2D_FR_SF;
 
-				TGraphAsymmErrors *gr_SF_curve[4];
+        //==== draw SF curve for each eta region
+        TCanvas *c_1D_SF_curve = new TCanvas("c_1D_SF_curve", "", 800, 800);
+        canvas_margin(c_1D_SF_curve);
+        c_1D_SF_curve->cd();
+        TLegend* lg_SF_curve = new TLegend(0.6, 0.6, 0.9, 0.9);
+        lg_SF_curve->SetFillStyle(0);
+        lg_SF_curve->SetBorderSize(0);
 
-				int n_pt_bins = 7;
-				vector<double> vec_pt_bins = {10., 15., 20., 25., 30., 35., 45., 60.};
-				if(Draw5GeV){
-					n_pt_bins = 8;
-					vec_pt_bins = {5., 10., 15., 20., 25., 30., 35., 45., 60.};
-				}
-				int n_eta_bins = 4; // eta : 0.0-0.8-1.479-2.0-2.5
+        TGraphAsymmErrors *gr_SF_curve[4];
 
-				//==== fill pt(x) bins
-				double x_bins[n_pt_bins+1];
-				for(int aaa=0;aaa<n_pt_bins+1;aaa++){
-					x_bins[aaa] = vec_pt_bins.at(aaa);
-				}
+        int n_pt_bins = 7;
+        vector<double> vec_pt_bins = {10., 15., 20., 25., 30., 35., 45., 60.};
+        if(Draw5GeV){
+          n_pt_bins = 8;
+          vec_pt_bins = {5., 10., 15., 20., 25., 30., 35., 45., 60.};
+        }
+        int n_eta_bins = 4; // eta : 0.0-0.8-1.479-2.0-2.5
 
-				double y_bins[5] = {0.0, 0.8, 1.479, 2.0, 2.5};
-				Color_t colors[4] = {kBlack, kRed, kBlue, kViolet};
+        //==== fill pt(x) bins
+        double x_bins[n_pt_bins+1];
+        for(int aaa=0;aaa<n_pt_bins+1;aaa++){
+          x_bins[aaa] = vec_pt_bins.at(aaa);
+        }
 
-				//==== 2D FR Histogram starts from 0 GeV bin
-				//==== [5,10] GeV is bin2
-				//==== [10,15] GeV is bin3
-				int PtBinToSkip = 3;
-				if(Draw5GeV) PtBinToSkip = 2;
+        double y_bins[5] = {0.0, 0.8, 1.479, 2.0, 2.5};
+        Color_t colors[4] = {kBlack, kRed, kBlue, kViolet};
 
-				for(int j=0; j<4; j++){
-					TH1D *SF_curve = new TH1D("FR_eta_"+TString::Itoa(j,10), "", 7, x_bins);
-					for(int k=0; k<8; k++){
-						SF_curve->SetBinContent(k+1, small_2D->GetBinContent(k+PtBinToSkip, j+1) );
-						SF_curve->SetBinError(k+1, small_2D->GetBinError(k+PtBinToSkip, j+1) );
-					}
-					gr_SF_curve[j] = hist_to_graph(SF_curve);
-					gr_SF_curve[j]->SetLineColor(colors[j]);
-					gr_SF_curve[j]->GetYaxis()->SetTitle("Fake Rate Scale Factor");
-					gr_SF_curve[j]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
-					hist_axis(gr_SF_curve[j]);
-					if(j==0){
-						gr_SF_curve[j]->Draw("e1al");
-						gr_SF_curve[j]->GetYaxis()->SetRangeUser(0.8, 2.0);
-						hist_axis(gr_SF_curve[j]);
-					}
-					else gr_SF_curve[j]->Draw("e1lsame");
-				}
-				lg_SF_curve->AddEntry(gr_SF_curve[0], "0 < |#eta| < 0.8", "l");
-				lg_SF_curve->AddEntry(gr_SF_curve[1], "0.8 < |#eta| < 1.479", "l");
-				lg_SF_curve->AddEntry(gr_SF_curve[2], "1.479 < |#eta| < 2.0", "l");
-				lg_SF_curve->AddEntry(gr_SF_curve[3], "2.0 < |#eta| < 2.5", "l");
-				lg_SF_curve->Draw();
+        //==== 2D FR Histogram starts from 0 GeV bin
+        //==== [5,10] GeV is bin2
+        //==== [10,15] GeV is bin3
+        int PtBinToStartAt = 3;
+        if(Draw5GeV) PtBinToStartAt = 2;
 
-				latex_CMSPriliminary.SetTextSize(0.035);
-				latex_CMSPriliminary.DrawLatex(0.15, 0.96, "#font[62]{CMS} Simulation");
-				latex_Lumi.SetTextSize(0.035);
-				latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
+        for(int j=0; j<4; j++){
+          TH1D *SF_curve = new TH1D("FR_eta_"+TString::Itoa(j,10), "", 7, x_bins);
+          for(int k=0; k<8; k++){
+            SF_curve->SetBinContent(k+1, small_2D->GetBinContent(k+PtBinToStartAt, j+1) );
+            SF_curve->SetBinError(k+1, small_2D->GetBinError(k+PtBinToStartAt, j+1) );
+          }
+          gr_SF_curve[j] = hist_to_graph(SF_curve);
+          gr_SF_curve[j]->SetLineColor(colors[j]);
+          gr_SF_curve[j]->GetYaxis()->SetTitle("Fake Rate Scale Factor");
+          gr_SF_curve[j]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+          hist_axis(gr_SF_curve[j]);
+          if(j==0){
+            gr_SF_curve[j]->Draw("e1al");
+            gr_SF_curve[j]->GetYaxis()->SetRangeUser(0.8, 2.0);
+            hist_axis(gr_SF_curve[j]);
+          }
+          else gr_SF_curve[j]->Draw("e1lsame");
+        }
+        lg_SF_curve->AddEntry(gr_SF_curve[0], "0 < |#eta| < 0.8", "l");
+        lg_SF_curve->AddEntry(gr_SF_curve[1], "0.8 < |#eta| < 1.479", "l");
+        lg_SF_curve->AddEntry(gr_SF_curve[2], "1.479 < |#eta| < 2.0", "l");
+        lg_SF_curve->AddEntry(gr_SF_curve[3], "2.0 < |#eta| < 2.5", "l");
+        lg_SF_curve->Draw();
 
-				c_1D_SF_curve->SaveAs(plotpath+"/1D_pt_each_eta_FRSF_MCTruth_"+this_MCTruth_njet+this_MC_sample_MCTruth+"_"+xyvar+".pdf");
-				c_1D_SF_curve->Close();
-				delete c_1D_SF_curve;
-				
-				//==== write rootfile
-				file_FR->cd();
-				small_2D->Write();
+        latex_CMSPriliminary.SetTextSize(0.035);
+        latex_CMSPriliminary.DrawLatex(0.15, 0.96, "#font[62]{CMS} Simulation");
+        latex_Lumi.SetTextSize(0.035);
+        latex_Lumi.DrawLatex(0.7, 0.96, "35.9 fb^{-1} (13 TeV)");
 
-				file_FR->Close();
-				
-				
-			} // xyvar loop
+        c_1D_SF_curve->SaveAs(plotpath+"/1D_pt_each_eta_FRSF_MCTruth_"+this_MCTruth_njet+this_MC_sample_MCTruth+"_"+xyvar+".pdf");
+        c_1D_SF_curve->Close();
+        delete c_1D_SF_curve;
+
+        //==== write rootfile
+        file_FR->cd();
+        small_2D->Write();
+
+        file_FR->Close();
+
+
+      } // xyvar loop
 
    }  // END MC sample loop
     
