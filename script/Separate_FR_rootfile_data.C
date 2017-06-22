@@ -39,7 +39,7 @@ void Separate_FR_rootfile_data(TString inputdir, TString outdir, int ForWhichTri
   //==== Use TrkVVL triggers
   if(ForWhichTrigger==0){
     HLTsToUse = {"HLT_Mu3_PFJet40_v", "HLT_Mu8_TrkIsoVVL_v", "HLT_Mu17_TrkIsoVVL_v", "HLT_Mu20_v"};
-    WhichData = {"SingleMuon", "DoubleMuon", "DoubleMuon", "SingleMuon"};
+    WhichData = {"DoubleMuon", "DoubleMuon", "DoubleMuon", "SingleMuon"};
     HLTsNotUse = {"HLT_Mu8_v", "HLT_Mu17_v", "HLT_IsoMu24_v"};
   }
   //==== For IsoMu24
@@ -47,7 +47,7 @@ void Separate_FR_rootfile_data(TString inputdir, TString outdir, int ForWhichTri
   //==== So, LooseNotTight Muons in this events are not TriggerBiased, so we use non-TrkVVL trigger
   else if(ForWhichTrigger==1){
     HLTsToUse = {"HLT_Mu3_PFJet40_v", "HLT_Mu8_v", "HLT_Mu17_v", "HLT_Mu20_v"};
-    WhichData = {"SingleMuon", "DoubleMuon", "DoubleMuon", "SingleMuon"};
+    WhichData = {"DoubleMuon", "DoubleMuon", "DoubleMuon", "SingleMuon"};
     HLTsNotUse = {"HLT_Mu8_TrkIsoVVL_v", "HLT_Mu17_TrkIsoVVL_v", "HLT_IsoMu24_v"};
   }
 
