@@ -33,14 +33,16 @@ fi
 
 #NLimit syst_UpDowns(int sig_mass, bool printnumber=true, bool forlatex=false, bool inclusive=false, bool fillNlimit=false){
 if [ $whichRun = "syst" ]; then
-  if [ -z "$3" ]; then
+  channel=$2
+  if [ $channel = "mme" ]; then
     echo "Running MuMuE"
     for mass in 5 10 20 30 40 50 60 70 90 100 150 200 300 400 500 700 1000
     do
       root -l -b -q "src/syst_UpDowns_MuMuE.C($mass,true, true, false, false)" &> $PLOTTER_WORKING_DIR/tmp.txt
       python script/syst_latex_output_cleanup.py $PLOTTER_WORKING_DIR/tmp.txt
     done
-  else
+  fi
+  if [ $channel = "mmm" ]; then
     echo "Running MuMuMu"
     for mass in 5 10 20 30 40 50 60 70
     do

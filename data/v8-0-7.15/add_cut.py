@@ -4,7 +4,7 @@ import os
 filenames=['CR_rebins.txt', 'CR_xaxis.txt', 'CR_yaxis.txt'] 
 
 From = "_ZGamma_3mu0el"
-To = "_ZGamma_2mu1el"
+To = "_LowMassResonance_3mu0el"
 
 for filename in filenames:
 

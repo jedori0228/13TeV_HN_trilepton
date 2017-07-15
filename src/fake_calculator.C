@@ -459,8 +459,8 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
       
       //==== rebin pT..
       if(this_var_FR.Contains("pt")){
-        num_data->Rebin(5);
-        den_data->Rebin(5);
+        num_data->Rebin(1);
+        den_data->Rebin(1);
       }
       
       //==== hists for legend
@@ -490,8 +490,8 @@ void fake_calculator(double dXYMin, double RelIsoMax, int period=0){
           den_MC_temp->Scale(MCRescale);
           
           if(this_var_FR.Contains("pt")){
-            num_MC_temp->Rebin(5);
-            den_MC_temp->Rebin(5);
+            num_MC_temp->Rebin(1);
+            den_MC_temp->Rebin(1);
           }
           
           num_MC_temp->SetFillColor( map_string_to_MC_color[this_MC_type].at(aaa) );

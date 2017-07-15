@@ -247,7 +247,9 @@ NLimit syst_UpDowns_MuMuMu(int sig_mass, bool printnumber=true, bool forlatex=fa
     "MuonIDSF_up", "MuonIDSF_down", // 11, 12
     "PU_up", "PU_down", // 13, 14
     "FR_HalfSample_up", "FR_HalfSample_down", // 15, 16
-    "TriggerSF_up", "TriggerSF_down" // 17, 18
+    "TriggerSF_up", "TriggerSF_down", // 17, 18
+    //"ElectronIDSF_up", "ElectronIDSF_down", // 19, 20
+    //"ElectronEn_up", "ElectronEn_down", // 21, 22
   };
   vector<double> yields_prompt, yields_fake, yields_data, yields_signal, yields_signal_weighted;
   vector<double> syst_error_prompt, syst_error_fake, syst_error_data, syst_error_signal;
@@ -278,7 +280,7 @@ NLimit syst_UpDowns_MuMuMu(int sig_mass, bool printnumber=true, bool forlatex=fa
       NtpNameForData = "Central";
       NtpNameForFake = "Central";
     }
-          
+
     double n_bkg_prompt(0.), n_bkg_fake(0.), n_data(0.), n_signal(0.), n_signal_weighted(0.);
     
     TH1D *hist_bkg_for_error = NULL;
@@ -425,7 +427,7 @@ NLimit syst_UpDowns_MuMuMu(int sig_mass, bool printnumber=true, bool forlatex=fa
       TString str_mass = TString::Itoa(sig_mass, 10);
 
       double data_yield = yields_data.at(0);
-      if(region=="Preselection") data_yield = 9999;
+      //if(region=="Preselection") data_yield = 9999;
 
       //==== low mass
       if(sig_mass < 80){

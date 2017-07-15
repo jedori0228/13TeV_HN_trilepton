@@ -11,7 +11,9 @@ void HiggsCombindedLimit(){
   TString filepath = WORKING_DIR+"/plots/"+dataset+"/Limit/";
   TString plotpath = WORKING_DIR+"/plots/"+dataset+"/Limit/";
 
-  TString WhichDirectoryInCutop = "170524_mumue_previous";
+  //TString WhichDirectoryInCutop = "170622_USING_170524_v8-0-7.11";
+  //TString WhichDirectoryInCutop = "170622_USING_170607_MuMuE_myfirsttry_fix_printing";
+  TString WhichDirectoryInCutop = "MuMuMu_170622_USING_170524_v8-0-7.11__MuMuE_170622_USING_170607_MuMuE_myfirsttry_fix_printing";
 
   filepath = filepath+WhichDirectoryInCutop+"/";
   plotpath = plotpath+WhichDirectoryInCutop+"/";
@@ -24,13 +26,14 @@ void HiggsCombindedLimit(){
   string elline;
   ifstream in(filepath+"/result.txt");
 
-  double mass[17], limit[17], onesig_left[17], onesig_right[17], twosig_left[17], twosig_right[17];
+  double mass[17], obs[17], limit[17], onesig_left[17], onesig_right[17], twosig_left[17], twosig_right[17];
 
   int dummyint=0;
   while(getline(in,elline)){
     std::istringstream is( elline );
 
     is >> mass[dummyint];
+    is >> obs[dummyint];
     is >> limit[dummyint];
     is >> onesig_left[dummyint];
     is >> onesig_right[dummyint];
@@ -43,6 +46,7 @@ void HiggsCombindedLimit(){
     else if(mass[dummyint]<=700) scale = 0.001;
     else scale = 0.001;
 
+    obs[dummyint] *= scale;
     limit[dummyint] *= scale;
     onesig_left[dummyint] *= scale;
     onesig_right[dummyint] *= scale;
@@ -56,6 +60,10 @@ void HiggsCombindedLimit(){
 
     dummyint++;
   }
+
+  TGraph *gr_13TeV_obs = new TGraph(17,mass,obs);
+  gr_13TeV_obs->SetLineWidth(3);
+  gr_13TeV_obs->SetLineColor(kBlack);
 
   TGraph *gr_13TeV_exp = new TGraph(17,mass,limit);
   gr_13TeV_exp->SetLineWidth(3);
@@ -75,13 +83,15 @@ void HiggsCombindedLimit(){
   TLegend *lg = new TLegend(0.50, 0.15, 0.90, 0.50);
   TLegend *lg_log = new TLegend(0.20, 0.55, 0.60, 0.90);
 
-  lg->AddEntry(gr_13TeV_exp,"CL_{s} Expected");
-  lg->AddEntry(gr_band_1sigma,"CL_{s} Expected #pm 1 #sigma");
-  lg->AddEntry(gr_band_2sigma,"CL_{s} Expected #pm 2 #sigma");
+  lg->AddEntry(gr_13TeV_obs,"CL_{s} Observed", "l");
+  lg->AddEntry(gr_13TeV_exp,"CL_{s} Expected", "l");
+  lg->AddEntry(gr_band_1sigma,"CL_{s} Expected #pm 1 #sigma", "f");
+  lg->AddEntry(gr_band_2sigma,"CL_{s} Expected #pm 2 #sigma", "f");
 
-  lg_log->AddEntry(gr_13TeV_exp,"CL_{s} Expected");
-  lg_log->AddEntry(gr_band_1sigma,"CL_{s} Expected #pm 1 #sigma");
-  lg_log->AddEntry(gr_band_2sigma,"CL_{s} Expected #pm 2 #sigma");
+  lg_log->AddEntry(gr_13TeV_obs,"CL_{s} Observed", "l");
+  lg_log->AddEntry(gr_13TeV_exp,"CL_{s} Expected", "l");
+  lg_log->AddEntry(gr_band_1sigma,"CL_{s} Expected #pm 1 #sigma", "f");
+  lg_log->AddEntry(gr_band_2sigma,"CL_{s} Expected #pm 2 #sigma", "f");
 
   const int nm = 16;
   double mass_8TeV[nm] = {
@@ -121,6 +131,7 @@ void HiggsCombindedLimit(){
   gr_band_1sigma->Draw("3same");
   gr_13TeV_exp->Draw("lsame");
   gr_8TeV_exp->Draw("lsame");
+  gr_13TeV_obs->Draw("lsame");
 
   lg->AddEntry(gr_8TeV_exp, "8 TeV DiMuon Ch. Expected", "l");
   lg->SetX2NDC(0.90);
@@ -157,6 +168,7 @@ void HiggsCombindedLimit(){
   gr_band_1sigma->Draw("3same");
   gr_13TeV_exp->Draw("lsame");
   gr_8TeV_exp->Draw("lsame");
+  gr_13TeV_obs->Draw("lsame");
 
   lg_log->AddEntry(gr_8TeV_exp, "8 TeV DiMuon Ch. Expected", "l");
   lg_log->SetX2NDC(0.90);

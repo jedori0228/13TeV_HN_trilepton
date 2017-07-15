@@ -5,7 +5,7 @@ void make_rootfile_for_limit_MuMuE(bool newfile=true, bool printsyst=false){
   TString WORKING_DIR = getenv("PLOTTER_WORKING_DIR");
   TString dataset = getenv("CATANVERSION");
   TString LIMIT_PATH = WORKING_DIR+"/plots/"+dataset+"/Limit/";
-  TString WhichDirectoryInCutop = "170607_MuMuE_myfirsttry_fix_printing";
+  TString WhichDirectoryInCutop = "170622_USING_170607_MuMuE_myfirsttry_fix_printing";
 
   LIMIT_PATH = LIMIT_PATH+WhichDirectoryInCutop+"/";
 
@@ -169,7 +169,7 @@ void make_rootfile_for_limit_MuMuE(bool newfile=true, bool printsyst=false){
       myfile << "------------\n";
       myfile << "# we have just one channel, in which we observe 0 events\n";
       myfile << "bin 1\n";
-      myfile << "observation "<< n_limit.n_fake+n_limit.n_prompt <<"\n";
+      myfile << "observation "<< n_limit.n_data <<"\n";
       myfile << "------------\n";
       myfile << "# now we list the expected events for signal and all backgrounds in that bin\n";
       myfile << "# the second 'process' line must have a positive number for backgrounds, and 0 for signal\n";

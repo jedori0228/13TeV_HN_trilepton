@@ -9,7 +9,6 @@ void GetNonPromptRatio(){
   TString SearchRegion = "SR";
   //TString cut = "_cut_MuMuMu_Presel";
   TString cut = "_cut_SSSF_MuMuE_Presel";
-  //TString cut = "_cutWhigh";
 
   vector<TString> bkgs = {"DYJets_10to50", "DYJets", "WJets", "TTJets_aMC", "WW", "WZ", "ZZ"};
   if(cut.Contains("MuMuE")){

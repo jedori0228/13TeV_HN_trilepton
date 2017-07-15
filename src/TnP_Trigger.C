@@ -270,7 +270,7 @@ void TnP_Trigger(int period){
     
     //==== make SF root file
     
-    TString outputTriggerEffname = "MuonTriggerEfficiency_TRILEP_"+trigger+"_Run"+DataPeriod+".root";
+    TString outputTriggerEffname = "MuonTriggerEfficiency_HNTRILEP_"+trigger+"_Run"+DataPeriod+".root";
     TFile *file_TriggerEff = new TFile(plotpath+outputTriggerEffname, "RECREATE");
 
     TString CutsOnDen2 = "dB_bin0_&_dzPV_bin0_&_pair_dPhiPrimeDeg_bin0_&_pair_deltaR_bin0";
@@ -285,8 +285,8 @@ void TnP_Trigger(int period){
     c_TriggerEff_Data->Close();
     c_TriggerEff_MC->Close();
 
-    hist_TriggerEff_Data->SetName("TriggerEff_Trilepton_"+DataPeriod+"_Data");
-    hist_TriggerEff_MC->SetName("TriggerEff_Trilepton_"+DataPeriod+"_MC");
+    hist_TriggerEff_Data->SetName("TriggerEff_HNTrilepton_"+DataPeriod+"_Data");
+    hist_TriggerEff_MC->SetName("TriggerEff_HNTrilepton_"+DataPeriod+"_MC");
 
     file_TriggerEff->cd();
     hist_TriggerEff_Data->Write();

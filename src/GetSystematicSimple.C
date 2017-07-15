@@ -306,18 +306,17 @@ void GetSystematicSimple(int sig_mass){
       << endl;
     }
     else{
-      cout << "Total Monte Carlo\t& $"
+      cout << "Total prompt backgrounds\t& $"
       <<std::fixed<<std::setprecision(2)<<prompt << " \\pm "
       <<std::fixed<<std::setprecision(2)<<prompt_stat << "~\\mathrm{(stat.)}\\pm "
       <<std::fixed<<std::setprecision(2)<<prompt_syst << "~\\mathrm{(syst.)}$ \\\\" << endl;
       cout << "\\hline" << endl;
-      cout << "Data-driven background estimate: & \\\\" << endl;
-      cout << "Fake muon background\t& $"
+      cout << "Non-prompt background\t& $"
       <<std::fixed<<std::setprecision(2)<<fake << " \\pm "
       <<std::fixed<<std::setprecision(2)<<fake_stat << "~\\mathrm{(stat.)}\\pm "
       <<std::fixed<<std::setprecision(2)<<fake_syst << "~\\mathrm{(syst.)}$ \\\\" << endl;
       cout << "\\hline" << endl;
-      cout << "Total background\t& $"
+      cout << "Total backgrounds\t& $"
       <<std::fixed<<std::setprecision(2)<<total << " \\pm "
       <<std::fixed<<std::setprecision(2)<<total_stat << "~\\mathrm{(stat.)}\\pm "
       <<std::fixed<<std::setprecision(2)<<total_syst << "~\\mathrm{(syst.)}$ \\\\" << endl;
